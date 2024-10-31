@@ -66,7 +66,7 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 ## Usar mas cosas
-## Comando a utilizar
+## Comandos a utilizar
 - composer install
 - cp .env.example .env
 -Configurar en .env con una base de datos local
