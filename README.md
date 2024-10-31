@@ -9,5 +9,8 @@
 - php artisan serve
 - npm run dev
 
+## Para clonar un branch
+ - git clone --single-branch --branch NOMBRE_DE_LA_RAMA URL_DEL_REPOSITORIO
+
 
 
