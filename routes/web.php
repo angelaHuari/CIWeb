@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IdiomaController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
@@ -20,12 +21,14 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');*/
 
+//Para Todos los Usuarios
+//verifica que sea un usuario
 Route::get('/inicio', function () {
     return Inertia::render('Auth/Login');
-})->middleware(['auth', 'verified','InterfazUsuario'])->name('dashboard');
-
+})->middleware(['auth', 'verified', 'InterfazUsuario'])->name('dashboard');
+//verifica el tipo de usuario
 Route::get('/dashboard', function () {
-    $rol=Auth::user()->tipoUsuario;
+    $rol = Auth::user()->tipoUsuario;
     if ($rol === 'admin') {
         return Inertia::render('Administrador/Dashboard');
     } elseif ($rol === 'est') {
@@ -41,4 +44,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+
+//Para Administrador
+Route::middleware('EsAdmin')->group(function () {
+    Route::get('/formulario', function () {
+        return Inertia::render('Administrador/Formulario/ListaFormulario');
+    })->name('formulario');
+    Route::resource('idioma',IdiomaController::class);
+});
+
+
+
+//Para Estudiante
+
+//Para Docente
+
+
+require __DIR__ . '/auth.php';
