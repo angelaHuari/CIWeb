@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CicloController;
 use App\Http\Controllers\IdiomaController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -51,6 +52,7 @@ Route::middleware('EsAdmin')->group(function () {
         return Inertia::render('Administrador/Formulario/ListaFormulario');
     })->name('formulario');
     Route::resource('idioma',IdiomaController::class);
+    Route::resource('ciclo',CicloController::class);
 });
 
 

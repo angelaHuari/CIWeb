@@ -17,17 +17,17 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             //para admin
-            /*'name' => 'Cuenta Administrador',
+            'name' => 'Cuenta Administrador',
             'email' => 'admin@gmail.com',
-            'tipoUsuario' => 'admin',*/
+            'tipoUsuario' => 'admin',
             //para estudiante
             /*'name' => 'Cuenta Estudiante',
             'email' => 'estudiante@gmail.com',
             'tipoUsuario' => 'est',*/
             //para docente
-            'name' => 'Cuenta Docente',
+            /*'name' => 'Cuenta Docente',
             'email' => 'docente@gmail.com',
-            'tipoUsuario' => 'doc',
+            'tipoUsuario' => 'doc',*/
         ]);
     }
 }

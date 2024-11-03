@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->integer('nivel');
             $table->string('periodo');
-            //id idioma
+            $table->foreignId('idioma_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

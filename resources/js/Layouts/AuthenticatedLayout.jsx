@@ -37,8 +37,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                     Matriculas
                                 </NavLink>
                                 <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    href={route('ciclo.index')}
+                                    active={route().current('ciclo.index')}
                                 >
                                     Grupos
                                 </NavLink>
