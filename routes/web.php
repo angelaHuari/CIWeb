@@ -8,19 +8,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+//Pagina de Inicio
 Route::get('/', function () {
-    /*return Inertia::render('Welcome', [
+    return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);*/
-    return Inertia::render('Auth/Login');
+    ]);
 });
-/*
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');*/
 
 //Para Todos los Usuarios
 //verifica que sea un usuario
