@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Formulario = () => {
+const Formulario = ({data}) => {
   const [formData, setFormData] = useState({
     email: '',
     nombres: '',

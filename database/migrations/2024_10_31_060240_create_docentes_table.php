@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('docentes', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
+            $table->string('nombres');
             $table->String('aPaterno');
             $table->String('aMaterno');
             $table->String('sexo');
             $table->String('dni');
             $table->String('celular');
             $table->String('fechaNacimiento');
-            $table->String('email');
-            $table->String('urlfoto');
+            $table->String('emailInstitucional');
+            $table->String('fotoDocente');
             $table->timestamps();
         });
     }
