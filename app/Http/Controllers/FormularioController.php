@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Formulario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class FormularioController extends Controller
 {
@@ -13,7 +14,8 @@ class FormularioController extends Controller
      */
     public function index()
     {
-        //
+        $formularios = Formulario::paginate(10);
+        return Inertia::render('Administrador/Formulario/Index',['formularios'=>$formularios]);
     }
 
     /**
@@ -30,7 +32,7 @@ class FormularioController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'email' => 'required|email',
+            'email' => 'nullable|email',
             'nombres' => 'required|string',
             'aPaterno' => 'required|string',
             'aMaterno' => 'required|string',
