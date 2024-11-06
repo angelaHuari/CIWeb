@@ -4,20 +4,32 @@ export default function NavLink({
     active = false,
     className = '',
     children,
+    icon: Icon, // Soporte para un icono opcional
     ...props
 }) {
     return (
         <Link
             {...props}
-            className={
-                'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none ' +
-                (active
-                    ? 'border-indigo-400 text-gray-900 focus:border-indigo-700'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:border-gray-300 focus:text-gray-700') +
-                className
-            }
+            className={`flex items-center justify-between border-b-4 px-6 py-3 text-base font-medium transition duration-300 ease-in-out focus:outline-none rounded-lg
+                ${active
+                    ? 'border-indigo-600 text-gray-900 bg-indigo-100 shadow-lg hover:bg-indigo-200 focus:border-indigo-700' // Fondo al estar activo
+                    : 'border-transparent text-gray-600 hover:border-red-900 hover:bg-indigo-50 hover:text-gray-900 focus:border-indigo-500 focus:bg-indigo-50 focus:text-gray-900'} 
+                ${className}`}
+            role="navigation" // Mejora de accesibilidad
+            aria-current={active ? 'page' : undefined} // Indica la página activa
         >
-            {children}
+            <span className={`flex-1 ${active ? 'font-bold' : 'font-normal'} flex items-center`}>
+                {Icon && (
+                    <Icon
+                        className={`mr-5 h-10 w-10 ${active ? 'text-indigo-600' : 'text-gray-600'} transition-all duration-300`} 
+                        aria-hidden="true"
+                    />
+                )}
+                {children}
+            </span>
+            {active && (
+                <span className="ml-2 text-xs text-indigo-600" aria-hidden="true">✓</span> // Icono de verificación al estar activo
+            )}
         </Link>
     );
 }

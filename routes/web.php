@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CicloController;
 use App\Http\Controllers\DocenteController;
+use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\IdiomaController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -49,7 +50,9 @@ Route::middleware('EsAdmin')->group(function () {
     Route::resource('ciclo',CicloController::class);
     Route::resource('docente',DocenteController::class);
     
+    
 });
+Route::resource('formulario',FormularioController::class);
 
 
 

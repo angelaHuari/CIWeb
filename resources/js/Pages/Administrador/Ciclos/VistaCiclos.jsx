@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm, Link } from '@inertiajs/react';
 
+
 const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
     const [selectedCycle, setSelectedCycle] = useState(null); // Ciclo seleccionado para edición
 
@@ -53,7 +54,7 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
 
     return (
         <div className="p-4 md:p-6 lg:p-8 font-sans bg-blue-200 min-h-screen">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl text-center font-bold mb-6">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl text-center font-bold mb-6" style={{ color: '#74111e' }}>
                 Interfaz de Gestión de Ciclos
             </h1>
             <div className="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0">
@@ -183,6 +184,7 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                 </div>
             </div>
         </div>
+         
     );
 };
 

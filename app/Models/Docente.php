@@ -17,7 +17,7 @@ class Docente extends Model
         'dni',
         'celular',
         'fechaNacimiento',
-        'email',
+        'emailInstitucional',
         'fotoDocente',
     ];
 }

@@ -46,8 +46,8 @@ const VistaIdiomas = ({ idiomas = [] }) => {
    };*/
 
   return (
-    <div className="p-6 font-sans bg-blue-200">
-      <h1 className="text-2xl text-center font-bold mb-6">Interfaz de Gestión de Idiomas</h1>
+    <div className="p-6 font-sans bg-red-100">
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl text-center font-bold mb-6" style={{ color: '#74111e' }}>Interfaz de Gestión de Idiomas</h1>
 
       <div className="flex flex-col md:flex-row justify-between items-center mb-6">
         <div className="w-full md:w-auto mb-4 md:mb-0">
@@ -81,19 +81,19 @@ const VistaIdiomas = ({ idiomas = [] }) => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full table-auto border-collapse">
+        <table className="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg">
           <thead>
             <tr>
               {/*<th className="border-b-2 border-gray-300 px-4 py-2">ID</th>*/}
-              <th className="border-b-2 border-gray-300 px-4 py-2">Nombre</th>
-              <th className="border-b-2 border-gray-300 px-4 py-2">Acciones</th>
+              <th className="border-b-2 border-gray-300 px-4 py-2" style={{ backgroundColor: '#74111e',color: '#ffffff' }}>Nombre</th>
+              <th  className="border-b-2 border-gray-300 px-4 py-2" style={{ backgroundColor: '#74111e',color: '#ffffff' }}>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {languages.map((language, index) => (
               <tr key={index} className='text-center'>
                 {/*<td className="border-b border-gray-300 px-4 py-2">{language.id}</td>*/}
-                <td className="border-b border-gray-300 px-4 py-2">{language.nombre}</td>
+                <td className="border-b border-gray-300 px-4 py-2" style={{ color: '#74111e' }}>{language.nombre}</td>
                 <td className="border-b border-gray-300 px-4 py-2">
                   <button
                     onClick={() => handleEdit(language)}
@@ -114,6 +114,7 @@ const VistaIdiomas = ({ idiomas = [] }) => {
         </table>
       </div>
     </div>
+    
   );
 };
 

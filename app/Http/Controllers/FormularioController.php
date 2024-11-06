@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Formulario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FormularioController extends Controller
 {
@@ -31,37 +32,50 @@ class FormularioController extends Controller
         $data = $request->validate([
             'email' => 'required|email',
             'nombres' => 'required|string',
-            'apellidos' => 'required|string',
+            'aPaterno' => 'required|string',
+            'aMaterno' => 'required|string',
             'dni' => 'required|string',
             'sexo' => 'required|string',
             'celular' => 'required|string',
             'fechaNacimiento' => 'required|date',
-            'afiliacion' => 'required|string',
+            'tipoAlumno' => 'required|string',
             'programadeEstudios' => 'nullable|string',
             'semestre' => 'nullable|string',
             'correoInstitucional' => 'nullable|string',
-            'institucionProveniente' => 'nullable|string',
+            'institucionProviene' => 'nullable|string',
             'medioPublicitario' => 'nullable|string',
-            'ciclo' => 'required|string',
-            'horario' => 'required|string',
+            'cicloIngles' => 'required|string',
+            'horarioIngles' => 'required|string',
             'tienecertificadoIngles' => 'nullable|string',
-            'infoCertificado' => 'nullable|string',
-            'fechaCertificado' => 'nullable|date',
-            'medioDePago' => 'required|string',
-            'fechaDePago' => 'required|date',
-            'montoDePago' => 'required|numeric',
+            'realizoInglesBasico' => 'nullable|string',
+            'realizoInglesIntermedio' => 'nullable|date',
+            'medioPago' => 'required|string',
+            'fechaPago' => 'required|date',
+            'montoPago' => 'required|numeric',
             'nroComprobante' => 'required|string',
             'imgComprobante' => 'nullable|image|max:2048', // Valida que sea una imagen
         ]);
-    
-        // Maneja el archivo imgComprobante si está presente
-        if ($request->hasFile('imgComprobante')) {
-            $data['imgComprobante'] = $request->file('imgComprobante')->store('comprobantes', 'public');
+        try {
+            if ($request->hasFile('imgComprobante')) {
+                $path = $request->file('imgComprobante')->store('images', 'public');
+                $data['imgComprobante'] = Storage::url($path);
+            }
+
+            Formulario::create($data);
+
+            return redirect()->route('/')->with('message', 'Formulario registrado correctamente');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al guardar el formulario: ' . $e->getMessage());
         }
     
-        Formulario::create($data);
+        // Maneja el archivo imgComprobante si está presente
+        /*if ($request->hasFile('imgComprobante')) {
+            $data['imgComprobante'] = $request->file('imgComprobante')->store('comprobantes', 'public');
+        }*/
     
-        return response()->json(['message' => 'Formulario registrado exitosamente']);
+        
+    
+        /*return response()->json(['message' => 'Formulario registrado exitosamente']);*/
     }
 
     /**

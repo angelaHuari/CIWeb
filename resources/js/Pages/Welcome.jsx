@@ -1,27 +1,74 @@
-import { Head, Link } from '@inertiajs/react';
-import Formulario from './Formulario';
 
-export default function Welcome({ auth, laravelVersion, phpVersion }) {
-    const handleImageError = () => {
-        document
-            .getElementById('screenshot-container')
-            ?.classList.add('!hidden');
-        document.getElementById('docs-card')?.classList.add('!row-span-1');
-        document
-            .getElementById('docs-card-content')
-            ?.classList.add('!flex-row');
-        document.getElementById('background')?.classList.add('!hidden');
+import { Head, Link, useForm } from '@inertiajs/react';
+import DatosGenerales from './Formulario/DatosGenerales';
+import DatosAdicionales from './Formulario/DatosAdicionales';
+import DatosPagoCaja from './Formulario/DatosPagoCaja';
+import DatosPagoBanco from './Formulario/DatosPagoBanco';
+
+export default function Welcome({ auth,ListaGrupos }) {
+    const { data, setData, post, put, processing, errors } = useForm({
+        nombres: '',
+        aPaterno: '',
+        aMaterno: '',
+        dni: '',
+        sexo: '',
+        celular: '',
+        fechaNacimiento: '',
+        tipoAlumno: '',
+        programadeEstudios: '',
+        semestre: '',
+        correoInstitucional: '',
+        institucionProveniente: '',
+        medioPublicitario: '',
+        cicloIngles: '',
+        horarioIngles: '',
+        realizoInglesBasico:'',
+        realizoInglesIntermedio:'',
+        tienecertificadoIngles: '',
+        medioDePago: '',
+        fechaDePago: '',
+        montoDePago: '',
+        nroComprobante: '',
+        imgComprobante: null,
+    });
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post(route('formulario.store'));
+
+        // Limpiar el formulario
+        setData({
+            nombres: '',
+            aPaterno: '',
+            aMaterno: '',
+            dni: '',
+            sexo: '',
+            celular: '',
+            fechaNacimiento: '',
+            tipoAlumno: '',
+            programadeEstudios: '',
+            semestre: '',
+            anioEgreso:'',
+            correoInstitucional: '',
+            email: '',
+            institucionProviene: '',
+            medioPublicitario: '',
+            cicloIngles: '',
+            horarioIngles: '',
+            tienecertificadoIngles: '',
+            realizoInglesBasico: '',
+            realizoInglesIntermedio:'',
+            nroComprobante: '',
+            fechaPago: '',
+            montoPago: '',
+            medioPago: '',
+            imgComprobante: null,
+        });
     };
-
     return (
         <>
             <Head title="Welcome" />
             <div className="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
-                <img
-                    id="background"
-                    className="absolute -left-20 top-0 max-w-[877px]"
-                    src="https://laravel.com/assets/img/welcome/background.svg"
-                />
+
                 <div className="relative flex min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
                     <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
                         <header className="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3">
@@ -43,17 +90,34 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                         >
                                             Iniciar Sesion
                                         </Link>
-                                        
+
                                     </>
                                 )}
                             </nav>
                         </header>
                         <main>
-                            <Formulario/>
+                            <div className="welcome-container">
+                                <h1>Formulario de Inscripción</h1>
+                                <div className="triptico-container">
+                                    <div className="triptico-section">
+                                        <DatosGenerales data={data} setData={setData} errors={errors} />
+                                    </div>
+                                    <div className="triptico-section">
+                                        <DatosAdicionales grupos={ListaGrupos} data={data} setData={setData} />
+                                    </div>
+                                    <div className="triptico-section">
+                                        <DatosPagoBanco />
+                                        <DatosPagoCaja data={data} setData={setData} />
+                                    </div>
+
+                                </div>
+                                <br />
+                                <button type="submit" onClick={handleSubmit}>Enviar</button>
+                            </div>
                         </main>
 
                         <footer className="py-16 text-center text-sm text-black dark:text-white/70">
-                            Copyright 
+                            Copyright
                         </footer>
                     </div>
                 </div>
