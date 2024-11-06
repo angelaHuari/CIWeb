@@ -31,8 +31,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                     Formulario
                                 </NavLink>
                                 <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    href={route('matricula')}
+                                    active={route().current('matricula')}
                                 >
                                     Matriculas
                                 </NavLink>
