@@ -9,4 +9,17 @@ class Docente extends Model
 {
     /** @use HasFactory<\Database\Factories\DocenteFactory> */
     use HasFactory;
+
+    // Define los campos que se pueden asignar masivamente
+    protected $fillable = [
+        'nombres',
+        'aPaterno',
+        'aMaterno',
+        'sexo',
+        'dni',
+        'celular',
+        'fechaNacimiento',
+        'emailInstitucional',
+        'fotoDocente',
+    ];
 }

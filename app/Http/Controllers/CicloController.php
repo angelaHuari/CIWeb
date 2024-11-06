@@ -2,25 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ciclo;
 use App\Models\Idioma;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class IdiomaController extends Controller
+class CicloController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $ciclos = Ciclo::with('idioma')->paginate(10);
         $idiomas = Idioma::all();
-        return Inertia::render('Administrador/Idiomas/Index', ['Listaidiomas' => $idiomas]);
+        return Inertia::render('Administrador/Ciclos/Index', ['ListaCiclos' => $ciclos, 'ListaIdiomas' => $idiomas,]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+        //
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -30,11 +35,17 @@ class IdiomaController extends Controller
         // Validar la solicitud
         $request->validate([
             'nombre' => 'required|string|max:30',
+            'periodo' => 'required|string|max:10',
+            'nivel' => 'required|numeric|min:1|max:30',
+            'idioma_id' => 'required|exists:idiomas,id',
         ]);
-        Idioma::create([
+        Ciclo::create([
             'nombre' => $request->nombre,
+            'periodo' => $request->periodo,
+            'nivel' => $request->nivel,
+            'idioma_id' => $request->idioma_id,
         ]);
-        return redirect()->route('idioma.index');
+        return redirect()->route('ciclo.index');
     }
 
     /**
@@ -61,17 +72,23 @@ class IdiomaController extends Controller
         // Validar los datos de entrada
         $validatedData = $request->validate([
             'nombre' => 'required|string|max:40',
+            'periodo' => 'required|string|max:10',
+            'nivel' => 'required|numeric|min:1|max:30',
+            'idioma_id' => 'required|exists:idiomas,id',
         ]);
 
         // Buscar el idioma por su ID
-        $idioma = Idioma::findOrFail($id);
+        $idioma = Ciclo::findOrFail($id);
 
         // Actualizar los atributos del idioma
         $idioma->nombre = $validatedData['nombre'];
+        $idioma->periodo = $validatedData['periodo'];
+        $idioma->nivel = $validatedData['nivel'];
+        $idioma->idioma_id = $validatedData['idioma_id'];
 
         $idioma->save();
 
-        return redirect()->route('idioma.index');
+        return redirect()->route('ciclo.index');
     }
 
     /**

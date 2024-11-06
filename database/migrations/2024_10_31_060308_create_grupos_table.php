@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('grupos', function (Blueprint $table) {
             $table->id();
             $table->string('modalidad');
-            $table->String('nroEstudiantes');
-            $table->String('horario');            
-            //$table->String('docente_id');
-            //$table->String('ciclo_id');
+            $table->integer('nroEstudiantes');
+            $table->string('horario');
+            $table->foreignId('id_Ciclo')->constrained('ciclos')->onDelete('cascade');
+            $table->foreignId('id_Docente')->constrained('docentes')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +28,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('grupos');
-        
     }
 };

@@ -38,14 +38,14 @@ export default function AuthenticatedLayout({ header, children }) {
                                     Matriculas
                                 </NavLink>
                                 <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    href={route('grupo.index')}
+                                    active={route().current('grupo.index')}
                                 >
                                     Grupos
                                 </NavLink>
                                 <NavLink
-                                    href={route('docentes')}
-                                    active={route().current('docentes')}
+                                    href={route('docente.index')}
+                                    active={route().current('docente.index')}
                                 >
                                     Docentes
                                 </NavLink>

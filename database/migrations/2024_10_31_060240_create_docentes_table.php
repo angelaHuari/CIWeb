@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('docentes', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->String('aPaterno');
-            $table->String('aMaterno');
-            $table->String('sexo');
-            $table->String('dni');
-            $table->String('celular');
-            $table->String('fechaNacimiento');
-            $table->String('email');
-            $table->String('urlfoto');
-            $table->timestamps();
+            $table->string('nombres'); // Nombres del docente
+            $table->string('aPaterno'); // Apellido paterno
+            $table->string('aMaterno'); // Apellido materno
+            $table->enum('sexo', ['MASCULINO', 'FEMENINO']); // Sexo del docente
+            $table->string('dni')->unique(); // DNI del docente
+            $table->string('celular')->nullable(); // Celular del docente
+            $table->date('fechaNacimiento'); // Fecha de nacimiento
+            $table->string('emailInstitucional')->unique(); // Correo electrónico
+            $table->string('fotoDocente')->nullable(); // URL de la foto del docente
+            $table->timestamps(); // Campos created_at y updated_at
         });
     }
 

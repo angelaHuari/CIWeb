@@ -9,4 +9,20 @@ class Ciclo extends Model
 {
     /** @use HasFactory<\Database\Factories\CicloFactory> */
     use HasFactory;
+
+    protected $fillable =[
+        'nombre',
+        'nivel',
+        'periodo',
+        'idioma_id',
+    ];
+    public function idioma()
+    {
+        return $this->belongsTo(Idioma::class);
+    }
+
+    public function grupos()
+    {
+        return $this->hasMany(Grupo::class, 'id_Ciclo');
+    }
 }
