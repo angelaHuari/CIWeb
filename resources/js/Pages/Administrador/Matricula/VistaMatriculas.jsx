@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm, Link } from '@inertiajs/react';
 
-const ListaMatriculas = ({ matriculas = [] }) => {
+const VistaMatriculas = ({}) => {
     // Datos simulados para mostrar en las tablas
     const matriculas = [
         { nombre: 'Juan Pérez', tipo_pago: 'Transferencia', no_voucher: 'V123', fecha_pago: '2023-09-15' },
@@ -9,10 +9,6 @@ const ListaMatriculas = ({ matriculas = [] }) => {
         { nombre: 'Carlos López', tipo_pago: 'Tarjeta', no_voucher: 'V789', fecha_pago: '2023-07-25' }
     ];
 
-    // Función para manejar clics en las tarjetas y cambiar de vista
-    const handleCardClick = (value) => {
-        setView(value); // Establece la vista de la tarjeta que fue clickeada
-    };
     return (
         <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
             <table className="min-w-full table-auto">
@@ -39,4 +35,4 @@ const ListaMatriculas = ({ matriculas = [] }) => {
     );
 
 }
-export default ListaMatriculas;
+export default VistaMatriculas;

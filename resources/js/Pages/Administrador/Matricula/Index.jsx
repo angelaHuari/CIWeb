@@ -1,7 +1,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { FaUserGraduate, FaCreditCard, FaRegListAlt } from 'react-icons/fa';
-import { useState } from 'react';
+import React ,{ useState } from 'react';
+import VistaMatriculas from './VistaMatriculas';
+import VistaPagos from './VistaPagos';
 
 export default function Index({ ListaMatriculas }) {
     const [view, setView] = useState(null); // Estado para controlar qué vista se muestra
@@ -14,11 +16,18 @@ export default function Index({ ListaMatriculas }) {
     const renderContent = () => {
         if (view === 'Matriculas') {
             return (
-                <ListaMatriculas matriculas={ListaMatriculas} ></ListaMatriculas>
+                <>
+                <VistaMatriculas matriculas={ListaMatriculas}></VistaMatriculas>
+
+                </>
+                
             );
         } else if (view === 'Pagos') {
             return (
-                <ListaPagos ></ListaPagos>
+                <>
+                <VistaPagos ></VistaPagos>
+                </>
+                
             );
         } else {
             return (

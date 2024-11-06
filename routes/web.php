@@ -4,6 +4,7 @@ use App\Http\Controllers\CicloController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\IdiomaController;
+use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
@@ -49,7 +50,7 @@ Route::middleware('EsAdmin')->group(function () {
     Route::resource('idioma',IdiomaController::class);
     Route::resource('ciclo',CicloController::class);
     Route::resource('docente',DocenteController::class);
-    Route::resource('matricula',DocenteController::class);
+    Route::resource('matricula',MatriculaController::class);
      
 });
 /*

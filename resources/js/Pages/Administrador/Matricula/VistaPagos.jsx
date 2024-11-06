@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm, Link } from '@inertiajs/react';
 
-const ListaPagos = ({}) => {
+const VistaPagos = ({}) => {
     //datos simulados de pagos
     const pagos = [
         { nombre: 'Juan Pérez', monto: 100, tipo_pago: 'Transferencia', no_voucher: 'V123', fecha_pago: '2023-09-15' },
@@ -36,4 +36,4 @@ const ListaPagos = ({}) => {
         </div>
     );
 }
-export default ListaPagos;
+export default VistaPagos;
