@@ -115,6 +115,7 @@ const DatosAdicionales = ({ data, setData, grupos }) => {
 
                     <label>¿Dónde se enteró del centro de idiomas?</label>
                     <select value={data.medioPublicitario} onChange={(e) => setData('medioPublicitario', e.target.value)}>
+                        <option value="">Seleccione...</option>
                         <option value="pagina_web">Página web ISTTA</option>
                         <option value="facebook">Facebook</option>
                         <option value="anuncios">Anuncios</option>
@@ -122,7 +123,7 @@ const DatosAdicionales = ({ data, setData, grupos }) => {
                         <option value="amigos">Amigos</option>
                         <option value="familiar">Familiar</option>
                     </select>
-                    
+
                     <label>Indique su correo personal:</label>
                     <input type="email" value={data.email} onChange={(e) => setData('email', e.target.value)} />
                 </div>
@@ -142,7 +143,7 @@ const DatosAdicionales = ({ data, setData, grupos }) => {
                 <div>
                     <label>Seleccione el horario</label>
                     <select value={data.horarioIngles} onChange={(e) => setData('horarioIngles', e.target.value)}>
-
+                        <option value="">Seleccione...</option>
                         <option value="a">Presencial (1:30pm - 3:00pm)</option>
                         <option value="b">Virtual (7:00pm - 8:30pm)</option>
                         <option value="c">Virtual (8:30pm - 10:00pm)</option>
@@ -153,18 +154,21 @@ const DatosAdicionales = ({ data, setData, grupos }) => {
                 <div>
                     <label>Seleccione el horario virtual</label>
                     <select onChange={(e) => setData('horarioIngles', e.target.value)}>
+                        <option value="">Seleccione...</option>
                         <option value="d">Virtual (7:00pm)</option>
                         <option value="e">Virtual (8:30pm)</option>
                     </select>
 
                     <label>¿Dónde realizó el ciclo básico?</label>
                     <select value={data.realizoInglesBasico} onChange={(e) => setData('realizoInglesBasico', e.target.value)}>
+                        <option value="">Seleccione...</option>
                         <option value="istta">ISTTA</option>
                         <option value="otro">Otro</option>
                     </select>
 
                     <label>¿Cuenta con certificado?</label>
                     <select value={data.tienecertificadoIngles} onChange={(e) => setData('tienecertificadoIngles', e.target.value)}>
+                        <option value="">Seleccione...</option>
                         <option value="si">Si</option>
                         <option value="no">No</option>
                     </select>
@@ -183,12 +187,14 @@ const DatosAdicionales = ({ data, setData, grupos }) => {
 
                     <label>¿Dónde realizó el ciclo intermedio?</label>
                     <select value={data.realizoInglesIntermedio} onChange={(e) => setData('realizoInglesIntermedio', e.target.value)}>
+                        <option value="">Seleccione...</option>
                         <option value="istta">ISTTA</option>
                         <option value="otro">Otro</option>
                     </select>
 
                     <label>¿Cuenta con certificado?</label>
                     <select value={data.tienecertificadoIngles} onChange={(e) => setData('tienecertificadoIngles', e.target.value)}>
+                        <option value="">Seleccione...</option>
                         <option value="si">Si</option>
                         <option value="no">No</option>
                     </select>

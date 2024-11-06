@@ -1,11 +1,10 @@
-
 import { Head, Link, useForm } from '@inertiajs/react';
 import DatosGenerales from './Formulario/DatosGenerales';
 import DatosAdicionales from './Formulario/DatosAdicionales';
 import DatosPagoCaja from './Formulario/DatosPagoCaja';
 import DatosPagoBanco from './Formulario/DatosPagoBanco';
 
-export default function Welcome({ auth,ListaGrupos }) {
+export default function Welcome({ auth, ListaGrupos }) {
     const { data, setData, post, put, processing, errors } = useForm({
         nombres: '',
         aPaterno: '',
@@ -31,6 +30,7 @@ export default function Welcome({ auth,ListaGrupos }) {
         nroComprobante: '',
         imgComprobante: null,
     });
+
     const handleSubmit = (e) => {
         e.preventDefault();
         post(route('formulario.store'));
@@ -64,10 +64,11 @@ export default function Welcome({ auth,ListaGrupos }) {
             imgComprobante: null,
         });
     };
+
     return (
         <>
             <Head title="Welcome" />
-            <div className="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
+            <div className="bg-white text-black">
 
                 <div className="relative flex min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
                     <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
@@ -78,7 +79,7 @@ export default function Welcome({ auth,ListaGrupos }) {
                                 {auth.user ? (
                                     <Link
                                         href={route('dashboard')}
-                                        className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                        className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20]"
                                     >
                                         Entrada
                                     </Link>
@@ -86,11 +87,10 @@ export default function Welcome({ auth,ListaGrupos }) {
                                     <>
                                         <Link
                                             href={route('login')}
-                                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20]"
                                         >
-                                            Iniciar Sesion
+                                            Iniciar Sesión
                                         </Link>
-
                                     </>
                                 )}
                             </nav>
@@ -109,14 +109,12 @@ export default function Welcome({ auth,ListaGrupos }) {
                                         <DatosPagoBanco />
                                         <DatosPagoCaja data={data} setData={setData} />
                                     </div>
-
                                 </div>
                                 <br />
                                 <button type="submit" onClick={handleSubmit}>Enviar</button>
                             </div>
                         </main>
-
-                        <footer className="py-16 text-center text-sm text-black dark:text-white/70">
+                        <footer className="py-16 text-center text-sm text-black">
                             Copyright
                         </footer>
                     </div>
