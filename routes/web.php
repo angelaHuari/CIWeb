@@ -49,15 +49,16 @@ Route::middleware('EsAdmin')->group(function () {
     Route::resource('idioma',IdiomaController::class);
     Route::resource('ciclo',CicloController::class);
     Route::resource('docente',DocenteController::class);
-    
-    
+    Route::resource('matricula',DocenteController::class);
+     
 });
+/*
 Route::middleware('EsAdmin')->group(function () {
     // Ruta para el formulario de matrículas
     Route::get('/matricula', function () {
         return Inertia::render('Administrador/Matricula/ListadeVista');
     })->name('matricula');
-});
+});*/
 Route::resource('formulario',FormularioController::class);
 
 

@@ -7,8 +7,8 @@ export default function Index({ ListaCiclos, ListaIdiomas }) {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Ciclos
+                <h2 className="text-3xl font-bold leading-tight text-white bg-gradient-to-r from-[#800020] to-[#6A4E3C] p-4 rounded-lg shadow-lg text-center">
+                   Ciclos y Idiomas
                 </h2>
 
             }

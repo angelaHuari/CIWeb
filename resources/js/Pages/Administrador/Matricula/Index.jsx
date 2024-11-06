@@ -3,92 +3,23 @@ import { Head } from '@inertiajs/react';
 import { FaUserGraduate, FaCreditCard, FaRegListAlt } from 'react-icons/fa';
 import { useState } from 'react';
 
-export default function Dashboard() {
-    const [info, setInfo] = useState('');
+export default function Index({ ListaMatriculas }) {
     const [view, setView] = useState(null); // Estado para controlar qué vista se muestra
-
-    // Datos simulados para mostrar en las tablas
-    const matriculas = [
-        { nombre: 'Juan Pérez', tipo_pago: 'Transferencia', no_voucher: 'V123', fecha_pago: '2023-09-15' },
-        { nombre: 'Ana García', tipo_pago: 'Efectivo', no_voucher: 'V456', fecha_pago: '2023-08-18' },
-        { nombre: 'Carlos López', tipo_pago: 'Tarjeta', no_voucher: 'V789', fecha_pago: '2023-07-25' }
-    ];
-
-    const pagos = [
-        { nombre: 'Juan Pérez', monto: 100, tipo_pago: 'Transferencia', no_voucher: 'V123', fecha_pago: '2023-09-15' },
-        { nombre: 'Ana García', monto: 150, tipo_pago: 'Efectivo', no_voucher: 'V456', fecha_pago: '2023-08-18' },
-        { nombre: 'Carlos López', monto: 200, tipo_pago: 'Tarjeta', no_voucher: 'V789', fecha_pago: '2023-07-25' }
-    ];
 
     // Función para manejar clics en las tarjetas y cambiar de vista
     const handleCardClick = (value) => {
         setView(value); // Establece la vista de la tarjeta que fue clickeada
     };
 
-    // Función para mostrar la tabla de Matrículas
-    const renderMatriculasTable = () => {
-        return (
-            <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
-                <table className="min-w-full table-auto">
-                    <thead className="bg-[#800020] text-white">
-                        <tr>
-                            <th className="px-6 py-3 text-left">Nombre</th>
-                            <th className="px-6 py-3 text-left">Tipo de Pago</th>
-                            <th className="px-6 py-3 text-left">No. Voucher</th>
-                            <th className="px-6 py-3 text-left">Fecha de Pago</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {matriculas.map((matricula, index) => (
-                            <tr key={index} className="border-b hover:bg-[#F4D6C5]">
-                                <td className="px-6 py-3">{matricula.nombre}</td>
-                                <td className="px-6 py-3">{matricula.tipo_pago}</td>
-                                <td className="px-6 py-3">{matricula.no_voucher}</td>
-                                <td className="px-6 py-3">{new Date(matricula.fecha_pago).toLocaleDateString()}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        );
-    };
-
-    // Función para mostrar la tabla de Pagos
-    const renderPagosTable = () => {
-        return (
-            <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
-                <table className="min-w-full table-auto">
-                    <thead className="bg-[#800020] text-white">
-                        <tr>
-                            <th className="px-6 py-3 text-left">Nombre</th>
-                            <th className="px-6 py-3 text-left">Monto</th>
-                            <th className="px-6 py-3 text-left">Tipo de Pago</th>
-                            <th className="px-6 py-3 text-left">No. Voucher</th>
-                            <th className="px-6 py-3 text-left">Fecha de Pago</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {pagos.map((pago, index) => (
-                            <tr key={index} className="border-b hover:bg-[#F4D6C5]">
-                                <td className="px-6 py-3">{pago.nombre}</td>
-                                <td className="px-6 py-3">${pago.monto}</td>
-                                <td className="px-6 py-3">{pago.tipo_pago}</td>
-                                <td className="px-6 py-3">{pago.no_voucher}</td>
-                                <td className="px-6 py-3">{new Date(pago.fecha_pago).toLocaleDateString()}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        );
-    };
-
-    // Función para mostrar el contenido de la vista seleccionada
     const renderContent = () => {
         if (view === 'Matriculas') {
-            return renderMatriculasTable();
+            return (
+                <ListaMatriculas matriculas={ListaMatriculas} ></ListaMatriculas>
+            );
         } else if (view === 'Pagos') {
-            return renderPagosTable();
+            return (
+                <ListaPagos ></ListaPagos>
+            );
         } else {
             return (
                 <div className="text-center p-6">
@@ -97,7 +28,6 @@ export default function Dashboard() {
             );
         }
     };
-
     return (
         <AuthenticatedLayout
             header={
@@ -115,7 +45,7 @@ export default function Dashboard() {
                     {/* Card Principal - Bienvenida */}
                     <div className="overflow-hidden bg-amber-50 shadow-xl sm:rounded-lg mb-10">
                         <div className="p-8 text-gray-800 text-center">
-                            
+
 
                             {/* Cards Section */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
