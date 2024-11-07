@@ -44,9 +44,7 @@ Route::middleware('auth')->group(function () {
 
 //Para Administrador
 Route::middleware('EsAdmin')->group(function () {
-    /*Route::get('/formulario', function () {
-        return Inertia::render('Administrador/Formulario/ListaFormulario');
-    })->name('formulario');*/
+   
     Route::resource('idioma',IdiomaController::class);
     Route::resource('ciclo',CicloController::class);
     Route::resource('docente',DocenteController::class);

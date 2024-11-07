@@ -183,7 +183,7 @@ const FormularioDocentes = ({ docentes = [] }) => {
                     </div>
 
                     <div>
-                        <label>Celular</label>
+                        <label>cel</label>
                         <input
                             type="text"
                             name="celular"
