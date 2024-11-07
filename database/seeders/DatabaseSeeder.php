@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             //para admin
-            'name' => 'Cuenta Administrador',
+           /* 'name' => 'Cuenta Administrador',
             'email' => 'admin@gmail.com',
             'tipoUsuario' => 'admin',
             //para estudiante
@@ -25,9 +25,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'estudiante@gmail.com',
             'tipoUsuario' => 'est',*/
             //para docente
-            /*'name' => 'Cuenta Docente',
+            'name' => 'Cuenta Docente',
             'email' => 'docente@gmail.com',
-            'tipoUsuario' => 'doc',*/
+            'tipoUsuario' => 'doc',
         ]);
     }
 }
