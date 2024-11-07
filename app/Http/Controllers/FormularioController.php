@@ -32,7 +32,6 @@ class FormularioController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'email' => 'nullable|email',
             'nombres' => 'required|string',
             'aPaterno' => 'required|string',
             'aMaterno' => 'required|string',
@@ -41,16 +40,18 @@ class FormularioController extends Controller
             'celular' => 'required|string',
             'fechaNacimiento' => 'required|date',
             'tipoAlumno' => 'required|string',
-            'programadeEstudios' => 'nullable|string',
+            'programaEstudios' => 'nullable|string',
             'semestre' => 'nullable|string',
-            'correoInstitucional' => 'nullable|string',
+            'correoInstitucional' => 'nullable|email',
+            'email' => 'nullable|email',
+            'anioEgreso' => 'nullable|string',
             'institucionProviene' => 'nullable|string',
             'medioPublicitario' => 'nullable|string',
             'cicloIngles' => 'required|string',
             'horarioIngles' => 'required|string',
             'tienecertificadoIngles' => 'nullable|string',
             'realizoInglesBasico' => 'nullable|string',
-            'realizoInglesIntermedio' => 'nullable|date',
+            'realizoInglesIntermedio' => 'nullable|string',
             'medioPago' => 'required|string',
             'fechaPago' => 'required|date',
             'montoPago' => 'required|numeric',
@@ -65,19 +66,12 @@ class FormularioController extends Controller
 
             Formulario::create($data);
 
-            return redirect()->route('/')->with('message', 'Formulario registrado correctamente');
+            return redirect('/')->with('message', 'Formulario registrado correctamente');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al guardar el formulario: ' . $e->getMessage());
         }
     
-        // Maneja el archivo imgComprobante si está presente
-        /*if ($request->hasFile('imgComprobante')) {
-            $data['imgComprobante'] = $request->file('imgComprobante')->store('comprobantes', 'public');
-        }*/
-    
         
-    
-        /*return response()->json(['message' => 'Formulario registrado exitosamente']);*/
     }
 
     /**

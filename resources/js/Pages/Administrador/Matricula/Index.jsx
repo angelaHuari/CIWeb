@@ -1,12 +1,20 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { FaUserGraduate, FaCreditCard, FaRegListAlt } from 'react-icons/fa';
-import React ,{ useState } from 'react';
+import { FaUserGraduate, FaCreditCard, FaSearch } from 'react-icons/fa';
+import React, { useState } from 'react';
 import VistaMatriculas from './VistaMatriculas';
 import VistaPagos from './VistaPagos';
 
 export default function Index({ ListaMatriculas }) {
-    const [view, setView] = useState(null); // Estado para controlar qué vista se muestra
+    // Estado para controlar qué vista se muestra
+    const [view, setView] = useState(null);
+
+    // Estado para el buscador de matrículas
+    const [searchMatriculas, setSearchMatriculas] = useState('');
+
+    // Estado para el buscador de pagos
+    const [searchPagos, setSearchPagos] = useState('');
+
 
     // Función para manejar clics en las tarjetas y cambiar de vista
     const handleCardClick = (value) => {
@@ -16,18 +24,31 @@ export default function Index({ ListaMatriculas }) {
     const renderContent = () => {
         if (view === 'Matriculas') {
             return (
-                <>
-                <VistaMatriculas matriculas={ListaMatriculas}></VistaMatriculas>
+                <div className="flex flex-col justify-center mt-10 space-y-4">
+                    {/* Buscador de Matrículas */}
+                    <div className="flex justify-center mb-4">
+                        <div className="relative max-w-sm w-full">
+                            <input
+                                type="text"
+                                placeholder="Buscar por nombre de estudiante o matrícula"
+                                className="px-4 py-2 w-96 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#800020] focus:border-[#800020]"
+                                value={searchMatriculas}
+                                onChange={(e) => setSearchMatriculas(e.target.value)}
+                            />
+                            <FaSearch className="absolute right-3 top-2 text-gray-500" />
+                        </div>
+                    </div>
 
-                </>
-                
+                    <VistaMatriculas matriculas={ListaMatriculas} search={searchMatriculas} />
+                </div>
             );
+            
         } else if (view === 'Pagos') {
             return (
                 <>
-                <VistaPagos ></VistaPagos>
+                    <VistaPagos ></VistaPagos>
                 </>
-                
+
             );
         } else {
             return (

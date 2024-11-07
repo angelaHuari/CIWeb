@@ -44,22 +44,16 @@ Route::middleware('auth')->group(function () {
 
 //Para Administrador
 Route::middleware('EsAdmin')->group(function () {
-    Route::get('/formulario', function () {
+    /*Route::get('/formulario', function () {
         return Inertia::render('Administrador/Formulario/ListaFormulario');
-    })->name('formulario');
+    })->name('formulario');*/
     Route::resource('idioma',IdiomaController::class);
     Route::resource('ciclo',CicloController::class);
     Route::resource('docente',DocenteController::class);
     Route::resource('matricula',MatriculaController::class);
      
 });
-/*
-Route::middleware('EsAdmin')->group(function () {
-    // Ruta para el formulario de matrículas
-    Route::get('/matricula', function () {
-        return Inertia::render('Administrador/Matricula/ListadeVista');
-    })->name('matricula');
-});*/
+
 Route::resource('formulario',FormularioController::class);
 
 

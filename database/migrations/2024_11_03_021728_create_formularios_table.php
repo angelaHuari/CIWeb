@@ -21,10 +21,11 @@ return new class extends Migration
             $table->string('celular');
             $table->date('fechaNacimiento');
             $table->string('tipoAlumno');
-            $table->string('programadeEstudios')->nullable();
+            $table->string('programaEstudios')->nullable();
             $table->string('semestre')->nullable();
             $table->string('correoInstitucional')->nullable();
-            $table->string('email');
+            $table->string('email')->nullable();
+            $table->string('anioEgreso')->nullable();
             $table->string('institucionProviene')->nullable();
             $table->string('medioPublicitario')->nullable();
             $table->string('cicloIngles');
@@ -34,7 +35,7 @@ return new class extends Migration
             $table->string('realizoInglesIntermedio')->nullable();
             $table->string('nroComprobante');
             $table->date('fechaPago');
-            $table->decimal('montoPago');
+            $table->integer('montoPago');
             $table->string('medioPago');
             $table->string('imgComprobante')->nullable();
             $table->timestamps();

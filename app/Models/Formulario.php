@@ -11,7 +11,6 @@ class Formulario extends Model
     use HasFactory;
      // Campos que pueden ser asignados en masa
      protected $fillable = [
-        'email',
         'nombres',
         'aPaterno',
         'aMaterno',
@@ -20,9 +19,11 @@ class Formulario extends Model
         'celular',
         'fechaNacimiento',
         'tipoAlumno',
-        'programadeEstudios',
+        'programaEstudios',
         'semestre',
         'correoInstitucional',
+        'email',
+        'anioEgreso',
         'institucionProviene',
         'medioPublicitario',
         'cicloIngles',
@@ -38,10 +39,8 @@ class Formulario extends Model
     ];
 
     // Opcional: especifica que campos se deben convertir a un tipo específico
-    protected $casts = [
-        'fechaNacimiento' => 'date',
-        'fechaCertificado' => 'date',
-        'fechaDePago' => 'date',
-        'montoDePago' => 'decimal:2', // dos decimales para monto de pago
-    ];
+    /*protected $casts = [
+        'fechaPago' => 'date',
+        //'montoPago' => 'decimal:2', // dos decimales para monto de pago
+    ];*/
 }

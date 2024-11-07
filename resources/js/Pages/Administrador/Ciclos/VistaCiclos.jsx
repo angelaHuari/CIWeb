@@ -22,6 +22,7 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
     // Manejar el envío del formulario para registrar o editar un ciclo
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(data);
 
         if (selectedCycle) {
             // Editar ciclo

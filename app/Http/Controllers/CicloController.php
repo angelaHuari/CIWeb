@@ -32,19 +32,22 @@ class CicloController extends Controller
      */
     public function store(Request $request)
     {
+        
          // Validar la solicitud
-        $request->validate([
+        $ciclo=$request->validate([
             'nombre' => 'required|string|max:30',
             'periodo' => 'required|string|max:10',
             'nivel' => 'required|numeric|min:1|max:30',
             'idioma_id' => 'required|exists:idiomas,id',
         ]);
+        
         Ciclo::create([
             'nombre'=>$request->nombre,
             'periodo'=>$request->periodo,
             'nivel'=>$request->nivel,
             'idioma_id'=>$request->idioma_id,
         ]);
+       
         return redirect()->route('ciclo.index');
     }
 
