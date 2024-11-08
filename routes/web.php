@@ -3,6 +3,7 @@
 use App\Http\Controllers\CicloController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\FormularioController;
+use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\IdiomaController;
 use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\ProfileController;
@@ -49,6 +50,7 @@ Route::middleware('EsAdmin')->group(function () {
     Route::resource('ciclo',CicloController::class);
     Route::resource('docente',DocenteController::class);
     Route::resource('matricula',MatriculaController::class);
+    Route::resource('grupo',GrupoController::class);
      
 });
 

@@ -8,13 +8,13 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 class DocenteController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         $query = Docente::query();
 
 
-        return Inertia::render('Administrador/Docentes/FormularioDocentes', [
-            'docentes' => $query->get(),
+        return Inertia::render('Administrador/Docentes/Index', [
+            'ListaDocentes' => $query->get(),
         ]);
     }
 
@@ -39,7 +39,7 @@ class DocenteController extends Controller
 
         try {
             if ($request->hasFile('fotoDocente')) {
-                $path = $request->file('fotoDocente')->store('images', 'public');
+                $path = $request->file('fotoDocente')->store('docentes', 'public');
                 $validated['fotoDocente'] = Storage::url($path);
             }
 
@@ -47,7 +47,10 @@ class DocenteController extends Controller
 
             return redirect()->route('docente.index')->with('message', 'Docente creado exitosamente');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error al guardar el docente: ' . $e->getMessage());
+            return Inertia::render('Administrador/Docentes/FormularioDocentes', [
+                'errors' => $e->getMessage(), // Enviar el error al componente
+                'docentes' => Docente::all(), // Enviar los docentes si es necesario
+            ]);
         }
     }
 
@@ -61,6 +64,13 @@ class DocenteController extends Controller
     public function update(Request $request, $id)
     {
         $docente = Docente::findOrFail($id);
+
+        $request->merge([
+            'nombres' => strtoupper($request->input('nombres')),
+            'aPaterno' => strtoupper($request->input('aPaterno')),
+            'aMaterno' => strtoupper($request->input('aMaterno')),
+            'sexo' => strtoupper($request->input('sexo')),
+        ]);
 
         $validated = $request->validate([
             'nombres' => 'required|string|max:255',
@@ -76,20 +86,29 @@ class DocenteController extends Controller
 
         try {
             if ($request->hasFile('fotoDocente')) {
+                // Borrar la imagen anterior si existe
                 if ($docente->fotoDocente) {
                     $oldPath = str_replace('/storage/', '', parse_url($docente->fotoDocente, PHP_URL_PATH));
                     Storage::disk('public')->delete($oldPath);
                 }
 
-                $path = $request->file('fotoDocente')->store('images', 'public');
+                // Guardar la nueva imagen
+                $path = $request->file('fotoDocente')->store('docentes', 'public');
                 $validated['fotoDocente'] = Storage::url($path);
+            } else {
+                // Si no se sube una nueva imagen, mantener la imagen actual
+                $validated['fotoDocente'] = $docente->fotoDocente;
             }
 
+            // Actualizar el docente
             $docente->update($validated);
 
             return redirect()->route('docente.index')->with('message', 'Docente actualizado exitosamente');
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', 'Error al actualizar el docente: ' . $e->getMessage());
+            return Inertia::render('Administrador/Docentes/FormularioDocentes', [
+                'errors' => $e->getMessage(), // Enviar el error al componente
+                'docentes' => Docente::all(), // Enviar los docentes si es necesario
+            ]);
         }
     }
 }

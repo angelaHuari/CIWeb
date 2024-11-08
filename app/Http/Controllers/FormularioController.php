@@ -16,7 +16,7 @@ class FormularioController extends Controller
     public function index()
     {
         $formularios = Formulario::paginate(10);
-        return Inertia::render('Administrador/Formulario/Index', ['formularios' => $formularios]);
+        return Inertia::render('Administrador/Formulario/Index', ['ListaFormularios' => $formularios]);
     }
 
     /**
