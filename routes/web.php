@@ -45,16 +45,15 @@ Route::middleware('auth')->group(function () {
 
 //Para Administrador
 Route::middleware('EsAdmin')->group(function () {
-   
-    Route::resource('idioma',IdiomaController::class);
-    Route::resource('ciclo',CicloController::class);
-    Route::resource('docente',DocenteController::class);
-    Route::resource('matricula',MatriculaController::class);
-    Route::resource('grupo',GrupoController::class);
-     
+
+    Route::resource('idioma', IdiomaController::class);
+    Route::resource('ciclo', CicloController::class);
+    Route::resource('docente', DocenteController::class);
+    Route::resource('matricula', MatriculaController::class);
+    Route::resource('grupo', GrupoController::class);
 });
 
-Route::resource('formulario',FormularioController::class);
+Route::resource('formulario', FormularioController::class);
 
 
 
