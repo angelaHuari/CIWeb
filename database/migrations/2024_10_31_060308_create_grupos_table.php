@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('modalidad');
             $table->String('nroEstudiantes');
+            $table->String('nroVacantes');
             $table->String('horario');            
-            //$table->String('docente_id');
-            //$table->String('ciclo_id');
+            $table->String('docente_id');
+            $table->String('ciclo_id');
             $table->timestamps();
         });
     }

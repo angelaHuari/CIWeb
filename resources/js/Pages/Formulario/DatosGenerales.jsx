@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
-import { useForm, Link } from '@inertiajs/react';
 
 const DatosGenerales = ({data,setData,errors}) => {
-    
-/*
-    const [apellidos, setApellidos] = useState('');
-    const [nombres, setNombres] = useState('');
-    const [dni, setDni] = useState('');
-    const [sexo, setSexo] = useState('');
-    const [celular, setCelular] = useState('');
-    const [fechaNacimiento, setFechaNacimiento] = useState('');*/
-
     return (
         <div>
             <strong> <h2>Datos Generales</h2></strong>

@@ -9,4 +9,20 @@ class Grupo extends Model
 {
     /** @use HasFactory<\Database\Factories\GrupoFactory> */
     use HasFactory;
+    protected $fillable = [
+        'modalidad',
+        'nroEstudiantes',
+        'nroVacantes',
+        'horario',
+        'docente_id',
+        'ciclo_id',
+    ];
+    public function docente()
+    {
+        return $this->belongsTo(Docente::class);
+    }
+    public function ciclo()
+    {
+        return $this->belongsTo(Ciclo::class);
+    }
 }

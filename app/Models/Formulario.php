@@ -28,13 +28,13 @@ class Formulario extends Model
         'medioPublicitario',
         'cicloIngles',
         'horarioIngles',
-        'tienecertificadoIngles',
         'realizoInglesBasico',
         'realizoInglesIntermedio',
-        'nroComprobante',
+        'tienecertificadoIngles',
+        'medioPago',
         'fechaPago',
         'montoPago',
-        'medioPago',
+        'nroComprobante',
         'imgComprobante',
     ];
 

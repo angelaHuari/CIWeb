@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Formulario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -15,7 +16,7 @@ class FormularioController extends Controller
     public function index()
     {
         $formularios = Formulario::paginate(10);
-        return Inertia::render('Administrador/Formulario/Index',['formularios'=>$formularios]);
+        return Inertia::render('Administrador/Formulario/Index', ['formularios' => $formularios]);
     }
 
     /**
@@ -49,9 +50,9 @@ class FormularioController extends Controller
             'medioPublicitario' => 'nullable|string',
             'cicloIngles' => 'required|string',
             'horarioIngles' => 'required|string',
-            'tienecertificadoIngles' => 'nullable|string',
             'realizoInglesBasico' => 'nullable|string',
             'realizoInglesIntermedio' => 'nullable|string',
+            'tienecertificadoIngles' => 'nullable|string',
             'medioPago' => 'required|string',
             'fechaPago' => 'required|date',
             'montoPago' => 'required|numeric',
@@ -63,15 +64,14 @@ class FormularioController extends Controller
                 $path = $request->file('imgComprobante')->store('images', 'public');
                 $data['imgComprobante'] = Storage::url($path);
             }
-
+            //dd($data);
             Formulario::create($data);
-
             return redirect('/')->with('message', 'Formulario registrado correctamente');
         } catch (\Exception $e) {
+            // Esto te ayudará a capturar el error
+            Log::error('Error al guardar el formulario: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Error al guardar el formulario: ' . $e->getMessage());
         }
-    
-        
     }
 
     /**
