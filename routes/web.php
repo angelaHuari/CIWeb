@@ -3,6 +3,7 @@
 use App\Http\Controllers\CicloController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\FormularioController;
+use App\Http\Controllers\FuncionEstudianteController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\IdiomaController;
 use App\Http\Controllers\MatriculaController;
@@ -14,6 +15,7 @@ use Inertia\Inertia;
 
 //Pagina de Inicio
 Route::get('/', function () {
+    
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
     ]);
@@ -57,8 +59,12 @@ Route::resource('formulario', FormularioController::class);
 
 
 
-
 //Para Estudiante
+Route::middleware('EsEstudiante')->group(function () {
+    Route::get('estudiante', [FuncionEstudianteController::class, 'registrar'])->name('estudiante.registrar');
+    Route::get('estudiante/ver', [FuncionEstudianteController::class, 'ver'])->name('estudiante.ver');
+});
+
 
 //Para Docente
 

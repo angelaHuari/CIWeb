@@ -4,7 +4,7 @@ import DatosAdicionales from './Formulario/DatosAdicionales';
 import DatosPagoCaja from './Formulario/DatosPagoCaja';
 import DatosPagoBanco from './Formulario/DatosPagoBanco';
 
-export default function Welcome({ auth, ListaGrupos }) {
+export default function Welcome({ auth, ListaGrupos ,ListaCiclos}) {
     const { data, setData, post, put, processing, errors, reset } = useForm({
         nombres: '',
         aPaterno: '',
@@ -121,7 +121,7 @@ export default function Welcome({ auth, ListaGrupos }) {
                                             <DatosGenerales data={data} setData={setData} errors={errors} />
                                         </div>
                                         <div className="triptico-section">
-                                            <DatosAdicionales grupos={ListaGrupos} data={data} setData={setData} />
+                                            <DatosAdicionales grupos={ListaGrupos} ciclos={ListaCiclos} data={data} setData={setData} />
                                         </div>
                                         <div className="triptico-section">
                                             <DatosPagoBanco />

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-function RegistrarMatricula() {
+function InterfazUsoEstudiantes() {
   const [voucherPreview, setVoucherPreview] = useState(null); // Estado para la vista previa de la imagen
   const [matriculas, setMatriculas] = useState([]); // Estado para almacenar las matrículas
   const [fotoVoucher, setFotoVoucher] = useState(null); // Para almacenar la URL de la imagen
@@ -154,57 +154,15 @@ function RegistrarMatricula() {
       </div>
 
       <div className="text-right mt-8"> {/* Usar text-right para alinear el contenido a la derecha */}
-  <button
-    type="submit"
-    className="bg-[#700303] hover:bg-[#8c1010] text-white font-semibold py-2 px-6 rounded-md shadow-md transition duration-300"
-  >
-    Registrar
-  </button>
-</div>
-
-
-      {/* Tabla de Matrículas dentro del formulario con scroll */}
-      <div className="mt-12">
-        <h3 className="text-xl font-bold text-[#700303] mb-4">Matrículas Registradas</h3>
-        <div className="overflow-x-auto max-h-60 overflow-y-scroll">
-          <table className="min-w-full table-auto border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-[#700303] text-white">
-                <th className="p-2">Ciclo</th>
-                <th className="p-2">Horario</th>
-                <th className="p-2">Monto</th>
-                <th className="p-2">Medio de Pago</th>
-                <th className="p-2">Nro Voucher</th>
-                <th className="p-2">Foto Voucher</th> {/* Nueva columna para la imagen */}
-                <th className="p-2">Calificación</th>
-              </tr>
-            </thead>
-            <tbody>
-              {matriculas.map((matricula, index) => (
-                <tr key={index} className="border-b border-gray-300">
-                  <td className="p-2">{matricula.ciclo}</td>
-                  <td className="p-2">{matricula.horario}</td>
-                  <td className="p-2">{matricula.montoPago}</td>
-                  <td className="p-2">{matricula.medioPago}</td>
-                  <td className="p-2">{matricula.nroVoucher}</td>
-                  <td className="p-2">
-                    {matricula.fotoVoucher && (
-                      <img
-                        src={matricula.fotoVoucher}
-                        alt="Voucher"
-                        className="w-20 h-20 object-cover"
-                      />
-                    )}
-                  </td>
-                  <td className="p-2">{matricula.calificacion}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <button
+          type="submit"
+          className="bg-[#700303] hover:bg-[#8c1010] text-white font-semibold py-2 px-6 rounded-md shadow-md transition duration-300"
+        >
+          Registrar
+        </button>
       </div>
     </form>
   );
 }
 
-export default RegistrarMatricula;   
+export default InterfazUsoEstudiantes;   

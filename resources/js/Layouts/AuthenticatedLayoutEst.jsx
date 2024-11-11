@@ -31,14 +31,14 @@ export default function AuthenticatedLayoutEst({ header, children }) {
                                     Inicio
                                 </NavLink>
                                 <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    href={route('estudiante.registrar')}
+                                    active={route().current('estudiante.registrar')}
                                 >
                                     Registrar Matriculas
                                 </NavLink>
                                 <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    href={route('estudiante.ver')}
+                                    active={route().current('estudiante.ver')}
                                 >
                                     Ver Matriculas
                                 </NavLink>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const DatosAdicionales = ({ data, setData, grupos }) => {
+const DatosAdicionales = ({ data, setData, grupos ,ciclos=[] }) => {
 
     const [correoEgresado, setCorreoEgresado] = useState('');
     const handleTipoAlumnoChange = (e) => {
@@ -120,6 +120,9 @@ const DatosAdicionales = ({ data, setData, grupos }) => {
             <label>¿A qué ciclo de inglés desea matricularse?</label>
             <select value={data.cicloIngles} onChange={(e) => setData({...data,cicloIngles: e.target.value})}>
                 <option value="">Seleccione...</option>
+                {/*ciclos.data.map((ciclo)=>{
+                    <option value={ciclo.nombre}>{`${ciclo.nombre}`}</option>
+                })*/}
                 <option value="basico">Básico</option>
                 <option value="intermedio">Intermedio</option>
                 <option value="avanzado">Avanzado</option>
@@ -137,6 +140,7 @@ const DatosAdicionales = ({ data, setData, grupos }) => {
                     </select>
                 </div>
             )}
+
             {data.cicloIngles === 'intermedio' && (
                 <div>
                     <label>Seleccione el horario virtual</label>
