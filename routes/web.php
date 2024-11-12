@@ -8,6 +8,8 @@ use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\IdiomaController;
 use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Ciclo;
+use App\Models\Grupo;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -15,9 +17,21 @@ use Inertia\Inertia;
 
 //Pagina de Inicio
 Route::get('/', function () {
-    
+    // Obtener los grupos cuyo ciclo tenga periodo 'enero'
+    $grupos = Grupo::whereHas('ciclo', function ($query) {
+        $query->where('periodo', 'Enero'); // Filtrar ciclos con periodo 'enero'
+    })
+        ->with(['ciclo', 'docente']) // Incluir las relaciones ciclo y docente
+        ->get(); // Obtener todos los grupos que cumplen con la condición
+
+    // Obtener todos los ciclos con periodo 'enero'
+    $ciclos = Ciclo::where('periodo', 'Enero') // Filtrar ciclos con periodo 'enero'
+        ->with('idioma') // Incluir la relación con idioma
+        ->get(); // Obtener todos los ciclos que cumplen con la condición
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
+        'ListaGrupos' => $grupos ?: [],
+        'ListaCiclos' => $ciclos ?: [],
     ]);
 });
 
