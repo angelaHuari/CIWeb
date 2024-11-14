@@ -4,7 +4,8 @@ import DatosAdicionales from './Formulario/DatosAdicionales';
 import DatosPagoCaja from './Formulario/DatosPagoCaja';
 import DatosPagoBanco from './Formulario/DatosPagoBanco';
 
-export default function Welcome({ auth, ListaGrupos ,ListaCiclos}) {
+export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
+
     const { data, setData, post, put, processing, errors, reset } = useForm({
         nombres: '',
         aPaterno: '',

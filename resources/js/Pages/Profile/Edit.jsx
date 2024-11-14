@@ -12,7 +12,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
             <AuthenticatedLayoutEst
                 header={
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                        Profile
+                        Perfil de Usuario
                     </h2>
                 }
             >
@@ -45,7 +45,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
             <AuthenticatedLayout
                 header={
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                        Profile
+                        Perfil de Usuario
                     </h2>
                 }
             >
@@ -78,7 +78,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
             <AuthenticatedLayoutDoc
                 header={
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                        Profile
+                        Perfil de Usuario
                     </h2>
                 }
             >

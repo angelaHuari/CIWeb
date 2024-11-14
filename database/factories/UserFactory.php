@@ -27,19 +27,19 @@ class UserFactory extends Factory
             /*'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),*/
             //PARA CREAR USUARIO ADMIN
-            /*'name' => 'Cuenta de Administrador',
+            'name' => 'Cuenta de Administrador',
             'email' => 'admin@gmail.com',
             'tipoUsuario' => 'admin',
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('passAdmin'),
-            'remember_token' => Str::random(10),*/
+            'remember_token' => Str::random(10),
             //PARA CREAR USUARIO ESTUDIANTE
-            'name' => 'Cuenta de Estudiante',
+            /*'name' => 'Cuenta de Estudiante',
             'email' => 'estudiante@gmail.com',
             'tipoUsuario' => 'est',
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('passEstudiante'),
-            'remember_token' => Str::random(10),
+            'remember_token' => Str::random(10),*/
             // PARA CREAR USUARIO DOCENTE
             /*'name' => 'Cuenta de Docente',
             'email' => 'docente@gmail.com',
