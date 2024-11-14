@@ -31,6 +31,7 @@ export default function AuthenticatedLayoutDoc({ header, children }) {
                                     Grupos
                                 </NavLink>
                             </div>
+                            
                         </div>
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
