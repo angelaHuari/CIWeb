@@ -7,6 +7,7 @@
 - php artisan migrate
 - php artisan serve
 - npm run dev
+- php artisan storage:link (para funcion de imagenes)
 
 # clona un Branch
 git clone --single-branch --branch ModuloCiclosYIdiomas https://github.com/angelaHuari/CIWeb.git
