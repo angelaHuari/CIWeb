@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { FaFileAlt, FaSearch, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md'; // Ícono de cerrar
 
-const VistaMatriculas = () => {
+const VistaMatriculas = ({matriculas}) => {
     // Datos de matrículas simulados
-    const ListaMatriculas = [
+    /*const ListaMatriculas = [
         { 
             nombre: 'Juan Pérez', 
             fechaMatricula: '2023-09-01', 
@@ -26,13 +26,13 @@ const VistaMatriculas = () => {
             idGrupo: 'C3', 
             formulario: '/path/to/archivo3.pdf' 
         }
-    ];
+    ];*/
 
     const [search, setSearch] = useState(''); // Estado para el buscador
     const [formularioModal, setFormularioModal] = useState(null); // Estado para manejar el modal de formulario
 
     // Filtrar matrículas por nombre
-    const filteredMatriculas = ListaMatriculas.filter(matricula =>
+    const filteredMatriculas = matriculas.data.filter(matricula =>
         matricula.nombre.toLowerCase().includes(search.toLowerCase())
     );
 
@@ -93,7 +93,7 @@ const VistaMatriculas = () => {
                                 filteredMatriculas.map((matricula, index) => (
                                     <tr key={index} className="border-b hover:bg-[#F4D6C5]">
                                         <td className="px-6 py-3">{matricula.nombre}</td>
-                                        <td className="px-6 py-3">{new Date(matricula.fechaMatricula).toLocaleDateString()}</td>
+                                        <td className="px-6 py-3">{new Date(matricula.fecha).toLocaleDateString()}</td>
                                         <td className="px-6 py-3">
                                             {matricula.estadoPago === 'Pagado' ? (
                                                 <span className="text-green-500 flex items-center">
@@ -105,7 +105,7 @@ const VistaMatriculas = () => {
                                                 </span>
                                             )}
                                         </td>
-                                        <td className="px-6 py-3">{matricula.idGrupo}</td>
+                                        <td className="px-6 py-3">{matricula.grupo.ciclo.nombre}</td>
                                         <td className="px-6 py-3">
                                             {matricula.formulario ? (
                                                 <button 

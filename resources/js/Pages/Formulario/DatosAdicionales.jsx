@@ -6,21 +6,9 @@ const DatosAdicionales = ({ data, setData, grupos = [], ciclos = [] }) => {
     const handleTipoAlumnoChange = (e) => {
         setData({ ...data, tipoAlumno: e.target.value });
     };
-    console.log('Datos de grupos:', grupos);
-    console.log('Datos de ciclos:', ciclos);
+    
 
-    if (Array.isArray(grupos) && Array.isArray(ciclos)) {
-        const gruposFiltrados = grupos.filter(grupo => {
-            // Buscar el ciclo correspondiente al ciclo_id del grupo
-            const ciclo = ciclos.find(c => c.id === grupo.ciclo_id);
-            // Retornar true si el ciclo tiene el nombre 'básico'
-            return ciclo && ciclo.nombre === 'Basico';
-        });
-
-        console.log(gruposFiltrados);
-    } else {
-        console.error('Los datos de grupos o ciclos no son arrays');
-    }
+   
     return (
         <div>
             <strong><h2>Datos Adicionales</h2></strong>
@@ -134,14 +122,16 @@ const DatosAdicionales = ({ data, setData, grupos = [], ciclos = [] }) => {
             <label>¿A qué ciclo de inglés desea matricularse?</label>
             <select value={data.cicloIngles} onChange={(e) => setData({ ...data, cicloIngles: e.target.value })}>
                 <option value="">Seleccione...</option>
-                { ciclos.map((ciclo) => {
-                    <option value={ciclo.nombre}>{`${ciclo.nombre} ${ciclo.idioma.nombre}`}</option>
-                })}
+                {ciclos && ciclos.map((ciclo) => (
+                    <option key={ciclo.id} value={ciclo.nombre}>
+                        {`${ciclo.nombre} - ${ciclo.idioma?.nombre || ''}`}
+                    </option>
+                ))}
 
             </select>
 
             {/* Horario según ciclo */}
-            {data.cicloIngles === 'basico' && (
+            {data.cicloIngles === 'Basico' && (
                 <div>
                     <label>Seleccione el horario</label>
                     <select value={data.horarioIngles} onChange={(e) => setData({ ...data, horarioIngles: e.target.value })}>
@@ -153,7 +143,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], ciclos = [] }) => {
                 </div>
             )}
 
-            {data.cicloIngles === 'intermedio' && (
+            {data.cicloIngles === 'Intermedio' && (
                 <div>
                     <label>Seleccione el horario virtual</label>
                     <select value={data.horarioIngles} onChange={(e) => setData({ ...data, horarioIngles: e.target.value })}>
@@ -179,7 +169,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], ciclos = [] }) => {
 
             )}
 
-            {data.cicloIngles === 'avanzado' && (
+            {data.cicloIngles === 'Avanzado' && (
                 <div>
                     <label>Seleccione el horario</label>
                     <select value={data.horarioIngles} onChange={(e) => setData({ ...data, horarioIngles: e.target.value })}>

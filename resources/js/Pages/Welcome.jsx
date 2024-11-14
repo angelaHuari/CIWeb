@@ -35,7 +35,6 @@ export default function Welcome({ auth, ListaGrupos ,ListaCiclos}) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(data);
         post(route('formulario.store'));
 
         // Limpiar el formulario

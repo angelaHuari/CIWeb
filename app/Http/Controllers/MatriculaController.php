@@ -13,7 +13,7 @@ class MatriculaController extends Controller
      */
     public function index()
     {
-        $matriculas = Matricula::paginate(15);
+        $matriculas = Matricula::with(['grupo','estudiante'])->paginate(15);
         return Inertia::render('Administrador/Matricula/Index',['ListaMatriculas'=>$matriculas]);
     }
 

@@ -25,6 +25,7 @@ export default function Index({ ListaMatriculas }) {
                 
             );
         } else if (view === 'Pagos') {
+            //Tabla de Matriculas por verificar
             return (
                 <>
                 <VistaPagos ></VistaPagos>
@@ -80,7 +81,7 @@ export default function Index({ ListaMatriculas }) {
                                     tabIndex="0"
                                 >
                                     <FaCreditCard className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Pagos</h4>
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Verificacion de Matriculas</h4>
                                     <p className="text-[#F5D0A9] text-sm">Administra y revisa los pagos realizados por los estudiantes, incluyendo los vouchers.</p>
                                 </div>
 
