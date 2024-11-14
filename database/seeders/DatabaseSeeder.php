@@ -21,13 +21,13 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'tipoUsuario' => 'admin',*/
             //para estudiante
-            /*'name' => 'Cuenta Estudiante',
+            'name' => 'Cuenta Estudiante',
             'email' => 'estudiante@gmail.com',
-            'tipoUsuario' => 'est',*/
+            'tipoUsuario' => 'est',
             //para docente
-            'name' => 'Cuenta Docente',
+            /*'name' => 'Cuenta Docente',
             'email' => 'docente@gmail.com',
-            'tipoUsuario' => 'doc',
+            'tipoUsuario' => 'doc',*/
         ]);
     }
 }

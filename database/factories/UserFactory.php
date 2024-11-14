@@ -34,19 +34,19 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('passAdmin'),
             'remember_token' => Str::random(10),*/
             //PARA CREAR USUARIO ESTUDIANTE
-            /*'name' => 'Cuenta de Estudiante',
+            'name' => 'Cuenta de Estudiante',
             'email' => 'estudiante@gmail.com',
             'tipoUsuario' => 'est',
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('passEstudiante'),
-            'remember_token' => Str::random(10),*/
+            'remember_token' => Str::random(10),
             // PARA CREAR USUARIO DOCENTE
-            'name' => 'Cuenta de Docente',
+            /*'name' => 'Cuenta de Docente',
             'email' => 'docente@gmail.com',
             'tipoUsuario' => 'doc',
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('passDocente'),
-            'remember_token' => Str::random(10),
+            'remember_token' => Str::random(10),*/
         ];
     }
 
