@@ -39,8 +39,16 @@ const ResumenInscripcion = ({ inscripcion }) => {
     });
 
     const handleAceptar = () => {
-        alert("Formulario aceptado");
-        // Lógica para enviar los datos o realizar alguna acción
+        post(route('formularios.aceptar', inscripcion.id), {}, {
+            onSuccess: (page) => {
+                if (page.props.flash.message) {
+                    alert(page.props.flash.message);
+                }
+                if (page.props.flash.error) {
+                    alert(page.props.flash.error);
+                }
+            }
+        });
     };
 
     const handleRechazar = () => {
@@ -113,114 +121,107 @@ const ResumenInscripcion = ({ inscripcion }) => {
                     </div>
 
                     {/* Datos Matricula */}
-                    <div className="mb-6">
-                        <h3 className="text-xl font-semibold mb-3">Datos Matricula</h3>
-                        <div className="mb-4 grid grid-cols-2 gap-4">
+                    <div className="mb-6 bg-gray-50 p-6 rounded-lg shadow-sm">
+                        <h3 className="text-xl font-semibold mb-3 text-gray-800">Datos Matrícula</h3>
+                        <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-gray-700 mb-2">Nombre del Ciclo:</label>
-                                <select value={inscripcion.nombreCiclo} onChange={(e) => setData('nombreCiclo', e.target.value)} className="w-full p-2 border border-gray-300 rounded">
-                                    <option value="">Seleccione...</option>
-                                    <option value="básico">Básico</option>
-                                    <option value="intermedio">Intermedio</option>
-                                    <option value="avanzado">Avanzado</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-gray-700 mb-2">Nivel:</label>
-                                <input type="number" className="w-full p-2 border border-gray-300 rounded" value={inscripcion.nivel} onChange={(e) => setData('nivel', e.target.value)} />
-                            </div>
-                        </div>
-
-                        <div className="mb-4 grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-gray-700 mb-2">Idioma:</label>
-                                <select value={inscripcion.idioma} onChange={(e) => setData('idioma', e.target.value)} className="w-full p-2 border border-gray-300 rounded">
-                                    <option value="">Seleccione...</option>
-                                    <option value="ingles">Inglés</option>
-                                </select>
+                                <input 
+                                    type="text" 
+                                    className="w-full p-2 border border-gray-300 rounded bg-white" 
+                                    value={inscripcion.cicloIngles || ''}
+                                    readOnly 
+                                />
                             </div>
                             <div>
                                 <label className="block text-gray-700 mb-2">Horario:</label>
-                                <select value={inscripcion.horario} onChange={(e) => setData('horario', e.target.value)} className="w-full p-2 border border-gray-300 rounded">
-                                    <option value="">Seleccione...</option>
-                                    <option value="7:30 a 9:00">7:30 a 9:00</option>
-                                    {/* Agrega más opciones si es necesario */}
-                                </select>
+                                <input 
+                                    type="text" 
+                                    className="w-full p-2 border border-gray-300 rounded bg-white" 
+                                    value={inscripcion.horarioIngles || ''} 
+                                    readOnly 
+                                />
                             </div>
                         </div>
-
-                        <div className="mb-4 grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-gray-700 mb-2"></label>{/* estado de pago */}
-                                <input type="hidden" value="pendiente" onChange={(e) => setData('estadoPago', e.target.value)} />
-                            </div>
-                            <div>
-                                <label className="block text-gray-700 mb-2"></label>{/* nota */}
-                                <input type="hidden" value="" onChange={(e) => setData('nota', e.target.value)} />
-                            </div>
-                        </div>
-
-
-
-
                     </div>
+
                     {/*Datos Pago */}
-                    <div className="mb-6">
-                        <h3 className="text-xl font-semibold mb-3">Datos de Pago</h3>
-                        <div className="mb-4 grid grid-cols-2 gap-4">
+                    <div className="mb-6 bg-gray-50 p-6 rounded-lg shadow-sm">
+                        <h3 className="text-xl font-semibold mb-3 text-gray-800">Datos de Pago</h3>
+                        <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-gray-700 mb-2">Fecha de Pago:</label>
-                                <input type="date" className="w-full p-2 border border-gray-300 rounded" value={inscripcion.fechaPago} onChange={(e) => setData('fechaPago', e.target.value)} />
+                                <input 
+                                    type="date" 
+                                    className="w-full p-2 border border-gray-300 rounded" 
+                                    value={inscripcion.fechaPago} 
+                                    onChange={(e) => setData('fechaPago', e.target.value)} 
+                                />
                             </div>
                             <div>
-                                <label>Monto de Pago:</label>
-                                <select value={data.montoPago || 0} onChange={(e) => setData({ ...data, montoPago: Number(e.target.value) })}>
-                                    <option value={0}>Seleccione...</option>
-                                    <option value={100} >100 soles (Pago mes actual)</option>
-                                    <option value={200}>200 soles (Pago mes actual + 01 mes de adelanto)</option>
-                                    <option value={300}>300 soles (Pago mes actual + 02 meses de adelanto)</option>
-                                    <option value={400}>400 soles (Pago completo del Ciclo)</option>
-                                </select>
+                                <label className="block text-gray-700 mb-2">Monto de Pago:</label>
+                                <input
+                                    type="number" 
+                                    value={inscripcion.montoPago || 0} 
+                                    onChange={(e) => setData('montoPago', Number(e.target.value))}
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                >
+                                    
+                                </input>
                             </div>
-                        </div>
 
-                        <div className="mb-4 grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-gray-700 mb-2">Medio de Pago:</label>
-                                <select value={inscripcion.medioPago} onChange={(e) => setData('medioPago', e.target.value)} className="w-full p-2 border border-gray-300 rounded">
-                                    <option value="">Seleccione...</option>
-                                    <option value="cajaInstitucional">Caja Institucional</option>
-                                    <option value="bancoNacion">Banco Nación</option>
-                                    {/* Agrega más opciones si es necesario */}
-                                </select>
+                                <input
+                                    type="text" 
+                                    value={inscripcion.medioPago} 
+                                    onChange={(e) => setData('medioPago', e.target.value)} 
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                >
+                                    
+                                </input>
                             </div>
                             <div>
                                 <label className="block text-gray-700 mb-2">Número de Voucher:</label>
-                                <input type="text" className="w-full p-2 border border-gray-300 rounded" value={inscripcion.nroVoucher} onChange={(e) => setData('nroVoucher', e.target.value)} />
+                                <input 
+                                    type="text" 
+                                    className="w-full p-2 border border-gray-300 rounded" 
+                                    value={inscripcion.nroComprobante} 
+                                    onChange={(e) => setData('nroComprobante', e.target.value)} 
+                                />
                             </div>
                         </div>
 
-                        <div>
+                        <div className="mt-4">
                             <label className="block text-gray-700 mb-2">Comprobante de Pago:</label>
-                            <input type="file" accept="image/*" onChange={handleFileChange} className="w-full p-2 border border-gray-300 rounded" />
-                            {data.imgComprobante && (
+                            {inscripcion.imgComprobante ? (
                                 <div className="mt-2">
                                     <img
-                                        src={URL.createObjectURL(data.imgComprobante)}
-                                        alt="Vista previa"
+                                        src={inscripcion.imgComprobante}
+                                        alt="Comprobante"
                                         className="w-40 h-40 object-cover border border-gray-300 rounded"
                                     />
                                 </div>
+                            ) : (
+                                <p className="text-gray-500 italic">No se ha subido comprobante</p>
                             )}
                         </div>
                     </div>
 
                     {/* Botones de acción */}
                     <div className="mt-6 flex justify-center gap-4">
-                        <button type="button" className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600" onClick={handleAceptar}>
+                        <button 
+                            type="button" 
+                            className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200" 
+                            onClick={handleAceptar}
+                        >
                             Aceptar
                         </button>
-                        <button type="button" className="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600" onClick={handleRechazar}>
+                        <button 
+                            type="button" 
+                            className="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors duration-200" 
+                            onClick={handleRechazar}
+                        >
                             Rechazar
                         </button>
                     </div>

@@ -6,9 +6,21 @@ const DatosAdicionales = ({ data, setData, grupos = [], ciclos = [] }) => {
     const handleTipoAlumnoChange = (e) => {
         setData({ ...data, tipoAlumno: e.target.value });
     };
-    
+    console.log('Datos de grupos:', grupos);
+    console.log('Datos de ciclos:', ciclos);
 
-   
+    if (Array.isArray(grupos) && Array.isArray(ciclos)) {
+        const gruposFiltrados = grupos.filter(grupo => {
+            // Buscar el ciclo correspondiente al ciclo_id del grupo
+            const ciclo = ciclos.find(c => c.id === grupo.ciclo_id);
+            // Retornar true si el ciclo tiene el nombre 'básico'
+            return ciclo && ciclo.nombre === 'Basico';
+        });
+
+        console.log(gruposFiltrados);
+    } else {
+        console.error('Los datos de grupos o ciclos no son arrays');
+    }
     return (
         <div>
             <strong><h2>Datos Adicionales</h2></strong>
@@ -120,80 +132,126 @@ const DatosAdicionales = ({ data, setData, grupos = [], ciclos = [] }) => {
 
             {/* Ciclos de inglés */}
             <label>¿A qué ciclo de inglés desea matricularse?</label>
-            <select value={data.cicloIngles} onChange={(e) => setData({ ...data, cicloIngles: e.target.value })}>
+            <select 
+                value={data.cicloIngles} 
+                onChange={(e) => {
+                    const selectedCiclo = grupos.find(g => g.ciclo.id === parseInt(e.target.value))?.ciclo;
+                    setData({ 
+                        ...data, 
+                        cicloIngles: e.target.value,
+                        cicloNombre: selectedCiclo ? `${selectedCiclo.nombre} - ${selectedCiclo.idioma.nombre}` : '',
+                        horarioIngles: '' 
+                    });
+                }}
+            >
                 <option value="">Seleccione...</option>
-                {ciclos && ciclos.map((ciclo) => (
-                    <option key={ciclo.id} value={ciclo.nombre}>
-                        {`${ciclo.nombre} - ${ciclo.idioma?.nombre || ''}`}
-                    </option>
-                ))}
-
+                {[...new Set(grupos.map(grupo => grupo.ciclo.id))].map((cicloId) => {
+                    const grupo = grupos.find(g => g.ciclo.id === cicloId);
+                    const ciclo = grupo?.ciclo;
+                    return (
+                        <option key={cicloId} value={cicloId}>
+                            {`${ciclo?.nombre} - ${ciclo?.idioma?.nombre || ''}`}
+                        </option>
+                    );
+                })}
             </select>
 
-            {/* Horario según ciclo */}
-            {data.cicloIngles === 'Basico' && (
+            {/* Horarios disponibles según el ciclo seleccionado */}
+            {data.cicloIngles && (
                 <div>
-                    <label>Seleccione el horario</label>
-                    <select value={data.horarioIngles} onChange={(e) => setData({ ...data, horarioIngles: e.target.value })}>
+                    <label>Seleccione el horario disponible:</label>
+                    <select 
+                        value={data.horarioIngles} 
+                        onChange={(e) => {
+                            const selectedGrupo = grupos.find(g => g.id === parseInt(e.target.value));
+                            setData({ 
+                                ...data, 
+                                horarioIngles: e.target.value,
+                                horarioTexto: selectedGrupo?.horario || '',
+                                modalidad: selectedGrupo?.modalidad || ''
+                            });
+                        }}
+                    >
                         <option value="">Seleccione...</option>
-                        <option value="a">Presencial (1:30pm - 3:00pm)</option>
-                        <option value="b">Virtual (7:00pm - 8:30pm)</option>
-                        <option value="c">Virtual (8:30pm - 10:00pm)</option>
+                        {grupos
+                            .filter(grupo => grupo.ciclo.id === parseInt(data.cicloIngles))
+                            .map((grupo) => (
+                                <option key={grupo.id} value={grupo.id}>
+                                    {`${grupo.modalidad} - ${grupo.horario} (Vacantes: ${grupo.nroVacantes})`}
+                                </option>
+                            ))}
                     </select>
+
+                    {/* Campos adicionales según el ciclo */}
+                    {(() => {
+                        const cicloSeleccionado = grupos.find(g => g.ciclo.id === parseInt(data.cicloIngles))?.ciclo;
+                        const nombreCiclo = cicloSeleccionado?.nombre.toLowerCase() || '';
+                        
+                        // Si es intermedio
+                        if (nombreCiclo.includes('intermedio')) {
+                            return (
+                                <>
+                                    <div className="mt-4">
+                                        <label>¿Dónde realizó el ciclo básico?</label>
+                                        <select 
+                                            value={data.realizoInglesBasico} 
+                                            onChange={(e) => setData({ ...data, realizoInglesBasico: e.target.value })}
+                                        >
+                                            <option value="">Seleccione...</option>
+                                            <option value="istta">ISTTA</option>
+                                            <option value="otro">Otro</option>
+                                        </select>
+                                    </div>
+                                    <div className="mt-4">
+                                        <label>¿Cuenta con certificado de básico?</label>
+                                        <select 
+                                            value={data.tienecertificadoIngles} 
+                                            onChange={(e) => setData({ ...data, tienecertificadoIngles: e.target.value })}
+                                        >
+                                            <option value="">Seleccione...</option>
+                                            <option value="si">Sí</option>
+                                            <option value="no">No</option>
+                                        </select>
+                                    </div>
+                                </>
+                            );
+                        }
+                        
+                        // Si es avanzado
+                        if (nombreCiclo.includes('avanzado')) {
+                            return (
+                                <>
+                                    <div className="mt-4">
+                                        <label>¿Dónde realizó el ciclo intermedio?</label>
+                                        <select 
+                                            value={data.realizoInglesIntermedio} 
+                                            onChange={(e) => setData({ ...data, realizoInglesIntermedio: e.target.value })}
+                                        >
+                                            <option value="">Seleccione...</option>
+                                            <option value="istta">ISTTA</option>
+                                            <option value="otro">Otro</option>
+                                        </select>
+                                    </div>
+                                    <div className="mt-4">
+                                        <label>¿Cuenta con certificado de intermedio?</label>
+                                        <select 
+                                            value={data.tieneCertificadoIntermedio} 
+                                            onChange={(e) => setData({ ...data, tieneCertificadoIntermedio: e.target.value })}
+                                        >
+                                            <option value="">Seleccione...</option>
+                                            <option value="si">Sí</option>
+                                            <option value="no">No</option>
+                                        </select>
+                                    </div>
+                                </>
+                            );
+                        }
+                        
+                        return null; // Si es básico, no mostrar campos adicionales
+                    })()}
                 </div>
             )}
 
-            {data.cicloIngles === 'Intermedio' && (
-                <div>
-                    <label>Seleccione el horario virtual</label>
-                    <select value={data.horarioIngles} onChange={(e) => setData({ ...data, horarioIngles: e.target.value })}>
-                        <option value="">Seleccione...</option>
-                        <option value="d">Virtual (7:00pm)</option>
-                        <option value="e">Virtual (8:30pm)</option>
-                    </select>
-
-                    <label>¿Dónde realizó el ciclo básico?</label>
-                    <select value={data.realizoInglesBasico} onChange={(e) => setData({ ...data, realizoInglesBasico: e.target.value })}>
-                        <option value="">Seleccione...</option>
-                        <option value="istta">ISTTA</option>
-                        <option value="otro">Otro</option>
-                    </select>
-
-                    <label>¿Cuenta con certificado?</label>
-                    <select value={data.tienecertificadoIngles} onChange={(e) => setData({ ...data, tienecertificadoIngles: e.target.value })}>
-                        <option value="">Seleccione...</option>
-                        <option value="si">Si</option>
-                        <option value="no">No</option>
-                    </select>
-                </div>
-
-            )}
-
-            {data.cicloIngles === 'Avanzado' && (
-                <div>
-                    <label>Seleccione el horario</label>
-                    <select value={data.horarioIngles} onChange={(e) => setData({ ...data, horarioIngles: e.target.value })}>
-                        <option value="">Seleccione...</option>
-                        <option value="j">Virtual (7:00pm)</option>
-                        <option value="k">Virtual (8:30pm)</option>
-                    </select>
-
-                    <label>¿Dónde realizó el ciclo intermedio?</label>
-                    <select value={data.realizoInglesIntermedio} onChange={(e) => setData({ ...data, realizoInglesIntermedio: e.target.value })}>
-                        <option value="">Seleccione...</option>
-                        <option value="istta">ISTTA</option>
-                        <option value="otro">Otro</option>
-                    </select>
-
-                    <label>¿Cuenta con certificado?</label>
-                    <select value={data.tienecertificadoIngles} onChange={(e) => setData({ ...data, tienecertificadoIngles: e.target.value })}>
-                        <option value="">Seleccione...</option>
-                        <option value="si">Si</option>
-                        <option value="no">No</option>
-                    </select>
-
-                </div>
-            )}
         </div>
     );
 };

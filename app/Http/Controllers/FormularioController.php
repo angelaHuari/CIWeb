@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Formulario;
+use App\Models\Grupo;
+use App\Models\Estudiante;
+use App\Models\Matricula;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -48,18 +52,27 @@ class FormularioController extends Controller
             'anioEgreso' => 'nullable|string',
             'institucionProviene' => 'nullable|string',
             'medioPublicitario' => 'nullable|string',
-            'cicloIngles' => 'required|string',
-            'horarioIngles' => 'required|string',
-            'realizoInglesBasico' => 'nullable|string',
-            'realizoInglesIntermedio' => 'nullable|string',
-            'tienecertificadoIngles' => 'nullable|string',
+            'cicloIngles' => 'required|exists:ciclos,id',
+            'horarioIngles' => 'required|exists:grupos,id',
+            'realizoInglesBasico' => 'nullable|in:istta,otro',
+            'realizoInglesIntermedio' => 'nullable|in:istta,otro',
+            'tienecertificadoIngles' => 'nullable|in:si,no',
+            'tieneCertificadoIntermedio' => 'nullable|in:si,no',
             'medioPago' => 'required|string',
             'fechaPago' => 'required|date',
             'montoPago' => 'required|numeric',
             'nroComprobante' => 'required|string',
             'imgComprobante' => 'nullable|image|max:2048', // Valida que sea una imagen
         ]);
+
         try {
+            // Antes de crear el formulario, obtén los datos adicionales necesarios
+            $grupo = Grupo::with(['ciclo.idioma'])->find($data['horarioIngles']);
+            if ($grupo) {
+                $data['cicloIngles'] = $grupo->ciclo->nombre . ' - ' . $grupo->ciclo->idioma->nombre;
+                $data['horarioIngles'] = $grupo->horario;
+            }
+
             if ($request->hasFile('imgComprobante')) {
                 $path = $request->file('imgComprobante')->store('images', 'public');
                 $data['imgComprobante'] = Storage::url($path);
@@ -104,5 +117,50 @@ class FormularioController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function aceptar(string $id)
+    {
+        try {
+            $formulario = Formulario::findOrFail($id);
+            
+            // Crear estudiante
+            $estudiante = Estudiante::create([
+                'nombres' => $formulario->nombres,
+                'aPaterno' => $formulario->aPaterno,
+                'aMaterno' => $formulario->aMaterno,
+                'dni' => $formulario->dni,
+                'sexo' => $formulario->sexo,
+                'celular' => $formulario->celular,
+                'email' => $formulario->email ?? $formulario->correoInstitucional,
+                'emailInstitucional' => $formulario->correoInstitucional,
+                'programaEstudios' => $formulario->programaEstudios
+            ]);
+
+            // Buscar el grupo correspondiente
+            $grupo = Grupo::where('horario', $formulario->horarioIngles)
+                         ->whereHas('ciclo', function($query) use ($formulario) {
+                             $query->whereRaw("CONCAT(nombre, ' - ', (SELECT nombre FROM idiomas WHERE id = ciclos.idioma_id)) = ?", [$formulario->cicloIngles]);
+                         })
+                         ->first();
+
+            if (!$grupo) {
+                throw new \Exception('No se encontró el grupo correspondiente');
+            }
+
+            // Crear matrícula
+            Matricula::create([
+                'fecha' => Carbon::now(),
+                'estadoPago' => 'pagado',
+                'nota' => 0,
+                'estudiante_id' => $estudiante->id,
+                'grupo_id' => $grupo->id
+            ]);
+
+            return redirect()->back()->with('message', 'Estudiante registrado y matriculado correctamente');
+        } catch (\Exception $e) {
+            Log::error('Error al registrar estudiante y matrícula: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error al procesar la solicitud: ' . $e->getMessage());
+        }
     }
 }

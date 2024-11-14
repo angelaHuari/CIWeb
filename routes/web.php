@@ -17,21 +17,11 @@ use Inertia\Inertia;
 
 //Pagina de Inicio
 Route::get('/', function () {
-    // Obtener los grupos cuyo ciclo tenga periodo 'enero'
-    $grupos = Grupo::whereHas('ciclo', function ($query) {
-        $query->where('periodo', 'Enero'); // Filtrar ciclos con periodo 'enero'
-    })
-        ->with(['ciclo', 'docente']) // Incluir las relaciones ciclo y docente
-        ->get(); // Obtener todos los grupos que cumplen con la condición
-
-    // Obtener todos los ciclos con periodo 'enero'
-    $ciclos = Ciclo::where('periodo', 'Enero') // Filtrar ciclos con periodo 'enero'
-        ->with('idioma') // Incluir la relación con idioma
-        ->get(); // Obtener todos los ciclos que cumplen con la condición
+    $grupos = Grupo::with(['ciclo.idioma', 'docente'])->get();
+    
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
-        'ListaGrupos' => $grupos ?: [],
-        'ListaCiclos' => $ciclos ?: [],
+        'ListaGrupos' => $grupos,
     ]);
 });
 
@@ -70,6 +60,7 @@ Route::middleware('EsAdmin')->group(function () {
 });
 
 Route::resource('formulario', FormularioController::class);
+Route::post('/formularios/{id}/aceptar', [FormularioController::class, 'aceptar'])->name('formularios.aceptar');
 
 
 
