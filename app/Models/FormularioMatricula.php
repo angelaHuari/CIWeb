@@ -10,6 +10,7 @@ class FormularioMatricula extends Model
     /** @use HasFactory<\Database\Factories\FormularioMatriculaFactory> */
     use HasFactory;
     protected $fillable = [
+        'estudiante_id',
         'fecha',
         'cicloIngles',
         'horarioIngles',
@@ -19,4 +20,5 @@ class FormularioMatricula extends Model
         'medioPago',
         'imgComprobante',
     ];
+
 }

@@ -38,9 +38,5 @@ class Formulario extends Model
         'imgComprobante',
     ];
 
-    // Opcional: especifica que campos se deben convertir a un tipo específico
-    /*protected $casts = [
-        'fechaPago' => 'date',
-        //'montoPago' => 'decimal:2', // dos decimales para monto de pago
-    ];*/
+    
 }

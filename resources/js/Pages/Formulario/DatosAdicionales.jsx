@@ -1,32 +1,18 @@
 import React, { useState } from 'react';
 
-const DatosAdicionales = ({ data, setData, grupos = [], ciclos = [] }) => {
+const DatosAdicionales = ({ data, setData, grupos = [] }) => {
 
     const [correoEgresado, setCorreoEgresado] = useState('');
     const handleTipoAlumnoChange = (e) => {
         setData({ ...data, tipoAlumno: e.target.value });
     };
-    console.log('Datos de grupos:', grupos);
-    console.log('Datos de ciclos:', ciclos);
 
-    if (Array.isArray(grupos) && Array.isArray(ciclos)) {
-        const gruposFiltrados = grupos.filter(grupo => {
-            // Buscar el ciclo correspondiente al ciclo_id del grupo
-            const ciclo = ciclos.find(c => c.id === grupo.ciclo_id);
-            // Retornar true si el ciclo tiene el nombre 'básico'
-            return ciclo && ciclo.nombre === 'Basico';
-        });
-
-        console.log(gruposFiltrados);
-    } else {
-        console.error('Los datos de grupos o ciclos no son arrays');
-    }
     return (
         <div>
             <strong><h2>Datos Adicionales</h2></strong>
             <label>¿Usted es?</label>
             <div>
-                <select value={data.tipoAlumno} onChange={handleTipoAlumnoChange}>
+                <select value={data.tipoAlumno} onChange={handleTipoAlumnoChange} required>
                     <option value="">Seleccione...</option>
                     <option value="alumno">Alumno del Instituto</option>
                     <option value="egresado">Egresado del Instituto</option>
@@ -39,13 +25,13 @@ const DatosAdicionales = ({ data, setData, grupos = [], ciclos = [] }) => {
                     <label>Seleccione su programa de estudios:</label>
                     <select value={data.programaEstudios} onChange={(e) => setData({ ...data, programaEstudios: e.target.value })}>
                         <option value="">Seleccione...</option>
-                        <option value="dsi">DSI</option>
-                        <option value="electro">Electrónica I</option>
-                        <option value="ei">EI</option>
-                        <option value="ma">MA</option>
+                        <option value="dsi">Desarrollo de Sistemas de Informacion</option>
+                        <option value="electronica">Electrónica Industrial</option>
+                        <option value="ei">Electricidad Industrial</option>
+                        <option value="ma">Mecanica Automotriz</option>
                         <option value="mpi">MPI</option>
-                        <option value="conta">Conta</option>
-                        <option value="got">GOT</option>
+                        <option value="contabilidad">Contabilidad</option>
+                        <option value="got">Guia Oficial de Turismo</option>
                         <option value="ashr">ASHR</option>
                         <option value="lcap">LCAP</option>
                         <option value="et">ET</option>
