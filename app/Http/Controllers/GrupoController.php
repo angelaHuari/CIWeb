@@ -40,6 +40,7 @@ class GrupoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'periodo' => 'required|string',
             'modalidad' => 'required|string',
             'nroEstudiantes' => 'required|integer',
             'nroVacantes' => 'required|integer',

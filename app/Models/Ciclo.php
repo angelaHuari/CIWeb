@@ -12,7 +12,6 @@ class Ciclo extends Model
     protected $fillable =[
         'nombre',
         'nivel',
-        'periodo',
         'idioma_id',
     ];
     public function idioma()

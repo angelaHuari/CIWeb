@@ -3,9 +3,9 @@ import { Head } from '@inertiajs/react';
 import { FaUserGraduate, FaCreditCard, FaRegListAlt } from 'react-icons/fa';
 import React ,{ useState } from 'react';
 import VistaMatriculas from './VistaMatriculas';
-import VistaPagos from './VistaPagos';
+import VistaFormularios from './VistaFormularios';
 
-export default function Index({ ListaMatriculas }) {
+export default function Index({ ListaMatriculas,ListaFormulariosMatricula }) {
     const [view, setView] = useState(null); // Estado para controlar qué vista se muestra
 
     // Función para manejar clics en las tarjetas y cambiar de vista
@@ -24,11 +24,11 @@ export default function Index({ ListaMatriculas }) {
                 </>
                 
             );
-        } else if (view === 'Pagos') {
+        } else if (view === 'Verificacion') {
             //Tabla de Matriculas por verificar
             return (
                 <>
-                <VistaPagos ></VistaPagos>
+                <VistaFormularios ListaFormularios={ListaFormulariosMatricula}></VistaFormularios>
                 </>
                 
             );
@@ -70,19 +70,19 @@ export default function Index({ ListaMatriculas }) {
                                 >
                                     <FaUserGraduate className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
                                     <h4 className="text-lg font-semibold text-[#F5D0A9]">Gestión de Matrículas</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Gestiona y visualiza las matrículas de los estudiantes, junto con sus formularios asociados.</p>
+                                    <p className="text-[#F5D0A9] text-sm">Gestiona y visualiza las matrículas de los estudiantes, junto con toda la información asociada.</p>
                                 </div>
 
                                 {/* Card Pagos */}
                                 <div
                                     className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
-                                    onClick={() => handleCardClick('Pagos')}
-                                    aria-label="Pagos"
+                                    onClick={() => handleCardClick('Verificacion')}
+                                    aria-label="Verificacion"
                                     tabIndex="0"
                                 >
                                     <FaCreditCard className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
                                     <h4 className="text-lg font-semibold text-[#F5D0A9]">Verificacion de Matriculas</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Administra y revisa los pagos realizados por los estudiantes, incluyendo los vouchers.</p>
+                                    <p className="text-[#F5D0A9] text-sm">Verifica y aprueba los formularios de matriculas -mensualidades realizados por los estudiantes, incluyendo los comprobantes de pago.</p>
                                 </div>
 
                             </div>

@@ -2,10 +2,10 @@ import AuthenticatedLayoutEst from '@/Layouts/AuthenticatedLayoutEst';
 import { Head } from '@inertiajs/react';
 import { FaClipboardCheck, FaHandsHelping, FaLightbulb, FaComments, FaShieldAlt } from 'react-icons/fa';
 import { useState } from 'react';
-import InterfazUsoEstudiantes from './InterfazUsoEstudiantes';
+import FormularioMatriculas from './FormularioMatriculas';
 
 
-export default function RegistrarMatricula() {
+export default function RegistrarMatricula({ListaGrupos}) {
     return (
         <AuthenticatedLayoutEst
             header={
@@ -19,8 +19,8 @@ export default function RegistrarMatricula() {
             {/* Fondo con gradiente suave de granate a color piel */}
             <div className="py-12 bg-gradient-to-b from-[#800020] to-[#F5D0A9] min-h-screen">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <InterfazUsoEstudiantes
-                    ></InterfazUsoEstudiantes>
+                    <FormularioMatriculas grupos={ListaGrupos}
+                    ></FormularioMatriculas>
                 </div>
             </div>
         </AuthenticatedLayoutEst>

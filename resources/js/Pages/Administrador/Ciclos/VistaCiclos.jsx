@@ -7,17 +7,13 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
 
     const { data, setData, post, put, processing, errors } = useForm({
         nombre: '',
-        periodo: '',
         nivel: 1,
         idioma_id: '',
     });
 
     // Opciones de idiomas y periodos
     const languagesOptions = idiomas;
-    const periodOptions = [
-        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-    ];
+    
 
     // Manejar el envío del formulario para registrar o editar un ciclo
     const handleSubmit = (e) => {
@@ -36,7 +32,6 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
         // Limpiar el formulario
         setData({
             nombre: '',
-            periodo: '',
             nivel: 1,
             idioma_id: '',
         });
@@ -47,7 +42,6 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
         setSelectedCycle(cycle.id);
         setData({
             nombre: cycle.nombre,
-            periodo: cycle.periodo,
             nivel: cycle.nivel,
             idioma_id: cycle.idioma_id,
         });
@@ -97,17 +91,6 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                                 placeholder="Nivel"
                             />
 
-                            <select
-                                value={data.periodo}
-                                onChange={(e) => setData('periodo', e.target.value)}
-                                required
-                                className="p-2 border border-gray-300 rounded w-full"
-                            >
-                                <option value="" disabled>Selecciona un Período</option>
-                                {periodOptions.map((month, index) => (
-                                    <option key={index} value={month}>{month}</option>
-                                ))}
-                            </select>
                         </div>
 
                         <div className="flex justify-between">
@@ -139,7 +122,6 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                             <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Idioma</th>
                             <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Nombre del Ciclo</th>
                             <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Nivel</th>
-                            <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Período</th>
                             <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Acciones</th>
                         </tr>
                     </thead>
@@ -150,7 +132,6 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                                     <td className="border-b border-gray-300 px-4 py-2">{cycle.idioma.nombre}</td>
                                     <td className="border-b border-gray-300 px-4 py-2">{cycle.nombre}</td>
                                     <td className="border-b border-gray-300 px-4 py-2">{cycle.nivel}</td>
-                                    <td className="border-b border-gray-300 px-4 py-2">{cycle.periodo}</td>
                                     <td className="border-b border-gray-300 px-4 py-2">
                                         <button
                                             onClick={() => handleEdit(cycle)}

@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('formulario_matriculas', function (Blueprint $table) {
             $table->id();
             $table->string('estudiante_id');
-            $table->date('fecha');
+            $table->date('fechaMatricula');
             $table->string('cicloIngles');
             $table->string('horarioIngles');
             $table->date('fechaPago');
             $table->string('nroComprobante');
-            $table->integer('monto');
+            $table->integer('montoPago');
             $table->string('medioPago');
             $table->String('imgComprobante');
             $table->timestamps();

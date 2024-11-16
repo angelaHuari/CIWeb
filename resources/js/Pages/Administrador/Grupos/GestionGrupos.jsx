@@ -3,6 +3,7 @@ import { useForm, router } from '@inertiajs/react';
 
 const GestionGrupos = ({ grupos, ciclos, docentes }) => {
     const { data, setData, processing, errors, reset } = useForm({
+        periodo: '',
         modalidad: '',
         nroEstudiantes: '',
         nroVacantes: '',
@@ -10,6 +11,10 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
         docente_id: '',
         ciclo_id: '',
     });
+    const periodOptions = [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
 
     const [editing, setEditing] = useState(false);
     const [selectedGrupo, setSelectedGrupo] = useState(null);
@@ -95,6 +100,24 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
 
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow">
                 <div className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium mb-1" htmlFor="periodo">
+                            Periodo
+                        </label>
+                        <select
+                            value={data.periodo}
+                            onChange={(e) => setData('periodo', e.target.value)}
+                            required
+                            className="p-2 border border-gray-300 rounded w-full"
+                        >
+                            <option value="" disabled>Selecciona un Período</option>
+                            {periodOptions.map((month, index) => (
+                                <option key={index} value={month}>{month}</option>
+                            ))}
+                        </select>
+
+                    </div>
+
                     <div>
                         <label className="block text-sm font-medium mb-1" htmlFor="modalidad">
                             Modalidad
@@ -239,6 +262,9 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
                     <thead className="bg-gray-50">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Periodo
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Modalidad
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -264,6 +290,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
                     <tbody className="bg-white divide-y divide-gray-200">
                         {grupos.data?.map((grupo) => (
                             <tr key={grupo.id} className="hover:bg-gray-50">
+                                <td className="px-6 py-4 whitespace-nowrap">{grupo.periodo}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{grupo.modalidad}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{grupo.nroEstudiantes}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{grupo.nroVacantes}</td>

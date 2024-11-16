@@ -10,6 +10,7 @@ class Grupo extends Model
     /** @use HasFactory<\Database\Factories\GrupoFactory> */
     use HasFactory;
     protected $fillable = [
+        'periodo',
         'modalidad',
         'nroEstudiantes',
         'nroVacantes',

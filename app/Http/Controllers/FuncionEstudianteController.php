@@ -16,7 +16,8 @@ class FuncionEstudianteController extends Controller
      */
     public function registrar()
     {
-        return Inertia::render('Estudiante/RegistrarMatricula');
+        $grupos = Grupo::with(['ciclo.idioma'])->get();
+        return Inertia::render('Estudiante/RegistrarMatricula',['ListaGrupos'=>$grupos]);
     }
 
     /**
@@ -37,16 +38,10 @@ class FuncionEstudianteController extends Controller
             'fechaPago' => 'required|date',
             'montoPago' => 'required|numeric',
             'nroComprobante' => 'required|string',
-            'imgComprobante' => 'nullable|image|max:2048', // Valida que sea una imagen
+            'imgComprobante' => 'nullable|image|max:2048',
         ]);
 
         try {
-            // Antes de crear el formulario, obtén los datos adicionales necesarios
-            $grupo = Grupo::with(['ciclo.idioma'])->find($data['horarioIngles']);
-            if ($grupo) {
-                $data['cicloIngles'] = $grupo->ciclo->nombre . ' - ' . $grupo->ciclo->idioma->nombre;
-                $data['horarioIngles'] = $grupo->horario;
-            }
 
             if ($request->hasFile('imgComprobante')) {
                 $path = $request->file('imgComprobante')->store('images', 'public');
@@ -54,11 +49,12 @@ class FuncionEstudianteController extends Controller
             }
             //dd($data);
             FormularioMatricula::create($data);
-            return redirect('/')->with('message', 'Formulario registrado correctamente');
+            return redirect('/')->with('message', 'Matricula enviada correctamente');
+
         } catch (\Exception $e) {
             // Esto te ayudará a capturar el error
-            Log::error('Error al guardar el formulario: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Error al guardar el formulario: ' . $e->getMessage());
+            Log::error('Error al enviar el formulario: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error al enviar el formulario: ' . $e->getMessage());
         }
     }
 

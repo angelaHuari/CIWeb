@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-function InterfazUsoEstudiantes() {
+function FormularioMatriculas({ auth, grupos }) {
   const [voucherPreview, setVoucherPreview] = useState(null); // Estado para la vista previa de la imagen
   const [matriculas, setMatriculas] = useState([]); // Estado para almacenar las matrículas
   const [fotoVoucher, setFotoVoucher] = useState(null); // Para almacenar la URL de la imagen
@@ -12,12 +12,12 @@ function InterfazUsoEstudiantes() {
     formState: { errors },
   } = useForm({
     defaultValues: {
+      estudiante_id: auth.user.id, // id del usuario estudiante
       fechaMatricula: new Date().toLocaleDateString(), // Fecha de matrícula oculta
-      estadoPago: 'Pendiente', // Estado de pago oculto
-      ciclo: 'Básico',
-      horario: '',
+      cicloIngles: '',
+      horarioIngles: '',
       montoPago: 100, // Monto fijo de S/100
-      medioPago: 'Caja Institucional',
+      medioPago: '',
       nroVoucher: '',
       fotoVoucher: null,
     },
@@ -38,6 +38,8 @@ function InterfazUsoEstudiantes() {
         calificacion: 'Pendiente', // Calificación por defecto
       },
     ]);
+
+
     alert('¡Registro exitoso!');
   };
 
@@ -60,24 +62,29 @@ function InterfazUsoEstudiantes() {
       onSubmit={handleSubmit(onSubmit)}
       className="max-w-4xl mx-auto p-10 bg-white shadow-lg rounded-lg border border-gray-200" // Aumentar el max-width y padding
     >
-      <h2 className="text-2xl font-bold mb-6 text-center text-[#700303]">Interfaz de Uso - Estudiantes</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center text-[#700303]">Formulario de Matriculas -Mensualidades</h2>
 
       {/* Fecha de matrícula escondida */}
       <input type="hidden" {...register('fechaMatricula')} />
 
-      {/* Estado de pago escondido */}
-      <input type="hidden" {...register('estadoPago')} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-[#700303] mb-1">Ciclo:</label>
           <select
-            {...register('ciclo')}
+            {...register('cicloIngles')}
             className="border border-[#700303] p-2 w-full max-w-full rounded-md focus:outline-none focus:ring-2 focus:ring-[#700303]"
           >
-            <option value="Básico">Básico</option>
-            <option value="Intermedio">Intermedio</option>
-            <option value="Avanzado">Avanzado</option>
+            <option value="">Seleccione Ciclo</option>
+            {[...new Set(grupos.map(grupo => grupo.ciclo.id))].map((cicloId) => {
+              const grupo = grupos.find(g => g.ciclo.id === cicloId);
+              const ciclo = grupo?.ciclo;
+              return (
+                <option key={cicloId} value={cicloId}>
+                  {`${ciclo?.nombre} - ${ciclo?.idioma?.nombre || ''}`}
+                </option>
+              );
+            })}
           </select>
         </div>
 
@@ -158,11 +165,11 @@ function InterfazUsoEstudiantes() {
           type="submit"
           className="bg-[#700303] hover:bg-[#8c1010] text-white font-semibold py-2 px-6 rounded-md shadow-md transition duration-300"
         >
-          Registrar
+          Enviar
         </button>
       </div>
     </form>
   );
 }
 
-export default InterfazUsoEstudiantes;   
+export default FormularioMatriculas;   
