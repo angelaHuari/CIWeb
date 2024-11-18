@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\FormularioMatricula;
 use App\Models\Grupo;
+use App\Models\Matricula;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -16,8 +18,11 @@ class FuncionEstudianteController extends Controller
      */
     public function registrar()
     {
+        $user = Auth::user();
+        $estudiante = $user->estudiante;
+        $estudianteId = $estudiante ? $estudiante->id : null;
         $grupos = Grupo::with(['ciclo.idioma'])->get();
-        return Inertia::render('Estudiante/RegistrarMatricula',['ListaGrupos'=>$grupos]);
+        return Inertia::render('Estudiante/RegistrarMatricula', ['ListaGrupos' => $grupos, 'est' => $estudianteId]);
     }
 
     /**
@@ -25,13 +30,30 @@ class FuncionEstudianteController extends Controller
      */
     public function ver()
     {
-        return Inertia::render('Estudiante/VerMatriculas');
+        $user = Auth::user();
+        $estudiante = $user->estudiante;
+        $estudianteId = $estudiante ? $estudiante->id : null;
+
+
+        // Obtiene las matrículas del estudiante, paginadas
+        $matriculas = Matricula::with(['estudiante', 'grupo.ciclo'])
+            ->where('estudiante_id', $estudianteId)
+            ->paginate(10); // Ajusta el número de elementos por página según lo necesario
+
+        return Inertia::render('Estudiante/VerMatriculas', [
+            'ListaMatriculas' => $matriculas
+        ]);
     }
 
-    public function enviar(Request $request )
+    public function enviar(Request $request)
     {
+        $user = Auth::user();
+        $estudiante = $user->estudiante;
+        $estudianteId = $estudiante ? $estudiante->id : null;
+
+        // Validación de los datos
         $data = $request->validate([
-            'estudiante_id'=>'required|exists:estudiantes,id',
+            'fechaMatricula' => 'required|date',
             'cicloIngles' => 'required|exists:ciclos,id',
             'horarioIngles' => 'required|exists:grupos,id',
             'medioPago' => 'required|string',
@@ -42,20 +64,27 @@ class FuncionEstudianteController extends Controller
         ]);
 
         try {
+            // Asocia el estudiante ID
+            $data['estudiante_id'] = $estudianteId;
+            $grupo = Grupo::with(['ciclo.idioma'])->find($data['horarioIngles']);
+            if ($grupo) {
+                $data['cicloIngles'] = $grupo->ciclo->nombre . ' - ' . $grupo->ciclo->idioma->nombre;
+                $data['horarioIngles'] = $grupo->horario;
+            }
 
+            // Manejo de imagen
             if ($request->hasFile('imgComprobante')) {
                 $path = $request->file('imgComprobante')->store('images', 'public');
                 $data['imgComprobante'] = Storage::url($path);
             }
-            //dd($data);
-            FormularioMatricula::create($data);
-            return redirect('/')->with('message', 'Matricula enviada correctamente');
 
+            // Registro en la base de datos
+            FormularioMatricula::create($data);
+
+            return redirect()->route('estudiante.registrar')->with('message', 'Matrícula enviada correctamente');
         } catch (\Exception $e) {
-            // Esto te ayudará a capturar el error
             Log::error('Error al enviar el formulario: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Error al enviar el formulario: ' . $e->getMessage());
         }
     }
-
 }

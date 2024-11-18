@@ -71,6 +71,7 @@ Route::resource('formulario', FormularioController::class);
 Route::middleware('EsEstudiante')->group(function () {
     Route::get('estudiante', [FuncionEstudianteController::class, 'registrar'])->name('estudiante.registrar');
     Route::get('estudiante/ver', [FuncionEstudianteController::class, 'ver'])->name('estudiante.ver');
+    Route::post('estudiante/enviar', [FuncionEstudianteController::class, 'enviar'])->name('estudiante.enviar');
 });
 
 

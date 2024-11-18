@@ -9,16 +9,20 @@ class FormularioMatricula extends Model
 {
     /** @use HasFactory<\Database\Factories\FormularioMatriculaFactory> */
     use HasFactory;
+   
     protected $fillable = [
         'estudiante_id',
-        'fecha',
+        'fechaMatricula',
         'cicloIngles',
         'horarioIngles',
-        'fechaPago',
-        'nroComprobante',
-        'monto',
         'medioPago',
+        'fechaPago',
+        'montoPago',
+        'nroComprobante',
         'imgComprobante',
     ];
-
+    public function estudiante()
+    {
+        return $this->belongsTo(Estudiante::class);
+    }
 }

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import HistorialMatriculas from './HistorialMatriculas';
 
 
-export default function VerMatriculas() {
+export default function VerMatriculas({ListaMatriculas}) {
     
     
     return (
@@ -16,12 +16,12 @@ export default function VerMatriculas() {
                 </h2>
             }
         >
-            <Head title="Panel de Control - Centro de Idiomas" />
+            <Head title="SGMC" />
 
             {/* Fondo con gradiente suave de granate a color piel */}
             <div className="py-12 bg-gradient-to-b from-[#800020] to-[#F5D0A9] min-h-screen">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <HistorialMatriculas></HistorialMatriculas>
+                    <HistorialMatriculas matriculas={ListaMatriculas}></HistorialMatriculas>
                 </div>
             </div>
         </AuthenticatedLayoutEst>

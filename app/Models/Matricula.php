@@ -14,7 +14,6 @@ class Matricula extends Model
     
     protected $fillable = [
         'fecha',
-        'estadoPago',
         'nota',
         'estudiante_id',
         'grupo_id',

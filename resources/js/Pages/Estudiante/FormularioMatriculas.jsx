@@ -1,46 +1,35 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Link } from '@inertiajs/react';
 
-function FormularioMatriculas({ auth, grupos }) {
+function FormularioMatriculas({ grupos }) {
   const [voucherPreview, setVoucherPreview] = useState(null); // Estado para la vista previa de la imagen
-  const [matriculas, setMatriculas] = useState([]); // Estado para almacenar las matrículas
-  const [fotoVoucher, setFotoVoucher] = useState(null); // Para almacenar la URL de la imagen
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      estudiante_id: auth.user.id, // id del usuario estudiante
-      fechaMatricula: new Date().toLocaleDateString(), // Fecha de matrícula oculta
-      cicloIngles: '',
-      horarioIngles: '',
-      montoPago: 100, // Monto fijo de S/100
-      medioPago: '',
-      nroVoucher: '',
-      fotoVoucher: null,
-    },
+ 
+  const { data, setData, post, processing, errors } = useForm({
+    fechaMatricula: new Date().toISOString().split('T')[0], // Fecha actual
+    cicloIngles: '',
+    horarioIngles: '',
+    fechaPago: new Date().toISOString().split('T')[0], // Fecha actual
+    nroComprobante: '',
+    montoPago: 100,
+    medioPago: '',
+    imgComprobante: null,
   });
 
-  const onSubmit = (data) => {
-    console.log('Datos del formulario:', data);
-    // Agregar la matrícula al estado
-    setMatriculas([
-      ...matriculas,
-      {
-        ciclo: data.ciclo,
-        horario: data.horario,
-        montoPago: data.montoPago,
-        medioPago: data.medioPago,
-        nroVoucher: data.nroVoucher,
-        fotoVoucher: fotoVoucher, // Guardar la URL de la imagen
-        calificacion: 'Pendiente', // Calificación por defecto
-      },
-    ]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-
-    alert('¡Registro exitoso!');
+    post(route('estudiante.enviar'));
+    // Limpiar los campos (excepto los no mostrados)
+    setData({
+      fechaMatricula: new Date().toISOString().split('T')[0], // Fecha actual
+      cicloIngles: '',
+      horarioIngles: '',
+      fechaPago: new Date().toISOString().split('T')[0],
+      nroComprobante: '',
+      montoPago: 100,
+      medioPago: '',
+      imgComprobante: null,
+    });
   };
 
   // Función para manejar la selección de la imagen
@@ -50,29 +39,38 @@ function FormularioMatriculas({ auth, grupos }) {
       // Crear una URL temporal para mostrar la vista previa
       const imageUrl = URL.createObjectURL(file);
       setVoucherPreview(imageUrl); // Establecer la URL para la vista previa
-      setFotoVoucher(imageUrl); // Guardar la URL de la imagen en el estado
+      setData('imgComprobante', file); // Guardar la URL de la imagen en el estado
     } else {
       setVoucherPreview(null);
-      setFotoVoucher(null);
+      setData('imgComprobante', null);
     }
   };
 
+  // Limpieza de URLs temporales para liberar memoria
+  React.useEffect(() => {
+    return () => {
+      if (voucherPreview) {
+        URL.revokeObjectURL(voucherPreview);
+      }
+    };
+  }, [voucherPreview]);
+  // Filtra los horarios basados en el ciclo seleccionado 
+  const horariosFiltrados = grupos.filter((grupo) => grupo.ciclo.id === parseInt(data.cicloIngles));
+
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit}
       className="max-w-4xl mx-auto p-10 bg-white shadow-lg rounded-lg border border-gray-200" // Aumentar el max-width y padding
     >
       <h2 className="text-2xl font-bold mb-6 text-center text-[#700303]">Formulario de Matriculas -Mensualidades</h2>
-
-      {/* Fecha de matrícula escondida */}
-      <input type="hidden" {...register('fechaMatricula')} />
-
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-[#700303] mb-1">Ciclo:</label>
           <select
-            {...register('cicloIngles')}
+            id="cicloIngles"
+            value={data.cicloIngles}
+            onChange={(e) => setData('cicloIngles', e.target.value)}
+            required
             className="border border-[#700303] p-2 w-full max-w-full rounded-md focus:outline-none focus:ring-2 focus:ring-[#700303]"
           >
             <option value="">Seleccione Ciclo</option>
@@ -81,7 +79,8 @@ function FormularioMatriculas({ auth, grupos }) {
               const ciclo = grupo?.ciclo;
               return (
                 <option key={cicloId} value={cicloId}>
-                  {`${ciclo?.nombre} - ${ciclo?.idioma?.nombre || ''}`}
+                  {/* Si ciclo o idioma son indefinidos, muestra una cadena vacía */}
+                  {`${ciclo?.nombre || ''} - ${ciclo?.idioma?.nombre || ''}`}
                 </option>
               );
             })}
@@ -91,19 +90,32 @@ function FormularioMatriculas({ auth, grupos }) {
         <div>
           <label className="block text-sm font-medium text-[#700303] mb-1">Horario:</label>
           <select
-            {...register('horario', { required: 'El horario es obligatorio' })}
+            id="horarioIngles"
+            value={data.horarioIngles}
+            onChange={(e) => setData('horarioIngles', e.target.value)}
+            required
             className="border border-[#700303] p-2 w-full max-w-full rounded-md focus:outline-none focus:ring-2 focus:ring-[#700303] text-ellipsis overflow-hidden"
           >
             <option value="">Selecciona un horario</option>
-            <option value="7:00-8:30 AM">7:00-8:30 AM</option>
-            <option value="10:00-11:30 AM">10:00-11:30 AM</option>
-            <option value="1:00-2:30 PM">1:00-2:30 PM</option>
-            <option value="4:00-5:30 PM">4:00-5:30 PM</option>
-            <option value="7:00-8:30 PM">7:00-8:30 PM</option>
+            {horariosFiltrados.map((grupo) => (<option key={grupo.id} value={grupo.id}> {`${grupo.modalidad} - ${grupo.horario} (Vacantes: ${grupo.nroVacantes})`} </option>))}
+
           </select>
-          {errors.horario && <p className="text-red-500 text-sm mt-1">{errors.horario.message}</p>}
+
+          {errors.horarioIngles && <p className="text-red-500 text-sm mt-1">{errors.horarioIngles.message}</p>}
         </div>
 
+
+        <div>
+          <label className="block text-sm font-medium text-[#700303] mb-1">Fecha de Pago:</label>
+          <input
+            id="fechaPago"
+            type="date"
+            value={data.fechaPago}
+            onChange={(e) => setData('fechaPago', e.target.value)}
+            required
+            className="border border-[#700303] p-2 w-full rounded-md bg-gray-100"
+          />
+        </div>
         <div>
           <label className="block text-sm font-medium text-[#700303] mb-1">Monto Pagado:</label>
           <input
@@ -117,7 +129,10 @@ function FormularioMatriculas({ auth, grupos }) {
         <div>
           <label className="block text-sm font-medium text-[#700303] mb-1">Medio de Pago:</label>
           <select
-            {...register('medioPago')}
+            id="medioPago"
+            value={data.medioPago}
+            onChange={(e) => setData('medioPago', e.target.value)}
+            required
             className="border border-[#700303] p-2 w-full max-w-full rounded-md focus:outline-none focus:ring-2 focus:ring-[#700303]"
           >
             <option value="Caja Institucional">Caja Institucional</option>
@@ -128,8 +143,11 @@ function FormularioMatriculas({ auth, grupos }) {
         <div>
           <label className="block text-sm font-medium text-[#700303] mb-1">Nro Voucher:</label>
           <input
+            id="nroComprobante"
             type="text"
-            {...register('nroVoucher', { required: 'El número de voucher es obligatorio' })}
+            value={data.nroComprobante}
+            onChange={(e) => setData('nroComprobante', e.target.value)}
+            required
             className="border border-[#700303] p-2 w-full max-w-full rounded-md focus:outline-none focus:ring-2 focus:ring-[#700303]"
           />
           {errors.nroVoucher && <p className="text-red-500 text-sm mt-1">{errors.nroVoucher.message}</p>}
@@ -138,11 +156,12 @@ function FormularioMatriculas({ auth, grupos }) {
         <div>
           <label className="block text-sm font-medium text-[#700303] mb-1">Foto de Voucher:</label>
           <input
+            id="imgComprobante"
             type="file"
-            {...register('fotoVoucher')}
-            className="border border-[#700303] p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-[#700303]"
+            required
             accept="image/*" // Aceptar solo imágenes
             onChange={handleImageChange} // Capturar la imagen seleccionada
+            className="border border-[#700303] p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-[#700303]"
           />
 
           {/* Mostrar la vista previa de la imagen si hay una */}
@@ -160,7 +179,7 @@ function FormularioMatriculas({ auth, grupos }) {
         </div>
       </div>
 
-      <div className="text-right mt-8"> {/* Usar text-right para alinear el contenido a la derecha */}
+      <div className="text-right mt-8"> 
         <button
           type="submit"
           className="bg-[#700303] hover:bg-[#8c1010] text-white font-semibold py-2 px-6 rounded-md shadow-md transition duration-300"

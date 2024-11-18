@@ -1,57 +1,17 @@
+import { Link } from '@inertiajs/react';
 import React, { useState } from 'react';
-import { FaFileAlt, FaSearch, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaFileAlt, FaSearch, FaEye, FaTimesCircle } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md'; // Ícono de cerrar
 
-const VistaMatriculas = ({matriculas}) => {
-    // Datos de matrículas simulados
-    /*const matriculas = [
-        {
-            nombre: 'Juan Pérez',
-            fecha: '2024-09-01',
-            grupo: { ciclo: { nombre: 'A1' } },
-            nota: '85',
-            pago: {
-                fechaPago: '2024-09-05',
-                monto: '150.00',
-                medioPago: 'Tarjeta de crédito',
-                nroVoucher: '123456',
-                fotoVoucher: 'imagenes/modeloo.png'
-            }
-        },
-        {
-            nombre: 'Ana García',
-            fecha: '2024-08-15',
-            grupo: { ciclo: { nombre: 'B2' } },
-            nota: '78',
-            pago: {
-                fechaPago: '2024-09-05',
-                monto: '150.00',
-                medioPago: 'Tarjeta de crédito',
-                nroVoucher: '123456',
-                fotoVoucher: 'imagenes/profesor.jpg'
-            }
-        },
-        {
-            nombre: 'Carlos López',
-            fecha: '2024-07-20',
-            grupo: { ciclo: { nombre: 'C3' } },
-            nota: '92',
-            pago: {
-                fechaPago: '2024-07-22',
-                monto: '200.00',
-                medioPago: 'Efectivo',
-                nroVoucher: '7891011',
-                fotoVoucher: 'imagenes/modeloo.png'
-            }
-        }
-    ];*/
+const VistaMatriculas = ({ matriculas }) => {
+
     const [search, setSearch] = useState(''); // Estado para el buscador
     const [selectedMatricula, setSelectedMatricula] = useState(null);
     /*const [formularioModal, setFormularioModal] = useState(null);*/ // Estado para manejar el modal de formulario
 
     // Filtrar matrículas por nombre
-    const filteredMatriculas = matriculas.data.filter(matricula =>
-        matricula.estudiante.aPaterno.toLowerCase().includes(search.toLowerCase())
+    const filteredMatriculas = matriculas.data.filter(ma =>
+        ma.matricula.estudiante.aPaterno.toLowerCase().includes(search.toLowerCase())
     );
 
     const handleViewDetailsClick = (matricula) => {
@@ -92,24 +52,24 @@ const VistaMatriculas = ({matriculas}) => {
                             {/* Columna para los datos (reducida para dar más espacio a la imagen) */}
                             <div className="w-1/3 flex flex-col justify-center">
                                 <h3 className="text-2xl font-semibold mb-4">Datos de Matrícula</h3>
-                                <p><strong>Nombre:</strong> {selectedMatricula.nombre}</p>
-                                <p><strong>Fecha de Matrícula:</strong> {new Date(selectedMatricula.fecha).toLocaleDateString()}</p>
-                                <p><strong>Grupo:</strong> {selectedMatricula.grupo.ciclo.nombre}</p>
-                                <p><strong>Nota Estudiante:</strong> {selectedMatricula.nota || 'No disponible'}</p>
+                                <p><strong>Nombre:</strong> {selectedMatricula.matricula.estudiante.nombres}</p>
+                                <p><strong>Fecha de Matrícula:</strong> {new Date(selectedMatricula.matricula.fecha).toLocaleDateString()}</p>
+                                <p><strong>Grupo:</strong> {selectedMatricula.matricula.grupo.ciclo.nombre}</p>
+                                <p><strong>Nota Estudiante:</strong> {selectedMatricula.matricula.nota || 'No disponible'}</p>
                                 <br />
                                 <h3 className="text-2xl font-semibold mb-4">Datos de Pago</h3>
-                                <p><strong>Fecha de Pago:</strong> {selectedMatricula.pago?.fechaPago ? new Date(selectedMatricula.pago.fechaPago).toLocaleDateString() : 'No disponible'}</p>
-                                <p><strong>Monto:</strong> {selectedMatricula.pago?.monto || 'No disponible'}</p>
-                                <p><strong>Medio de Pago:</strong> {selectedMatricula.pago?.medioPago || 'No disponible'}</p>
-                                <p><strong>Nro Voucher:</strong> {selectedMatricula.pago?.nroVoucher || 'No disponible'}</p>
+                                <p><strong>Fecha de Pago:</strong> {selectedMatricula ? new Date(selectedMatricula.fecha).toLocaleDateString() : 'No disponible'}</p>
+                                <p><strong>Monto:</strong> {selectedMatricula?.monto || 'No disponible'}</p>
+                                <p><strong>Medio de Pago:</strong> {selectedMatricula?.medioPago || 'No disponible'}</p>
+                                <p><strong>Nro Voucher:</strong> {selectedMatricula?.nroComprobante || 'No disponible'}</p>
                             </div>
-                           
+
                             {/* Columna para la imagen (más grande y centrada) */}
                             <div className="w-2/3 flex justify-center items-center pl-8">
-                                {selectedMatricula.pago?.fotoVoucher ? (
+                                {selectedMatricula?.imgComprobante ? (
                                     <div className="relative w-full h-full flex justify-center items-center">
                                         <img
-                                            src={selectedMatricula.pago.fotoVoucher}
+                                            src={selectedMatricula.imgComprobante}
                                             alt="Foto del Voucher"
                                             className="max-w-[500px] max-h-[500px] object-contain rounded-md" /* Imagen más grande */
                                         />
@@ -124,7 +84,7 @@ const VistaMatriculas = ({matriculas}) => {
 
                 {/* Tabla de Matrículas */}
                 <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
-                <table className="min-w-full table-auto">
+                    <table className="min-w-full table-auto">
                         <thead className="bg-[#800020] text-white">
                             <tr>
                                 <th className="px-6 py-3 text-left">Nombre</th>
@@ -135,14 +95,14 @@ const VistaMatriculas = ({matriculas}) => {
                         </thead>
                         <tbody>
                             {filteredMatriculas.length > 0 ? (
-                                filteredMatriculas.map((matricula, index) => (
+                                filteredMatriculas.map((ma, index) => (
                                     <tr key={index} className="border-b hover:bg-[#F4D6C5]">
-                                        <td className="px-6 py-3">{matricula.nombre}</td>
-                                        <td className="px-6 py-3">{new Date(matricula.fecha).toLocaleDateString()}</td>
-                                        <td className="px-6 py-3">{matricula.grupo.ciclo.nombre}</td>
+                                        <td className="px-6 py-3">{ma.matricula.estudiante.nombres}</td>
+                                        <td className="px-6 py-3">{new Date(ma.matricula.fecha).toLocaleDateString()}</td>
+                                        <td className="px-6 py-3">{ma.matricula.grupo.ciclo.nombre}</td>
                                         <td className="px-6 py-3">
                                             <button
-                                                onClick={() => handleViewDetailsClick(matricula)}
+                                                onClick={() => handleViewDetailsClick(ma)}
                                                 className="text-[#800020] hover:text-[#6A4E3C]"
                                             >
                                                 <FaEye className="text-xl" />
@@ -159,6 +119,18 @@ const VistaMatriculas = ({matriculas}) => {
                             )}
                         </tbody>
                     </table>
+                    {/* Paginación */}
+                    <div className="mt-4">
+                        {matriculas.links.map((link, index) => (
+                            <Link
+                                key={index}
+                                href={link.url}
+                                className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-red-900 text-white' : 'bg-white text-blue-800'
+                                    }`}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

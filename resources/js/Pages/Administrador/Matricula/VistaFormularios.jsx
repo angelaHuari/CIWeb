@@ -1,8 +1,9 @@
+import { Link } from '@inertiajs/react';
 import React, { useState } from 'react';
 import { FaSearch, FaEye } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 
-const TablaFormularios = ({ formMatriculas =[], search }) => {
+const TablaFormularios = ({ formMatriculas = [], search }) => {
     /*const filteredPagos = formMatriculas.filter(form => 
         form.estudiante.aPaterno.toLowerCase().includes(search.toLowerCase())
     );*/
@@ -17,15 +18,15 @@ const TablaFormularios = ({ formMatriculas =[], search }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        //enviar a tabla formulario_matriculas
+        //enviar a tabla matriculas y pagos
         setShowForm(false);
-        setSelectedPago(null);
+        setSelectedForm(null);
     };
 
     return (
         <div>
             {/* Formulario */}
-            {showForm && selectedPago && (
+            {showForm && selectedForm && (
                 <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {/* Datos de Matrícula */}
@@ -36,7 +37,7 @@ const TablaFormularios = ({ formMatriculas =[], search }) => {
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Nombres</label>
                                     <input
                                         type="text"
-                                        value={selectedPago.nombre}
+                                        value={selectedForm.estudiante.nombres}
                                         readOnly
                                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                     />
@@ -45,7 +46,7 @@ const TablaFormularios = ({ formMatriculas =[], search }) => {
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Apellido Paterno</label>
                                     <input
                                         type="text"
-                                        value={selectedPago.nombre}
+                                        value={selectedForm.estudiante.aPaterno}
                                         readOnly
                                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                     />
@@ -54,7 +55,7 @@ const TablaFormularios = ({ formMatriculas =[], search }) => {
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Apellido Materno</label>
                                     <input
                                         type="text"
-                                        value={selectedPago.nombre}
+                                        value={selectedForm.estudiante.aMaterno}
                                         readOnly
                                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                     />
@@ -63,25 +64,25 @@ const TablaFormularios = ({ formMatriculas =[], search }) => {
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Matrícula</label>
                                     <input
                                         type="text"
-                                        value={selectedPago.fecha_matricula}
+                                        value={selectedForm.fechaMatricula}
                                         readOnly
                                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Grupo</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Grupo -Horario</label>
                                     <input
                                         type="text"
-                                        value={selectedPago.grupo}
+                                        value={selectedForm.horarioIngles}
                                         readOnly
                                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Nota Estudiante</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Ciclo </label>
                                     <input
                                         type="text"
-                                        value={selectedPago.nota}
+                                        value={selectedForm.cicloIngles}
                                         readOnly
                                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                     />
@@ -96,8 +97,8 @@ const TablaFormularios = ({ formMatriculas =[], search }) => {
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Pago</label>
                                     <input
-                                        type="text"
-                                        value={new Date(selectedPago.fecha_pago).toLocaleDateString()}
+                                        type="date"
+                                        value={new Date(selectedForm.fechaPago)}
                                         readOnly
                                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                     />
@@ -106,7 +107,7 @@ const TablaFormularios = ({ formMatriculas =[], search }) => {
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Monto</label>
                                     <input
                                         type="text"
-                                        value={selectedPago.monto}
+                                        value={selectedForm.montoPago}
                                         readOnly
                                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                     />
@@ -115,16 +116,16 @@ const TablaFormularios = ({ formMatriculas =[], search }) => {
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Medio de Pago</label>
                                     <input
                                         type="text"
-                                        value={selectedPago.medio_pago}
+                                        value={selectedForm.medioPago}
                                         readOnly
                                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Nro Voucher</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Nro Voucher -Comprobante</label>
                                     <input
                                         type="text"
-                                        value={selectedPago.nro_voucher}
+                                        value={selectedForm.nroComprobante}
                                         readOnly
                                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                     />
@@ -145,26 +146,26 @@ const TablaFormularios = ({ formMatriculas =[], search }) => {
                 </div>
             )}
 
-            {/* Tabla de Formularios Matriculas -Mensualidades */}
+            {/* Tabla de Formularios Matriculas - Mensualidades */}
             <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6">
                 <table className="min-w-full table-auto">
                     <thead className="bg-[#800020] text-white">
                         <tr>
-                            <th className="px-6 py-3 text-left">Nombre</th>
+                            <th className="px-6 py-3 text-left">Nombres</th>
                             <th className="px-6 py-3 text-left">Apellido Paterno</th>
                             <th className="px-6 py-3 text-left">Apellido Materno</th>
-                            <th className="px-6 py-3 text-left">Formulario</th>
+                            <th className="px-6 py-3 text-left">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {formMatriculas.length > 0 ? (
-                            formMatriculas.map((form, index) => (
-                                <tr key={index} className="border-b hover:bg-[#F4D6C5]">
+                        {formMatriculas.data.length > 0 ? (
+                            formMatriculas.data.map((form) => (
+                                <tr key={form.id} className="border-b hover:bg-[#F4D6C5]">
                                     <td className="px-6 py-3">{form.estudiante.nombres}</td>
                                     <td className="px-6 py-3">{form.estudiante.aPaterno}</td>
                                     <td className="px-6 py-3">{form.estudiante.aMaterno}</td>
                                     <td className="px-6 py-3">
-                                        <button 
+                                        <button
                                             onClick={() => handleFormClick(form)}
                                             className="text-[#800020] hover:text-[#6A4E3C]"
                                         >
@@ -180,47 +181,24 @@ const TablaFormularios = ({ formMatriculas =[], search }) => {
                         )}
                     </tbody>
                 </table>
+                {/* Paginación */}
+                <div className="mt-4">
+                    {formMatriculas.links.map((link, index) => (
+                        <Link
+                            key={index}
+                            href={link.url}
+                            className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-red-900 text-white' : 'bg-white text-blue-800'
+                                }`}
+                            dangerouslySetInnerHTML={{ __html: link.label }}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );
 };
 
-const VistaFormularios = ({ListaFormularios}) => {
-    /*const pagos = [
-        { 
-            nombre: 'Juan Pérez', 
-            monto: 150.00, 
-            estado_pago: 'Pagado', 
-            fecha_pago: '2024-09-04', 
-            medio_pago: 'Tarjeta de crédito', 
-            nro_voucher: '123456',
-            fecha_matricula: '31/8/2024',
-            grupo: 'A1',
-            nota: '85'
-        },
-        { 
-            nombre: 'Ana García', 
-            monto: 150, 
-            estado_pago: 'No Pagado', 
-            fecha_pago: '2023-08-18', 
-            medio_pago: 'Transferencia', 
-            nro_voucher: '67890',
-            fecha_matricula: '15/8/2024',
-            grupo: 'B2',
-            nota: '78'
-        },
-        { 
-            nombre: 'Carlos López', 
-            monto: 200, 
-            estado_pago: 'Pagado', 
-            fecha_pago: '2023-07-25', 
-            medio_pago: 'Cheque', 
-            nro_voucher: '11223',
-            fecha_matricula: '20/7/2024',
-            grupo: 'C1',
-            nota: '92'
-        }
-    ];*/
+const VistaFormularios = ({ ListaFormularios }) => {
 
     const [search, setSearch] = useState('');
 

@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('matriculas', function (Blueprint $table) {
             $table->id();
             $table->date('fecha');
-            $table->string('estadoPago');
             $table->integer('nota');
             $table->foreignId('estudiante_id')->constrained()->onDelete('cascade');
             $table->foreignId('grupo_id')->constrained()->onDelete('cascade');
