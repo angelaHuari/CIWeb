@@ -39,21 +39,41 @@ const ResumenInscripcion = ({ inscripcion }) => {
     });
 
     const handleAceptar = () => {
-        post(route('formularios.aceptar', inscripcion.id), {}, {
-            onSuccess: (page) => {
-                if (page.props.flash.message) {
-                    alert(page.props.flash.message);
+        if (confirm('¿Está seguro que desea aceptar esta inscripción?')) {
+            post(route('formularios.aceptar', inscripcion.id), {}, {
+                onSuccess: (page) => {
+                    if (page.props.flash.message) {
+                        alert(page.props.flash.message);
+                        if (inscripcion.onStatusChange) {
+                            inscripcion.onStatusChange(inscripcion.id, 'aceptado');
+                        }
+                        window.location.reload();
+                    }
+                },
+                onError: (errors) => {
+                    alert('Error al procesar la inscripción: ' + Object.values(errors).join('\n'));
                 }
-                if (page.props.flash.error) {
-                    alert(page.props.flash.error);
-                }
-            }
-        });
+            });
+        }
     };
 
     const handleRechazar = () => {
-        alert("Formulario rechazado");
-        // Lógica para rechazar la acción o limpiar el formulario
+        if (confirm('¿Está seguro que desea rechazar esta inscripción?')) {
+            post(route('formularios.rechazar', inscripcion.id), {}, {
+                onSuccess: (page) => {
+                    if (page.props.flash.message) {
+                        alert(page.props.flash.message);
+                        if (inscripcion.onStatusChange) {
+                            inscripcion.onStatusChange(inscripcion.id, 'rechazado');
+                        }
+                        window.location.reload();
+                    }
+                },
+                onError: (errors) => {
+                    alert('Error al rechazar la inscripción: ' + Object.values(errors).join('\n'));
+                }
+            });
+        }
     };
     const handleFileChange = (e) => {
         const file = e.target.files[0];  // Obtiene el primer archivo seleccionado

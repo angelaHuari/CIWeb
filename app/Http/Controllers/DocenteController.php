@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Docente;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+
 class DocenteController extends Controller
 {
     public function index()
     {
-        $query = Docente::query();
-
+        $query = Docente::with('user');
 
         return Inertia::render('Administrador/Docentes/Index', [
             'ListaDocentes' => $query->get(),
@@ -43,7 +45,21 @@ class DocenteController extends Controller
                 $validated['fotoDocente'] = Storage::url($path);
             }
 
-            Docente::create($validated);
+            // Crear usuario primero
+            $user = User::create([
+                'name' => $validated['nombres'] . ' ' . $validated['aPaterno'] . ' ' . $validated['aMaterno'],
+                'email' => strtolower(substr($validated['nombres'], 0, 1) . $validated['aPaterno'] . '@istta.edu.pe'),
+                'password' => bcrypt($validated['dni']),
+                'tipoUsuario' => 'doc',
+                'email_verified_at' => now(), // Añadir verificación de email
+                'remember_token' => Str::random(10), // Añadir remember token
+            ]);
+
+            // Añadir user_id al docente
+            $validated['user_id'] = $user->id;
+
+            // Crear docente
+            $docente = Docente::create($validated);
 
             return redirect()->route('docente.index')->with('message', 'Docente creado exitosamente');
         } catch (\Exception $e) {

@@ -19,5 +19,16 @@ class Estudiante extends Model
         'email',
         'emailInstitucional',
         'programaEstudios',
+        'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function grupos()
+    {
+        return $this->belongsToMany(Grupo::class, 'matriculas', 'estudiante_id', 'grupo_id');
+    }
 }

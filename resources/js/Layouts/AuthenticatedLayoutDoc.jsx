@@ -28,7 +28,13 @@ export default function AuthenticatedLayoutDoc({ header, children }) {
                                     href={route('dashboard')}
                                     active={route().current('dashboard')}
                                 >
-                                    Grupos
+                                    Inicio
+                                </NavLink>
+                                <NavLink
+                                    href={route('docentes.verGrupos')}
+                                    active={route().current('docentes.verGrupos')}
+                                >
+                                    Ver Grupos
                                 </NavLink>
                             </div>
                             

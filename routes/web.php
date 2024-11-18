@@ -3,6 +3,7 @@
 use App\Http\Controllers\CicloController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\FormularioController;
+use App\Http\Controllers\FuncionDocenteController;
 use App\Http\Controllers\FuncionEstudianteController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\IdiomaController;
@@ -57,10 +58,12 @@ Route::middleware('EsAdmin')->group(function () {
     Route::resource('docente', DocenteController::class);
     Route::resource('matricula', MatriculaController::class);
     Route::resource('grupo', GrupoController::class);
+    Route::post('/formularios/{id}/aceptar', [FormularioController::class, 'aceptar'])->name('formularios.aceptar');
+    Route::post('/formularios/{id}/rechazar', [FormularioController::class, 'rechazar'])->name('formularios.rechazar');
 });
 
 Route::resource('formulario', FormularioController::class);
-Route::post('/formularios/{id}/aceptar', [FormularioController::class, 'aceptar'])->name('formularios.aceptar');
+
 
 
 
@@ -72,6 +75,9 @@ Route::middleware('EsEstudiante')->group(function () {
 
 
 //Para Docente
-
+Route::middleware('EsDocente')->group(function () {
+    Route::get('docentes', [FuncionDocenteController::class, 'verGrupos'])->name('docentes.verGrupos');
+    Route::post('/docentes/guardar-nota', [FuncionDocenteController::class, 'guardarNota'])->name('docente.guardar-nota');
+});
 
 require __DIR__ . '/auth.php';

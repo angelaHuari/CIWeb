@@ -9,8 +9,8 @@ class Formulario extends Model
 {
     /** @use HasFactory<\Database\Factories\FormularioFactory> */
     use HasFactory;
-     // Campos que pueden ser asignados en masa
-     protected $fillable = [
+    // Campos que pueden ser asignados en masa
+    protected $fillable = [
         'nombres',
         'aPaterno',
         'aMaterno',
@@ -37,6 +37,4 @@ class Formulario extends Model
         'nroComprobante',
         'imgComprobante',
     ];
-
-    
 }

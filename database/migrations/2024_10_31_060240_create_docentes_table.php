@@ -22,6 +22,8 @@ return new class extends Migration
             $table->String('fechaNacimiento');
             $table->String('emailInstitucional');
             $table->String('fotoDocente');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

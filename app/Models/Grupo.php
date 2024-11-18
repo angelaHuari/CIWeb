@@ -26,4 +26,12 @@ class Grupo extends Model
     {
         return $this->belongsTo(Ciclo::class);
     }
+    public function estudiantes()
+    {
+        return $this->belongsToMany(Estudiante::class, 'matriculas', 'grupo_id', 'estudiante_id');
+    }
+    public function matriculas()
+    {
+        return $this->hasMany(Matricula::class, 'grupo_id');
+    }
 }

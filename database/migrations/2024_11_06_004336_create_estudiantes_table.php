@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('emailInstitucional');
             $table->string('programaEstudios');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 const TablaDocentes = ({ docentes, onEdit }) => {
     const [showModal, setShowModal] = useState(false);
     const [selectedDocente, setSelectedDocente] = useState(null);
+    const [showCredentials, setShowCredentials] = useState(false);
 
     const handleShowModal = (docente) => {
         setSelectedDocente(docente);
@@ -12,6 +13,7 @@ const TablaDocentes = ({ docentes, onEdit }) => {
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedDocente(null);
+        setShowCredentials(false);
     };
 
     return (
@@ -59,49 +61,70 @@ const TablaDocentes = ({ docentes, onEdit }) => {
 
             {showModal && selectedDocente && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-[600px] border-2 border-gray-300 flex">
-                        
-                        {/* Información del docente en el estilo de un DNI horizontal */}
-                        <div className="flex-1 text-left pr-4">
-                            <h3 className="text-lg font-semibold mb-2">Detalles del Docente</h3>
-                            <p><strong>Nombres:</strong> {selectedDocente.nombres}</p>
-                            <p><strong>Apellido Paterno:</strong> {selectedDocente.aPaterno}</p>
-                            <p><strong>Apellido Materno:</strong> {selectedDocente.aMaterno}</p>
-                            <p><strong>DNI:</strong> {selectedDocente.dni}</p>
-                            <p><strong>Celular:</strong> {selectedDocente.celular}</p>
-                            <p><strong>Email Institucional:</strong> {selectedDocente.emailInstitucional}</p>
-                            <p><strong>Fecha de Nacimiento:</strong> {selectedDocente.fechaNacimiento}</p>
-                            <p><strong>Sexo:</strong> {selectedDocente.sexo}</p>
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-[600px] border-2 border-gray-300">
+                        <div className="flex justify-between mb-4">
+                            <h3 className="text-lg font-semibold">Detalles del Docente</h3>
+                            <button
+                                onClick={() => setShowCredentials(!showCredentials)}
+                                className="bg-blue-500 text-white px-4 py-2 rounded"
+                            >
+                                {showCredentials ? 'Ocultar Credenciales' : 'Ver Credenciales'}
+                            </button>
                         </div>
 
-                        {/* Foto del docente alineada a la derecha con etiqueta "Foto" */}
-                        <div className="flex-shrink-0 ml-8 text-center">
-                            <p className="font-semibold mb-2">Foto</p>
-                            {selectedDocente.fotoDocente ? (
-                                <img
-                                    src={selectedDocente.fotoDocente}
-                                    alt="Foto del Docente"
-                                    className="border rounded-lg"
-                                    style={{ width: '200px', height: '200px', objectFit: 'cover' }}
-                                />
-                            ) : (
-                                <div
-                                    className="border rounded-lg bg-gray-200 flex items-center justify-center"
-                                    style={{ width: '200px', height: '200px' }}
-                                >
-                                    <span className="text-gray-500">Sin Foto</span>
+                        <div className="flex">
+                            <div className="flex-1 text-left pr-4">
+                                <h3 className="text-lg font-semibold mb-2">Detalles del Docente</h3>
+                                <p><strong>Nombres:</strong> {selectedDocente.nombres}</p>
+                                <p><strong>Apellido Paterno:</strong> {selectedDocente.aPaterno}</p>
+                                <p><strong>Apellido Materno:</strong> {selectedDocente.aMaterno}</p>
+                                <p><strong>DNI:</strong> {selectedDocente.dni}</p>
+                                <p><strong>Celular:</strong> {selectedDocente.celular}</p>
+                                <p><strong>Email Institucional:</strong> {selectedDocente.emailInstitucional}</p>
+                                <p><strong>Fecha de Nacimiento:</strong> {selectedDocente.fechaNacimiento}</p>
+                                <p><strong>Sexo:</strong> {selectedDocente.sexo}</p>
+                            </div>
+
+                            <div className="flex-shrink-0 ml-8 text-center">
+                                <p className="font-semibold mb-2">Foto</p>
+                                {selectedDocente.fotoDocente ? (
+                                    <img
+                                        src={selectedDocente.fotoDocente}
+                                        alt="Foto del Docente"
+                                        className="border rounded-lg"
+                                        style={{ width: '200px', height: '200px', objectFit: 'cover' }}
+                                    />
+                                ) : (
+                                    <div
+                                        className="border rounded-lg bg-gray-200 flex items-center justify-center"
+                                        style={{ width: '200px', height: '200px' }}
+                                    >
+                                        <span className="text-gray-500">Sin Foto</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {showCredentials && selectedDocente.user && (
+                            <div className="mt-4 p-4 bg-gray-100 rounded">
+                                <h4 className="font-semibold mb-2">Credenciales de Usuario</h4>
+                                <div className="space-y-2">
+                                    <p><strong>Nombre de Usuario:</strong> {selectedDocente.user.email}</p>
+                                    <p><strong>Contraseña:</strong> {selectedDocente.dni}</p>
+                                    <p className="text-sm text-red-600 mt-2">
+                                        * Por seguridad, la contraseña inicial es el DNI del docente
+                                    </p>
                                 </div>
-                            )}
-                        </div>
+                            </div>
+                        )}
 
+                        <button
+                            onClick={handleCloseModal}
+                            className="mt-4 bg-gray-500 text-white px-4 py-2 rounded"
+                        >
+                            Cerrar
+                        </button>
                     </div>
-                    
-                    <button
-                        onClick={handleCloseModal}
-                        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded fixed bottom-8"
-                    >
-                        Cerrar
-                    </button>
                 </div>
             )}
         </div>
