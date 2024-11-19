@@ -151,10 +151,10 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                 <table className="min-w-full table-auto">
                     <thead className="bg-[#800020] text-white">
                         <tr>
-                            <th className="px-6 py-3 text-left">Nombres</th>
-                            <th className="px-6 py-3 text-left">Apellido Paterno</th>
-                            <th className="px-6 py-3 text-left">Apellido Materno</th>
-                            <th className="px-6 py-3 text-left">Acciones</th>
+                            <th className="px-6 py-3 text-center">Nombres Estudiante</th>
+                            <th className="px-6 py-3 text-center">Apellido Paterno</th>
+                            <th className="px-6 py-3 text-center">Apellido Materno</th>
+                            <th className="px-6 py-3 text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>

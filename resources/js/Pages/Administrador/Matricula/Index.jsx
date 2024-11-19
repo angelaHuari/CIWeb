@@ -1,11 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { FaUserGraduate, FaCreditCard, FaRegListAlt } from 'react-icons/fa';
-import React ,{ useState } from 'react';
+import React, { useState } from 'react';
 import VistaMatriculas from './VistaMatriculas';
 import VistaFormularios from './VistaFormularios';
+import VistaPagos from './VistaPagos';
 
-export default function Index({ ListaMatriculas,ListaFormulariosMatricula }) {
+export default function Index({ ListaMatriculas, ListaFormulariosMatricula }) {
     const [view, setView] = useState(null); // Estado para controlar qué vista se muestra
 
     // Función para manejar clics en las tarjetas y cambiar de vista
@@ -19,18 +20,26 @@ export default function Index({ ListaMatriculas,ListaFormulariosMatricula }) {
         if (view === 'Gestión Matriculas') {
             return (
                 <>
-                <VistaMatriculas matriculas={ListaMatriculas}></VistaMatriculas>
+                    <VistaMatriculas matriculas={ListaMatriculas}></VistaMatriculas>
 
                 </>
-                
+
             );
         } else if (view === 'Verificacion') {
             //Tabla de Matriculas por verificar
             return (
                 <>
-                <VistaFormularios ListaFormularios={ListaFormulariosMatricula}></VistaFormularios>
+                    <VistaFormularios ListaFormularios={ListaFormulariosMatricula}></VistaFormularios>
                 </>
-                
+
+            );
+        } else if (view === 'Gestion Pagos') {
+            //Tabla de Matriculas por verificar
+            return (
+                <>
+                    <VistaPagos pagos={ListaMatriculas}></VistaPagos>
+                </>
+
             );
         } else {
             return (
@@ -73,7 +82,7 @@ export default function Index({ ListaMatriculas,ListaFormulariosMatricula }) {
                                     <p className="text-[#F5D0A9] text-sm">Gestiona y visualiza las matrículas de los estudiantes, junto con toda la información asociada.</p>
                                 </div>
 
-                                {/* Card Pagos */}
+                                {/* Card Verificacion Matriculas */}
                                 <div
                                     className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
                                     onClick={() => handleCardClick('Verificacion')}
@@ -85,11 +94,23 @@ export default function Index({ ListaMatriculas,ListaFormulariosMatricula }) {
                                     <p className="text-[#F5D0A9] text-sm">Verifica y aprueba los formularios de matriculas -mensualidades realizados por los estudiantes, incluyendo los comprobantes de pago.</p>
                                 </div>
 
+                                {/* Card Gestión de Pagos */}
+                                <div
+                                    className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
+                                    onClick={() => handleCardClick('Gestion Pagos')}
+                                    aria-label="Gestión Matriculas"
+                                    tabIndex="0"
+                                >
+                                    <FaUserGraduate className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Gestión de Pagos</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Gestiona y visualiza los pagos de los estudiantes, junto con toda la información asociada.</p>
+                                </div>
+
                             </div>
 
                             {/* Mostrar el contenido dependiendo de la vista seleccionada */}
                             {renderContent()}
-                            
+
                         </div>
                     </div>
                 </div>

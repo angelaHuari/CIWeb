@@ -15,7 +15,7 @@ class MatriculaController extends Controller
      */
     public function index()
     {
-        $pagos= Pago::with(['matricula.grupo.ciclo','matricula.estudiante'])->paginate(15);
+        $pagos= Pago::with(['matricula.grupo.ciclo.idioma','matricula.estudiante'])->paginate(15);
         $matriculas = Matricula::with(['grupo.ciclo','estudiante'])->paginate(15);
         $formMatriculas = FormularioMatricula::with('estudiante')->paginate(15);
         return Inertia::render('Administrador/Matricula/Index',['ListaMatriculas'=>$pagos,'ListaFormulariosMatricula'=>$formMatriculas]);
