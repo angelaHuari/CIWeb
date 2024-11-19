@@ -45,15 +45,15 @@ class DocenteController extends Controller
                 $validated['fotoDocente'] = Storage::url($path);
             }
 
-            // Crear usuario primero
-            $user = User::create([
-                'name' => $validated['nombres'] . ' ' . $validated['aPaterno'] . ' ' . $validated['aMaterno'],
-                'email' => strtolower(substr($validated['nombres'], 0, 1) . $validated['aPaterno'] . '@istta.edu.pe'),
-                'password' => bcrypt($validated['dni']),
-                'tipoUsuario' => 'doc',
-                'email_verified_at' => now(), // Añadir verificación de email
-                'remember_token' => Str::random(10), // Añadir remember token
-            ]);
+           // Crear usuario primero
+           $user = User::create([
+            'name' => $validated['nombres'] . ' ' . $validated['aPaterno'] . ' ' . $validated['aMaterno'],
+            'email' => $validated['emailInstitucional'],
+            'password' => bcrypt($validated['dni']),
+            'tipoUsuario' => 'doc',
+            'email_verified_at' => now(), // Añadir verificación de email
+            'remember_token' => Str::random(10), // Añadir remember token
+        ]);
 
             // Añadir user_id al docente
             $validated['user_id'] = $user->id;

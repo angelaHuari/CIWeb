@@ -24,11 +24,13 @@ const FormularioDocentes = ({ docentes = [] }) => {
         setEditingDocente(docente);
         setData({
             ...docente,
-            fotoDocente: null,
+            fotoDocente: null,  // Esto elimina la foto cuando editas
+            _method: 'PUT',     // Asegúrate de enviar el método PUT si estás editando
         });
-        setPreviewImage(docente.fotoDocente);
+        setPreviewImage(docente.fotoDocente);  // Mantener la imagen previa
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
+    
 
     const handleChange = (e) => {
         const key = e.target.name;
@@ -43,31 +45,52 @@ const FormularioDocentes = ({ docentes = [] }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        const formData = new FormData();
-        Object.keys(data).forEach((key) => {
-            if (data[key] !== null) {
-                formData.append(key, data[key]);
-            }
-        });
-
-        const routeName = isEdit ? 'docente.update' : 'docente.store';
-        const id = isEdit ? editingDocente.id : null;
-
-        post(route(routeName, id), {
-            forceFormData: true,
-            data: formData,
-            onSuccess: () => {
-                reset();
-                setEditingDocente(null);
-                setPreviewImage(null);
-            },
-            onError: (errors) => {
-                console.log('Errores:', errors);
-            },
-        });
+    
+        if (isEdit) {
+            const formData = new FormData();
+            Object.keys(data).forEach(key => {
+                if (data[key] !== null) {
+                    formData.append(key, data[key]);
+                }
+            });
+    
+            // Asegúrate de que el método PUT se esté enviando
+            formData.append('_method', 'PUT');
+    
+            post(route('docente.update', editingDocente.id), {
+                forceFormData: true, // Usamos FormData
+                data: formData,
+                onSuccess: () => {
+                    reset();
+                    setEditingDocente(null);
+                    setPreviewImage(null);
+                },
+                onError: (errors) => {
+                    console.log('Errores:', errors);
+                },
+            });
+        } else {
+            const formData = new FormData();
+            Object.keys(data).forEach(key => {
+                if (data[key] !== null && key !== '_method') {
+                    formData.append(key, data[key]);
+                }
+            });
+    
+            post(route('docente.store'), {
+                forceFormData: true,
+                data: formData,
+                onSuccess: () => {
+                    reset();
+                    setPreviewImage(null);
+                },
+                onError: (errors) => {
+                    console.log('Errores:', errors);
+                },
+            });
+        }
     };
-
+    
     const handleCancelEdit = () => {
         setEditingDocente(null);
         reset();
