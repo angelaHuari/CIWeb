@@ -49,14 +49,19 @@ export default function AuthenticatedLayout({ header, children }) {
                                     Docentes
                                 </NavLink>
                                 <NavLink
-                        href={route('estadisticas.index')}
-                        active={route().current('estadisticas.index')}
-                        >
-                    Estadísticas
-                    </NavLink>
-                         
-                                
-                               
+                                    href={route('estadisticas.index')}
+                                    active={route().current('estadisticas.index')}
+                                >
+                                    Estadísticas
+                                </NavLink>
+                                <NavLink
+                                    href={route('usuarios.index')}
+                                    active={route().current('usuarios.index')}
+                                >
+                                    Usuarios
+                                </NavLink>
+
+
                             </div>
                         </div>
 

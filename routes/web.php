@@ -10,6 +10,7 @@ use App\Http\Controllers\IdiomaController;
 use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EstadisticasController;
+use App\Http\Controllers\FuncionAdminController;
 use App\Models\Ciclo;
 use App\Models\Grupo;
 use Illuminate\Foundation\Application;
@@ -69,6 +70,8 @@ Route::middleware('EsAdmin')->group(function () {
             'grupos' => $grupos
         ]);
     })->name('gestion.estudiantes.grupo');
+    
+    Route::get('/usuarios',[FuncionAdminController::class, 'index'])->name('usuarios.index');
 });
 
 Route::resource('formulario', FormularioController::class);
