@@ -8,9 +8,9 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 // Registro de los componentes de Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const Estadisticas = () => {
-  const [tiposAlumnos, setTiposAlumnos] = useState([]);
-  const [medioPublicitario, setMedioPublicitario] = useState([]);
+const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] }) => {
+  const [dataTiposAlumnos, setDataTiposAlumnos] = useState([]);
+  const [datamedioPublicitario, setDataMedioPublicitario] = useState([]);
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [selectedCard, setSelectedCard] = useState(null);
@@ -28,20 +28,19 @@ const Estadisticas = () => {
     setError(null); // Resetear el error previo
 
     try {
-      const response = await fetch(`/estadisticas/filtrar?month=${month}&year=${year}&type=${selectedCard}`);
-      const data = await response.json();
-      
-      if (response.ok) {
-        if (selectedCard === 'tiposAlumnos') {
-          setTiposAlumnos(data.tiposAlumnos || []);
-        } else if (selectedCard === 'medioPublicitario') {
-          setMedioPublicitario(data.medioPublicitario || []);
-        }
-      } else {
+      //const response = await fetch(`/estadisticas/filtrar?month=${month}&year=${year}&type=${selectedCard}`);
+      const data = datos;
+
+
+      if (selectedCard === 'tiposAlumnos') {
+        setDataTiposAlumnos(tiposAlumnos || []);
+      } else if (selectedCard === 'medioPublicitario') {
+        setDataMedioPublicitario(medioPublicitario || []);
+      }else {
         setError('Error al obtener los datos.');
       }
     } catch (error) {
-      setError('Error al obtener los datos.');
+      setError('Error al obtenerhnui los datos.');
     } finally {
       setLoading(false); // Finalizar el estado de carga
     }
@@ -123,48 +122,70 @@ const Estadisticas = () => {
           </div>
 
           {/* Filtros: Mes y Año */}
-          <div className="mt-6 flex gap-4 mb-6 justify-center">
-            <input
-              type="month"
-              value={month}
-              onChange={(e) => setMonth(e.target.value)}
-              className="px-4 py-2 bg-gray-800 text-white rounded-md"
-            />
-            <input
-              type="number"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              className="px-4 py-2 bg-gray-800 text-white rounded-md"
-            />
-            <button
-              onClick={handleFilterChange}
-              disabled={loading}  // Deshabilitar el botón mientras se carga
-              className={`px-4 py-2 ${loading ? 'bg-gray-500' : 'bg-blue-600'} text-white rounded-md`}
-            >
-              {loading ? 'Cargando...' : 'Filtrar'}
-            </button>
+          <div className="mt-6 flex flex-col sm:flex-row gap-6 mb-6 justify-center items-center sm:items-start px-4 sm:px-0">
+            <div className="text-center sm:text-left mb-6 sm:mb-0">
+              <h2 className="text-xl font-semibold text-gray-900">Filtrar por mes y año</h2>
+              <p className="text-sm text-gray-500 mt-2">Selecciona el mes y el año para filtrar los resultados.</p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start">
+              <div className="w-full sm:w-auto">
+                <label htmlFor="month" className="block text-sm font-medium text-gray-700">Mes</label>
+                <input
+                  id="month"
+                  type="month"
+                  value={month}
+                  onChange={(e) => setMonth(e.target.value)}
+                  className="mt-1 px-4 py-2 bg-gray-800 text-white rounded-md w-full sm:w-48 border border-gray-600 focus:ring-2 focus:ring-blue-500"
+                  aria-label="Mes de filtro"
+                />
+              </div>
+              <div className="w-full sm:w-auto">
+                <label htmlFor="year" className="block text-sm font-medium text-gray-700">Año</label>
+                <input
+                  id="year"
+                  type="number"
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
+                  className="mt-1 px-4 py-2 bg-gray-800 text-white rounded-md w-full sm:w-48 border border-gray-600 focus:ring-2 focus:ring-blue-500"
+                  aria-label="Año de filtro"
+                />
+              </div>
+              <div className="w-full sm:w-auto">
+                <button
+                  onClick={handleFilterChange}
+                  disabled={loading}
+                  className={`px-4 py-2 ${loading ? 'bg-gray-500' : 'bg-blue-600'} text-white rounded-md w-full sm:w-auto mt-4 sm:mt-0`}
+                >
+                  {loading ? 'Cargando...' : 'Filtrar'}
+                </button>
+              </div>
+            </div>
           </div>
+
+
 
           {/* Mostrar mensaje de error */}
           {error && <div className="text-red-500 text-center mb-4">{error}</div>}
 
           {/* Mostrar el gráfico de Tipos de Alumnos si se seleccionó la tarjeta */}
           {selectedCard === 'tiposAlumnos' && tiposAlumnos.length > 0 && (
+
             <div className="mt-6">
+
               <Pie data={tiposAlumnosData} />
             </div>
           )}
 
           {/* Mostrar el gráfico de Medios Publicitarios si se seleccionó la tarjeta */}
           {selectedCard === 'medioPublicitario' && medioPublicitario.length > 0 && (
+
             <div className="mt-6">
               <Bar data={medioPublicitarioData} />
             </div>
           )}
-
           {/* Mostrar mensaje cuando no hay datos */}
-          {(selectedCard === 'tiposAlumnos' && tiposAlumnos.length === 0) || 
-           (selectedCard === 'medioPublicitario' && medioPublicitario.length === 0) ? (
+          {(selectedCard === 'tiposAlumnos' && tiposAlumnos.length === 0) ||
+            (selectedCard === 'medioPublicitario' && medioPublicitario.length === 0) ? (
             <div className="text-center text-gray-500 mt-6">No hay datos disponibles para mostrar.</div>
           ) : null}
         </div>

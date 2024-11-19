@@ -10,7 +10,8 @@ class EstadisticasController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Administrador/Estadisticas/index');
+        $datos = Formulario::all();
+        return Inertia::render('Administrador/Estadisticas/Estadisticas',['datos'=>$datos]);
     }
 
     public function filtrar(Request $request)
@@ -32,9 +33,9 @@ class EstadisticasController extends Controller
                 ->get();
     
             // Depura los resultados
-            // dd($tiposAlumnos);
+            dd($tiposAlumnos);
     
-            return response()->json(['tiposAlumnos' => $tiposAlumnos]);
+            return Inertia::render('Administrador/Estadisticas/Estadisticas',['tiposAlumnos' => $tiposAlumnos]);
         } else if ($type === 'medioPublicitario') {
             // Obtener las estadísticas de medios publicitarios
             $medioPublicitario = Formulario::selectRaw('medioPublicitario, COUNT(*) as cantidad')
@@ -44,9 +45,9 @@ class EstadisticasController extends Controller
                 ->get();
     
             // Depura los resultados
-          //  dd($medioPublicitario);
+            dd($medioPublicitario);
     
-            return response()->json(['medioPublicitario' => $medioPublicitario]);
+            return Inertia::render('Administrador/Estadisticas/Estadisticas',['medioPublicitario' => $medioPublicitario]);
         }
     
         return response()->json(['error' => 'Tipo no válido'], 400);

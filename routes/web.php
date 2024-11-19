@@ -63,6 +63,12 @@ Route::middleware('EsAdmin')->group(function () {
     Route::get('/estadisticas/filtrar', [EstadisticasController::class, 'filtrar']);
     Route::post('/formularios/{id}/aceptar', [FormularioController::class, 'aceptar'])->name('formularios.aceptar');
     Route::post('/formularios/{id}/rechazar', [FormularioController::class, 'rechazar'])->name('formularios.rechazar');
+    Route::get('/gestionestudiantesgrupo', function () {
+        $grupos = App\Models\Grupo::with(['estudiantes', 'docente', 'ciclo.idioma'])->get();
+        return Inertia::render('Administrador/Grupos/GestionEstudiantesGrupo', [
+            'grupos' => $grupos
+        ]);
+    })->name('gestion.estudiantes.grupo');
 });
 
 Route::resource('formulario', FormularioController::class);

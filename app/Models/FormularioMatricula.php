@@ -11,7 +11,6 @@ class FormularioMatricula extends Model
     use HasFactory;
    
     protected $fillable = [
-        'estudiante_id',
         'fechaMatricula',
         'cicloIngles',
         'horarioIngles',
@@ -20,6 +19,7 @@ class FormularioMatricula extends Model
         'montoPago',
         'nroComprobante',
         'imgComprobante',
+        'estudiante_id',
     ];
     public function estudiante()
     {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useForm, router } from '@inertiajs/react';
+import { useForm, router, Link } from '@inertiajs/react';
 
 const GestionGrupos = ({ grupos, ciclos, docentes }) => {
     const { data, setData, processing, errors, reset } = useForm({
@@ -75,6 +75,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
     const handleEdit = (grupo) => {
         setSelectedGrupo(grupo);
         setData({
+            periodo: grupo.periodo || '',
             modalidad: grupo.modalidad || '',
             nroEstudiantes: grupo.nroEstudiantes || '',
             nroVacantes: grupo.nroVacantes || '',
@@ -303,13 +304,20 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
                                         ? `${grupo.docente.nombres} ${grupo.docente.aPaterno} ${grupo.docente.aMaterno}`
                                         : 'N/A'}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-6 py-4 whitespace-nowrap space-x-2">
                                     <button
                                         onClick={() => handleEdit(grupo)}
                                         className="text-indigo-600 hover:text-indigo-900 transition-colors"
                                     >
                                         Editar
                                     </button>
+                                    <br/> 
+                                    <Link
+                                        href={`/gestionestudiantesgrupo?grupo=${grupo.id}`}
+                                        className="text-green-600 hover:text-green-900 transition-colors"
+                                    >
+                                        Ver estudiantes
+                                    </Link>
                                 </td>
                             </tr>
                         ))}

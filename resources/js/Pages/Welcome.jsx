@@ -34,6 +34,26 @@ export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
         imgComprobante: null,
     });
 
+    const validarFecha = (fecha) => {
+        const fechaIngresada = new Date(fecha);
+        const hoy = new Date();
+        const edadMinima = 18; // Edad mínima requerida
+        const fechaMinima = new Date(
+            hoy.getFullYear() - edadMinima,
+            hoy.getMonth(),
+            hoy.getDate()
+        );
+
+        if (fechaIngresada > hoy) {
+            return 'La fecha no puede estar en el futuro.';
+        } else if (fechaIngresada > fechaMinima) {
+            return `Debes tener al menos ${edadMinima} años.`;
+        }
+        return '';
+    };
+    errors['fechaNacimiento'] = validarFecha(data.fechaNacimiento);
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         post(route('formulario.store'));

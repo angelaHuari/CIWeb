@@ -30,14 +30,34 @@ const FormularioDocentes = ({ docentes = [] }) => {
         setPreviewImage(docente.fotoDocente);  // Mantener la imagen previa
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-    
+
+    const validarFecha = (fecha) => {
+        const fechaIngresada = new Date(fecha);
+        const hoy = new Date();
+        const edadMinima = 18; // Edad mínima requerida
+        const fechaMinima = new Date(
+            hoy.getFullYear() - edadMinima,
+            hoy.getMonth(),
+            hoy.getDate()
+        );
+
+        if (fechaIngresada > hoy) {
+            return 'La fecha no puede estar en el futuro.';
+        } else if (fechaIngresada > fechaMinima) {
+            return `Debes tener al menos ${edadMinima} años.`;
+        }
+        return '';
+    };
+
 
     const handleChange = (e) => {
         const key = e.target.name;
         const value = e.target.type === 'file' ? e.target.files[0] : e.target.value;
 
         setData(key, value);
-
+        if (key === 'fechaNacimiento' && e.target.value) {
+            errors['fechaNacimiento'] = validarFecha(value);
+        }
         if (key === 'fotoDocente' && e.target.files[0]) {
             setPreviewImage(URL.createObjectURL(e.target.files[0]));
         }
@@ -45,7 +65,7 @@ const FormularioDocentes = ({ docentes = [] }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-    
+
         if (isEdit) {
             const formData = new FormData();
             Object.keys(data).forEach(key => {
@@ -53,10 +73,10 @@ const FormularioDocentes = ({ docentes = [] }) => {
                     formData.append(key, data[key]);
                 }
             });
-    
+
             // Asegúrate de que el método PUT se esté enviando
             formData.append('_method', 'PUT');
-    
+
             post(route('docente.update', editingDocente.id), {
                 forceFormData: true, // Usamos FormData
                 data: formData,
@@ -76,7 +96,7 @@ const FormularioDocentes = ({ docentes = [] }) => {
                     formData.append(key, data[key]);
                 }
             });
-    
+
             post(route('docente.store'), {
                 forceFormData: true,
                 data: formData,
@@ -90,7 +110,7 @@ const FormularioDocentes = ({ docentes = [] }) => {
             });
         }
     };
-    
+
     const handleCancelEdit = () => {
         setEditingDocente(null);
         reset();
@@ -146,7 +166,7 @@ const FormularioDocentes = ({ docentes = [] }) => {
                             <span className="text-red-500">{errors.aPaterno}</span>
                         )}
                     </div>
-                    
+
                 </div>
 
                 {/* Fila con dos columnas */}
@@ -212,38 +232,38 @@ const FormularioDocentes = ({ docentes = [] }) => {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                <div>
-                    <label>Fecha de Nacimiento</label>
-                    <input
-                        type="date"
-                        name="fechaNacimiento"
-                        value={data.fechaNacimiento || ''}
-                        onChange={handleChange}
-                        className="border p-2 w-full"
-                    />
-                    {errors.fechaNacimiento && (
-                        <span className="text-red-500">{errors.fechaNacimiento}</span>
-                    )}
+                    <div>
+                        <label>Fecha de Nacimiento</label>
+                        <input
+                            type="date"
+                            name="fechaNacimiento"
+                            value={data.fechaNacimiento || ''}
+                            onChange={handleChange}
+                            className="border p-2 w-full"
+                        />
+                        {errors.fechaNacimiento && (
+                            <span className="text-red-500">{errors.fechaNacimiento}</span>
+                        )}
+                    </div>
+
+                    <div>
+                        <label>Email Institucional</label>
+                        <input
+                            type="email"
+                            name="emailInstitucional"
+                            value={data.emailInstitucional || ''}
+                            onChange={handleChange}
+                            className="border p-2 w-full"
+                        />
+                        {errors.emailInstitucional && (
+                            <span className="text-red-500">{errors.emailInstitucional}</span>
+                        )}
+                    </div>
+
                 </div>
 
-                <div>
-                    <label>Email Institucional</label>
-                    <input
-                        type="email"
-                        name="emailInstitucional"
-                        value={data.emailInstitucional || ''}
-                        onChange={handleChange}
-                        className="border p-2 w-full"
-                    />
-                    {errors.emailInstitucional && (
-                        <span className="text-red-500">{errors.emailInstitucional}</span>
-                    )}
-                </div>
 
-                </div>
-                
 
-                
 
                 <div>
                     <label>Foto del Docente</label>
@@ -276,8 +296,8 @@ const FormularioDocentes = ({ docentes = [] }) => {
                         {processing
                             ? 'Guardando...'
                             : isEdit
-                            ? 'Actualizar'
-                            : 'Guardar'}
+                                ? 'Actualizar'
+                                : 'Guardar'}
                     </button>
                 </div>
             </form>

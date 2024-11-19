@@ -26,7 +26,10 @@ const DatosGenerales = ({data,setData,errors}) => {
             <input type="text" value={data.celular} onChange={(e) => setData({...data,celular: e.target.value})} />
             
             <label>Fecha de Nacimiento:</label>
-            <input type="date" value={data.fechaNacimiento} onChange={(e) =>setData({...data,fechaNacimiento: e.target.value})} />
+            <input type="date" value={data.fechaNacimiento} onChange={(e) =>setData({...data,fechaNacimiento: e.target.value})} onError={errors.fechaNacimiento} />
+            {errors.fechaNacimiento && (
+                            <span className="text-red-500">{errors.fechaNacimiento}</span>
+                        )}
         </div>
     );
 };
