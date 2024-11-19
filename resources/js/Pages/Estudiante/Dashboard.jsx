@@ -30,8 +30,7 @@ export default function Dashboard() {
             }
         >
             <Head title="Panel de Control - Centro de Idiomas" />
-
-            {/* Fondo con gradiente suave de granate a color piel */}
+            
             <div className="py-12 bg-gradient-to-b from-[#800020] to-[#F5D0A9] min-h-screen">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
