@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaEye } from 'react-icons/fa';
 
 const TablaDocentes = ({ docentes, onEdit }) => {
     const [showModal, setShowModal] = useState(false);
@@ -6,6 +7,7 @@ const TablaDocentes = ({ docentes, onEdit }) => {
     const [showCredentials, setShowCredentials] = useState(false);
 
     const handleShowModal = (docente) => {
+        if (!docente) return;
         setSelectedDocente(docente);
         setShowModal(true);
     };
@@ -17,41 +19,49 @@ const TablaDocentes = ({ docentes, onEdit }) => {
     };
 
     return (
-        <div className="mt-8">
-            <h2 className="text-lg font-semibold mb-4">Lista de Docentes</h2>
-            <table className="table-auto w-full border">
-                <thead>
-                    <tr className="bg-gray-200">
-                        <th className="border px-4 py-2">Nombres</th>
-                        <th className="border px-4 py-2">Apellido Paterno</th>
-                        <th className="border px-4 py-2">Apellido Materno</th>
-                        <th className="border px-4 py-2">Celular</th>
-                        <th className="border px-4 py-2">Email</th>
-                        <th className="border px-4 py-2">Acciones</th>
+        <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
+            <table className="min-w-full table-auto">
+                <thead className="bg-[#800020] text-white">
+                    <tr>
+                        <th className="px-6 py-3 text-left">Nombres</th>
+                        <th className="px-6 py-3 text-left">Apellido Paterno</th>
+                        <th className="px-6 py-3 text-left">Apellido Materno</th>
+                        <th className="px-6 py-3 text-left">Celular</th>
+                        <th className="px-6 py-3 text-left">Email</th>
+                        <th className="px-6 py-3 text-left">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {docentes.length > 0 ? (
                         docentes.map((docente) => (
-                            <tr key={docente.id}>
-                                <td className="border px-4 py-2">{docente.nombres}</td>
-                                <td className="border px-4 py-2">{docente.aPaterno}</td>
-                                <td className="border px-4 py-2">{docente.aMaterno}</td>
-                                <td className="border px-4 py-2">{docente.celular}</td>
-                                <td className="border px-4 py-2">{docente.emailInstitucional}</td>
-                                <td className="border px-4 py-2">
-                                    <button onClick={() => onEdit(docente)} className="mr-2">
+                            <tr
+                                key={docente.id}
+                                className="border-b hover:bg-[#F4D6C5] cursor-pointer"
+                            >
+                                <td className="px-6 py-3">{docente.nombres || 'No disponible'}</td>
+                                <td className="px-6 py-3">{docente.aPaterno || 'No disponible'}</td>
+                                <td className="px-6 py-3">{docente.aMaterno || 'No disponible'}</td>
+                                <td className="px-6 py-3">{docente.celular || 'No disponible'}</td>
+                                <td className="px-6 py-3">{docente.emailInstitucional || 'No disponible'}</td>
+                                <td className="px-6 py-3">
+                                    <button
+                                        onClick={() => onEdit(docente)}
+                                        className="text-[#800020] hover:text-[#6A4E3C] mr-2"
+                                    >
                                         <img src="/imagenes/editar.png" alt="Editar" className="h-5 w-5" />
                                     </button>
-                                    <button onClick={() => handleShowModal(docente)}>
-                                        <img src="/imagenes/ojo.png" alt="Ver más" className="h-5 w-5" />
+                                    <button
+                                        onClick={() => handleShowModal(docente)}
+                                        className="text-[#800020] hover:text-[#6A4E3C]"
+                                    >
+                                        <img src="/imagenes/ojo.png" alt="Editar" className="h-5 w-5" />
                                     </button>
                                 </td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="6" className="border px-4 py-2 text-center">
+                            <td colSpan="6" className="px-6 py-3 text-center text-gray-500">
                                 No hay docentes disponibles.
                             </td>
                         </tr>
@@ -75,14 +85,14 @@ const TablaDocentes = ({ docentes, onEdit }) => {
                         <div className="flex">
                             <div className="flex-1 text-left pr-4">
                                 <h3 className="text-lg font-semibold mb-2">Detalles del Docente</h3>
-                                <p><strong>Nombres:</strong> {selectedDocente.nombres}</p>
-                                <p><strong>Apellido Paterno:</strong> {selectedDocente.aPaterno}</p>
-                                <p><strong>Apellido Materno:</strong> {selectedDocente.aMaterno}</p>
-                                <p><strong>DNI:</strong> {selectedDocente.dni}</p>
-                                <p><strong>Celular:</strong> {selectedDocente.celular}</p>
-                                <p><strong>Email Institucional:</strong> {selectedDocente.emailInstitucional}</p>
-                                <p><strong>Fecha de Nacimiento:</strong> {selectedDocente.fechaNacimiento}</p>
-                                <p><strong>Sexo:</strong> {selectedDocente.sexo}</p>
+                                <p><strong>Nombres:</strong> {selectedDocente.nombres || 'No disponible'}</p>
+                                <p><strong>Apellido Paterno:</strong> {selectedDocente.aPaterno || 'No disponible'}</p>
+                                <p><strong>Apellido Materno:</strong> {selectedDocente.aMaterno || 'No disponible'}</p>
+                                <p><strong>DNI:</strong> {selectedDocente.dni || 'No disponible'}</p>
+                                <p><strong>Celular:</strong> {selectedDocente.celular || 'No disponible'}</p>
+                                <p><strong>Email Institucional:</strong> {selectedDocente.emailInstitucional || 'No disponible'}</p>
+                                <p><strong>Fecha de Nacimiento:</strong> {selectedDocente.fechaNacimiento || 'No disponible'}</p>
+                                <p><strong>Sexo:</strong> {selectedDocente.sexo || 'No disponible'}</p>
                             </div>
 
                             <div className="flex-shrink-0 ml-8 text-center">
@@ -109,10 +119,10 @@ const TablaDocentes = ({ docentes, onEdit }) => {
                             <div className="mt-4 p-4 bg-gray-100 rounded">
                                 <h4 className="font-semibold mb-2">Credenciales de Usuario</h4>
                                 <div className="space-y-2">
-                                    <p><strong>Nombre de Usuario:</strong> {selectedDocente.user.email}</p>
-                                    <p><strong>Contraseña:</strong> {selectedDocente.dni}</p>
+                                    <p><strong>Nombre de Usuario:</strong> {selectedDocente.user.email || 'No disponible'}</p>
+                                    <p><strong>Contraseña:</strong> {selectedDocente.dni || 'No disponible'}</p>
                                     <p className="text-sm text-red-600 mt-2">
-                                        * Por seguridad, la contraseña inicial es el DNI del docente
+                                        * Por seguridad, la contraseña inicial es el DNI del docente.
                                     </p>
                                 </div>
                             </div>
