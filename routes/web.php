@@ -9,6 +9,7 @@ use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\IdiomaController;
 use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EstadisticasController;
 use App\Models\Ciclo;
 use App\Models\Grupo;
 use Illuminate\Foundation\Application;
@@ -58,6 +59,8 @@ Route::middleware('EsAdmin')->group(function () {
     Route::resource('docente', DocenteController::class);
     Route::resource('matricula', MatriculaController::class);
     Route::resource('grupo', GrupoController::class);
+    Route::resource('/estadisticas', EstadisticasController::class);
+    Route::get('/estadisticas/filtrar', [EstadisticasController::class, 'filtrar']);
     Route::post('/formularios/{id}/aceptar', [FormularioController::class, 'aceptar'])->name('formularios.aceptar');
     Route::post('/formularios/{id}/rechazar', [FormularioController::class, 'rechazar'])->name('formularios.rechazar');
 });
