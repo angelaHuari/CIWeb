@@ -13,7 +13,7 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
 
     // Opciones de idiomas y periodos
     const languagesOptions = idiomas;
-    
+
 
     // Manejar el envío del formulario para registrar o editar un ciclo
     const handleSubmit = (e) => {
@@ -48,125 +48,145 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
     };
 
     return (
-        <div className="p-4 md:p-6 lg:p-8 font-sans bg-blue-200 min-h-screen">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl text-center font-bold mb-6" style={{ color: '#74111e' }}>
-                Interfaz de Gestión de Ciclos
-            </h1>
-            <div className="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0">
-                {/* Formulario para agregar o editar un ciclo */}
-                <div className="w-full md:w-1/2 lg:w-2/5">
-                    <h3 className="text-xl font-semibold mb-4 text-center md:text-left">Registro de Ciclo</h3>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <select
-                                value={data.idioma_id}
-                                onChange={(e) => setData('idioma_id', e.target.value)}
-                                required
-                                className="p-2 border border-gray-300 rounded w-full"
-                            >
-                                <option value="" disabled>Selecciona un Idioma</option>
-                                {languagesOptions.map((lang) => (
-                                    <option key={lang.id} value={lang.id}>{lang.nombre}</option>
-                                ))}
-                            </select>
+        <div className="min-h-screen bg-gradient-to-r from-[#800020] to-[#F5D0A9] py-12">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
+                    {/* Formulario para agregar o editar un ciclo */}
+                    <div className="w-full max-w-full mx-auto">
+                        <h3 className="text-xl font-semibold mb-4 text-center md:text-left">Registro de Ciclo</h3>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div className="grid grid-cols-3 gap-4 items-center">
+                                {/* Columna 1: Nombre */}
+                                <div>
+                                    <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">
+                                        Nombre
+                                    </label>
+                                    <input
+                                        id="nombre"
+                                        type="text"
+                                        value={data.nombre}
+                                        onChange={(e) => setData('nombre', e.target.value.toUpperCase())}
+                                        placeholder="Nombre del Ciclo"
+                                        required
+                                        className="mt-1 p-2 border border-gray-300 rounded w-full"
+                                    />
+                                </div>
 
-                            <input
-                                type="text"
-                                value={data.nombre}
-                                onChange={(e) => setData('nombre', e.target.value)}
-                                placeholder="Nombre del Ciclo"
-                                required
-                                className="p-2 border border-gray-300 rounded w-full"
-                            />
-                        </div>
+                                {/* Columna 2: Nivel */}
+                                <div>
+                                    <label htmlFor="nivel" className="block text-sm font-medium text-gray-700">
+                                        Nivel
+                                    </label>
+                                    <input
+                                        id="nivel"
+                                        type="number"
+                                        value={data.nivel}
+                                        onChange={(e) => setData('nivel', Number(e.target.value))}
+                                        min="1"
+                                        required
+                                        className="mt-1 p-2 border border-gray-300 rounded w-full"
+                                        placeholder="Nivel"
+                                    />
+                                </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <input
-                                type="number"
-                                value={data.nivel}
-                                onChange={(e) => setData('nivel', Number(e.target.value))}
-                                min="1"
-                                required
-                                className="p-2 border border-gray-300 rounded w-full"
-                                placeholder="Nivel"
-                            />
+                                {/* Columna 3: Idioma */}
+                                <div>
+                                    <label htmlFor="idioma_id" className="block text-sm font-medium text-gray-700">
+                                        Idioma
+                                    </label>
+                                    <select
+                                        id="idioma_id"
+                                        value={data.idioma_id}
+                                        onChange={(e) => setData('idioma_id',  e.target.value.toUpperCase())}
+                                        required
+                                        className="mt-1 p-2 border border-gray-300 rounded w-full uppercase"
+                                    >
+                                        <option value="" disabled>Selecciona un Idioma</option>
+                                        {languagesOptions.map((lang) => (
+                                            <option key={lang.id} value={lang.id}>{lang.nombre}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
 
-                        </div>
 
-                        <div className="flex justify-between">
-                            <button
-                                type="submit"
-                                className={`bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto ${selectedCycle ? 'bg-green-500' : 'bg-blue-500'} hover:bg-blue-600`}
-                            >
-                                {selectedCycle ? 'Modificar' : 'Agregar'}
-                            </button>
-
-                            {selectedCycle && (
+                            <div className="flex justify-end">
                                 <button
-                                    onClick={() => setSelectedCycle(null)}
-                                    className="bg-red-500 text-white px-4 py-2 rounded w-full md:w-auto hover:bg-red-600"
+                                    type="submit"
+                                    className={`bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto ${selectedCycle ? 'bg-green-500' : 'bg-blue-500'} hover:bg-blue-600`}
                                 >
-                                    Cancelar
+                                    {selectedCycle ? 'Modificar' : 'Agregar'}
                                 </button>
-                            )}
-                        </div>
-                    </form>
+
+                                {selectedCycle && (
+                                    <button
+                                        onClick={() => setSelectedCycle(null)}
+                                        className="bg-red-500 text-white px-4 py-2 rounded w-full md:w-auto hover:bg-red-600"
+                                    >
+                                        Cancelar
+                                    </button>
+                                )}
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 
-            {/* Tabla de ciclos */}
-            <div className="overflow-x-auto mt-6">
-                <table className="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg">
-                    <thead className="bg-gray-100">
-                        <tr>
-                            <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Idioma</th>
-                            <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Nombre del Ciclo</th>
-                            <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Nivel</th>
-                            <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {ciclos && ciclos.data && ciclos.data.length > 0 ? (
-                            ciclos.data.map((cycle) => (
-                                <tr key={cycle.id}>
-                                    <td className="border-b border-gray-300 px-4 py-2">{cycle.idioma.nombre}</td>
-                                    <td className="border-b border-gray-300 px-4 py-2">{cycle.nombre}</td>
-                                    <td className="border-b border-gray-300 px-4 py-2">{cycle.nivel}</td>
-                                    <td className="border-b border-gray-300 px-4 py-2">
-                                        <button
-                                            onClick={() => handleEdit(cycle)}
-                                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 w-full md:w-auto"
-                                        >
-                                            Editar
-                                        </button>
+            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                {/* Tabla de ciclos */}
+                <div className="overflow-x-auto mt-6">
+                    <table className="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg">
+                        <thead className="bg-[#800020] text-white">
+                            <tr>
+                                <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Idioma</th>
+                                <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Nombre del Ciclo</th>
+                                <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Nivel</th>
+                                <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {ciclos && ciclos.data && ciclos.data.length > 0 ? (
+                                ciclos.data.map((cycle) => (
+                                    <tr key={cycle.id}>
+                                        <td className="border-b border-gray-300 px-4 py-2">{cycle.idioma.nombre}</td>
+                                        <td className="border-b border-gray-300 px-4 py-2">{cycle.nombre}</td>
+                                        <td className="border-b border-gray-300 px-4 py-2">{cycle.nivel}</td>
+                                        <td className="border-b border-gray-300 px-4 py-2">
+                                            <button
+                                                onClick={() => handleEdit(cycle)}
+                                                className="bg-black text-white px-3 py-1 rounded hover:bg-green-600 w-full md:w-auto"
+                                            >
+                                                Editar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="5" className="border-b border-gray-300 px-4 py-2 text-center">
+                                        No hay registros
                                     </td>
                                 </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="5" className="border-b border-gray-300 px-4 py-2 text-center">
-                                    No hay registros
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                            )}
+                        </tbody>
+                    </table>
 
-                {/* Paginación */}
-                <div className="mt-4">
-                    {ciclos.links.map((link, index) => (
-                        <Link
-                            key={index}
-                            href={link.url}
-                            className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'
-                                }`}
-                            dangerouslySetInnerHTML={{ __html: link.label }}
-                        />
-                    ))}
+                    {/* Paginación */}
+                    <div className="mt-4">
+                        {ciclos.links.map((link, index) => (
+                            <Link
+                                key={index}
+                                href={link.url}
+                                className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-black text-white' : 'bg-white text-gray'
+                                    }`}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
-         
+
     );
 };
 

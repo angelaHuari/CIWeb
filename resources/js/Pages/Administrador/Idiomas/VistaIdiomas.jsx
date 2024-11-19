@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from '@inertiajs/react';
 
 const VistaIdiomas = ({ idiomas = [] }) => {
-  const { data, setData, post,put, processing, errors } = useForm({
+  const { data, setData, post, put, processing, errors } = useForm({
     nombre: '',
   });//formulario para idiomas
 
@@ -24,39 +24,32 @@ const VistaIdiomas = ({ idiomas = [] }) => {
     } else {
       // Crear y registrar un nuevo idioma en la base de datos
       post(route('idioma.store'));
-      
+
     }
     //recargar la pagina
     window.location.reload();
 
     // Limpiar el formulario
-    setData('nombre','');
+    setData('nombre', '');
   };
 
   // Manejar la edición de un idioma
   const handleEdit = (language) => {
     setSelectedLanguage(language.id);
-    setData('nombre',language.nombre);
+    setData('nombre', language.nombre);
   };
 
-  // Manejar la eliminación de un idioma --NO IMPLEMENTAR-CONSULTAR
-  /* const handleDelete = (id) => {
-     //eliminar idioma  en base de datos
-     setLanguages(updatedLanguages);
-   };*/
-
   return (
-    <div className="p-6 font-sans bg-red-100">
-      <h1 className="text-2xl sm:text-3xl lg:text-4xl text-center font-bold mb-6" style={{ color: '#74111e' }}>Interfaz de Gestión de Idiomas</h1>
+    <div className="min-h-screen bg-gradient-to-r from-[#800020] to-[#F5D0A9] py-12">
 
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-        <div className="w-full md:w-auto mb-4 md:mb-0">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
           <h3 className="text-xl font-semibold mb-2 text-center md:text-left">Registro de Idioma</h3>
           <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-center w-full">
             <input
               type="text"
               value={data.nombre}
-              onChange={(e) => setData('nombre',e.target.value)}
+              onChange={(e) => setData('nombre', e.target.value.toUpperCase())}
               placeholder="Nombre del Idioma"
               required
               className="p-2 border border-gray-300 rounded mb-4 md:mb-0 md:mr-4 w-full md:w-auto"
@@ -67,55 +60,53 @@ const VistaIdiomas = ({ idiomas = [] }) => {
             >
               {selectedLanguage ? 'Modificar' : 'Agregar'}
             </button>
+
+            {selectedLanguage && (
+              <button
+                onClick={() => setSelectedLanguage(null)}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Cancelar Edición
+              </button>
+            )}
           </form>
+
         </div>
-
-        {selectedLanguage && (
-          <button
-            onClick={() => setSelectedLanguage(null)}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Cancelar Edición
-          </button>
-        )}
-      </div>
-
-      <div className="overflow-x-auto">
-        <table className="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg">
-          <thead>
-            <tr>
-              {/*<th className="border-b-2 border-gray-300 px-4 py-2">ID</th>*/}
-              <th className="border-b-2 border-gray-300 px-4 py-2" style={{ backgroundColor: '#74111e',color: '#ffffff' }}>Nombre</th>
-              <th  className="border-b-2 border-gray-300 px-4 py-2" style={{ backgroundColor: '#74111e',color: '#ffffff' }}>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {languages.map((language, index) => (
-              <tr key={index} className='text-center'>
-                {/*<td className="border-b border-gray-300 px-4 py-2">{language.id}</td>*/}
-                <td className="border-b border-gray-300 px-4 py-2" style={{ color: '#74111e' }}>{language.nombre}</td>
-                <td className="border-b border-gray-300 px-4 py-2">
-                  <button
-                    onClick={() => handleEdit(language)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded mr-2 hover:bg-blue-600"
-                  >
-                    Modificar
-                  </button>
-                  {/*<button
-                    onClick={() => handleDelete(language.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                  >
-                    Eliminar
-                  </button> */}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="overflow-x-auto">
+            <table className="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg">
+              <thead className="bg-[#800020] text-white">
+                <tr >
+                  <th className="border-b-2 border-gray-300 px-4 py-2" >Nombre</th>
+                  <th className="border-b-2 border-gray-300 px-4 py-2" >Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {languages && languages.length > 0 ? (languages.map((language, index) => (
+                  <tr key={index} className='text-center'>
+                    <td className="border-b border-gray-300 px-4 py-2">{language.nombre}</td>
+                    <td className="border-b border-gray-300 px-4 py-2">
+                      <button
+                        onClick={() => handleEdit(language)}
+                        className="bg-black text-white px-3 py-1 rounded mr-2 hover:bg-green-600"
+                      >
+                        Editar
+                      </button>
+                    </td>
+                  </tr>
+                ))) : (
+                  <tr>
+                    <td colSpan="5" className="border-b border-gray-300 px-4 py-2 text-center">
+                      No hay registros
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
-    
   );
 };
-
 export default VistaIdiomas;
