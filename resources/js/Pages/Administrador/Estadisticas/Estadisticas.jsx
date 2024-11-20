@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
-import { FaUserGraduate, FaBullhorn } from 'react-icons/fa';  // Iconos de Font Awesome
-import { Pie, Bar } from 'react-chartjs-2';  // Para los gráficos
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';  // Importación de Chart.js
+import { Head } from '@inertiajs/react';
+import { FaUserGraduate, FaBullhorn } from 'react-icons/fa';
+import { Pie, Bar, Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, LineElement, PointElement } from 'chart.js';
 
 // Registro de los componentes de Chart.js
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, LineElement, PointElement);
 
 const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] }) => {
   const [dataTiposAlumnos, setDataTiposAlumnos] = useState([]);
@@ -14,70 +14,118 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [selectedCard, setSelectedCard] = useState(null);
-  const [loading, setLoading] = useState(false); // Estado de carga
-  const [error, setError] = useState(null); // Estado para manejar errores
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedGraph, setSelectedGraph] = useState('pie');
 
-  // Función para hacer la petición y obtener los datos filtrados
   const handleFilterChange = async () => {
     if (!month || !year) {
       setError('Por favor, selecciona un mes y un año válidos.');
       return;
     }
 
-    setLoading(true); // Iniciar el estado de carga
-    setError(null); // Resetear el error previo
+    setLoading(true);
+    setError(null);
 
     try {
-      //const response = await fetch(`/estadisticas/filtrar?month=${month}&year=${year}&type=${selectedCard}`);
-      const data = datos;
-
-
       if (selectedCard === 'tiposAlumnos') {
         setDataTiposAlumnos(tiposAlumnos || []);
       } else if (selectedCard === 'medioPublicitario') {
         setDataMedioPublicitario(medioPublicitario || []);
-      }else {
+      } else {
         setError('Error al obtener los datos.');
       }
     } catch (error) {
-      setError('Error al obtenerhnui los datos.');
+      setError('Error al obtener los datos.');
     } finally {
-      setLoading(false); // Finalizar el estado de carga
+      setLoading(false);
     }
   };
 
-  // Datos para el gráfico de torta (Tipos de Alumnos)
   const tiposAlumnosData = {
-    labels: tiposAlumnos.map((item) => item.tipoAlumno),
+    labels: dataTiposAlumnos.map((item) => item.tipoAlumno),
     datasets: [
       {
-        data: tiposAlumnos.map((item) => item.cantidad),
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'], // Colores personalizados
+        data: dataTiposAlumnos.map((item) => Math.round(item.cantidad)),
+        backgroundColor: ['#6D9DC5', '#FFB81C', '#34A853'], // Colores más claros
       },
     ],
   };
 
-  // Datos para el gráfico de barras (Medios Publicitarios)
+  const tiposAlumnosOptions = {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            const total = tooltipItem.dataset.data.reduce((acc, value) => acc + value, 0);
+            const percentage = Math.round((tooltipItem.raw / total) * 100);
+            return `${tooltipItem.label}: ${Math.round(tooltipItem.raw)} (${percentage}%)`;
+          },
+        },
+      },
+    },
+    scales: {
+      y: {
+        ticks: {
+          stepSize: 10,
+        },
+      },
+    },
+  };
+
   const medioPublicitarioData = {
-    labels: medioPublicitario.map((item) => item.medioPublicitario),
+    labels: datamedioPublicitario.map((item) => item.medioPublicitario),
     datasets: [
       {
         label: 'Medios Publicitarios',
-        data: medioPublicitario.map((item) => item.cantidad),
-        backgroundColor: '#FF5733',
+        data: datamedioPublicitario.map((item) => Math.round(item.cantidad)),
+        backgroundColor: ['#FF6F61', '#6B7F0E', '#1D9BF0', '#F39C12'], // Colores más suaves
       },
     ],
+  };
+
+  const medioPublicitarioOptions = {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            return `${tooltipItem.label}: ${Math.round(tooltipItem.raw)}`;
+          },
+        },
+      },
+    },
+    scales: {
+      y: {
+        ticks: {
+          stepSize: 10,
+        },
+      },
+    },
   };
 
   useEffect(() => {
     if (selectedCard) {
-      handleFilterChange(); // Llamamos a la función para obtener los datos según la tarjeta seleccionada
+      handleFilterChange();
     }
-  }, [month, year, selectedCard]); // Reactualizar cuando cambian los filtros
+  }, [month, year, selectedCard]);
 
-  // Manejador de clic en tarjeta para mostrar la sección correspondiente
   const handleCardClick = (cardType) => {
     setSelectedCard(cardType);
+  };
+
+  const renderTitle = () => {
+    switch (selectedCard) {
+      case 'tiposAlumnos':
+        return 'Estadísticas de los Tipos de Estudiantes';
+      case 'medioPublicitario':
+        return 'Estadísticas de los Medios Publicitarios';
+      default:
+        return '';
+    }
+  };
+
+  const handleGraphChange = (graphType) => {
+    setSelectedGraph(graphType);
   };
 
   return (
@@ -89,64 +137,63 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
       }
     >
       <Head title="Estadísticas" />
-      <div className="py-8 bg-gradient-to-b from-[#F5F5DC] via-[#F8F8F0] to-white">
+      <div className="py-8 bg-[#FFFBF0]">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {/* Tarjeta 1: Tipos de Estudiante */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-center items-center">
             <div
-              className="bg-gradient-to-r from-[#4B0C00] via-[#5A0B0F] to-[#3B0906] p-6 rounded-lg shadow-lg border border-gray-200 hover:shadow-xl transition duration-300 ease-in-out cursor-pointer"
+              className="bg-gradient-to-r from-[#5A0B0F] via-[#6B0F00] to-[#4B0C00] p-8 rounded-lg shadow-lg border border-gray-200 hover:shadow-xl transition duration-300 ease-in-out cursor-pointer text-center"
               onClick={() => handleCardClick('tiposAlumnos')}
             >
-              <div className="flex items-center space-x-4">
-                <FaUserGraduate className="text-white text-4xl" />
-                <h3 className="text-xl font-semibold text-white">Tipos de Estudiante</h3>
+              <div className="flex justify-center items-center mb-4">
+                <FaUserGraduate className="text-white text-5xl" />
               </div>
-              <p className="mt-4 text-white">
-                Información sobre los diferentes tipos de estudiantes en el sistema.
-              </p>
+              <h3 className="text-2xl font-semibold text-white">Tipos de Estudiante</h3>
+              <p className="mt-4 text-white">Información sobre los diferentes tipos de estudiantes en el sistema.</p>
             </div>
 
-            {/* Tarjeta 2: Publicidad */}
             <div
-              className="bg-gradient-to-r from-[#5A0B0F] via-[#3B0906] to-[#4B0C00] p-6 rounded-lg shadow-lg border border-gray-200 hover:shadow-xl transition duration-300 ease-in-out cursor-pointer"
+              className="bg-gradient-to-r from-[#5A0B0F] via-[#3B0906] to-[#4B0C00] p-8 rounded-lg shadow-lg border border-gray-200 hover:shadow-xl transition duration-300 ease-in-out cursor-pointer text-center"
               onClick={() => handleCardClick('medioPublicitario')}
             >
-              <div className="flex items-center space-x-4">
-                <FaBullhorn className="text-white text-4xl" />
-                <h3 className="text-xl font-semibold text-white">Publicidad</h3>
+              <div className="flex justify-center items-center mb-4">
+                <FaBullhorn className="text-white text-5xl" />
               </div>
-              <p className="mt-4 text-white">
-                Estadísticas sobre las campañas publicitarias y su rendimiento.
-              </p>
+              <h3 className="text-2xl font-semibold text-white">Publicidad</h3>
+              <p className="mt-4 text-white">Estadísticas sobre las campañas publicitarias y su rendimiento.</p>
             </div>
           </div>
 
-          {/* Filtros: Mes y Año */}
-          <div className="mt-6 flex flex-col sm:flex-row gap-6 mb-6 justify-center items-center sm:items-start px-4 sm:px-0">
-            <div className="text-center sm:text-left mb-6 sm:mb-0">
-              <h2 className="text-xl font-semibold text-gray-900">Filtrar por mes y año</h2>
+          <div className="mt-10 text-center">
+            <h3 className="text-3xl font-semibold text-white bg-gradient-to-r from-[#3E0B10] to-[#6B0F00] p-3 rounded-lg shadow-md">
+              {renderTitle()}
+            </h3>
+          </div>
+
+          <div className="mt-10 flex flex-col sm:flex-row gap-6 mb-6 justify-center items-center sm:items-start">
+            <div className="text-center sm:text-left mb-6 sm:mb-0 w-full">
+              <h2 className="text-2xl font-semibold text-[#333333]">Filtrar por mes y año</h2>
               <p className="text-sm text-gray-500 mt-2">Selecciona el mes y el año para filtrar los resultados.</p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start">
+            <div className="flex flex-col sm:flex-row gap-6 items-center justify-center sm:items-start w-full">
               <div className="w-full sm:w-auto">
-                <label htmlFor="month" className="block text-sm font-medium text-gray-700">Mes</label>
+                <label htmlFor="month" className="block text-sm font-medium text-[#333333]">Mes</label>
                 <input
                   id="month"
                   type="month"
                   value={month}
                   onChange={(e) => setMonth(e.target.value)}
-                  className="mt-1 px-4 py-2 bg-gray-800 text-white rounded-md w-full sm:w-48 border border-gray-600 focus:ring-2 focus:ring-blue-500"
+                  className="mt-1 px-4 py-3 bg-white text-black rounded-md w-full sm:w-56 border border-gray-300 focus:ring-2 focus:ring-[#3E0B10]"
                   aria-label="Mes de filtro"
                 />
               </div>
               <div className="w-full sm:w-auto">
-                <label htmlFor="year" className="block text-sm font-medium text-gray-700">Año</label>
+                <label htmlFor="year" className="block text-sm font-medium text-[#333333]">Año</label>
                 <input
                   id="year"
                   type="number"
                   value={year}
                   onChange={(e) => setYear(e.target.value)}
-                  className="mt-1 px-4 py-2 bg-gray-800 text-white rounded-md w-full sm:w-48 border border-gray-600 focus:ring-2 focus:ring-blue-500"
+                  className="mt-1 px-4 py-3 bg-white text-black rounded-md w-full sm:w-56 border border-gray-300 focus:ring-2 focus:ring-[#3E0B10]"
                   aria-label="Año de filtro"
                 />
               </div>
@@ -154,7 +201,8 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
                 <button
                   onClick={handleFilterChange}
                   disabled={loading}
-                  className={`px-4 py-2 ${loading ? 'bg-gray-500' : 'bg-blue-600'} text-white rounded-md w-full sm:w-auto mt-4 sm:mt-0`}
+                  className={`px-6 py-3 text-lg ${loading ? 'bg-gray-400' : 'bg-[#3E0B10] hover:bg-[#2D080C]'} text-white rounded-md w-full sm:w-auto mt-4 sm:mt-0 focus:outline-none focus:ring-2 focus:ring-[#3E0B10] transition duration-300 ease-in-out`}
+                  aria-label="Aplicar filtro"
                 >
                   {loading ? 'Cargando...' : 'Filtrar'}
                 </button>
@@ -162,32 +210,44 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
             </div>
           </div>
 
-
-
-          {/* Mostrar mensaje de error */}
           {error && <div className="text-red-500 text-center mb-4">{error}</div>}
 
-          {/* Mostrar el gráfico de Tipos de Alumnos si se seleccionó la tarjeta */}
-          {selectedCard === 'tiposAlumnos' && tiposAlumnos.length > 0 && (
+          {selectedCard && (
+            <div className="mt-10">
+              <div className="flex justify-center mb-6 gap-4">
+                <button
+                  onClick={() => handleGraphChange('pie')}
+                  className={`px-6 py-2 text-md rounded-md ${selectedGraph === 'pie' ? 'bg-[#3E0B10] text-white' : 'bg-gray-200 text-black'}`}
+                >
+                  Gráfico de Torta o Circular
+                </button>
+                <button
+                  onClick={() => handleGraphChange('bar')}
+                  className={`px-6 py-2 text-md rounded-md ${selectedGraph === 'bar' ? 'bg-[#3E0B10] text-white' : 'bg-gray-200 text-black'}`}
+                >
+                  Gráfico de Barras
+                </button>
+                <button
+                  onClick={() => handleGraphChange('line')}
+                  className={`px-6 py-2 text-md rounded-md ${selectedGraph === 'line' ? 'bg-[#3E0B10] text-white' : 'bg-gray-200 text-black'}`}
+                >
+                  Gráfico de Líneas
+                </button>
+              </div>
 
-            <div className="mt-6">
-
-              <Pie data={tiposAlumnosData} />
+              <div className="flex w-75 h-75 mx-auto"> {/* Tamaño moderado */}        
+                {selectedGraph === 'pie' && (
+                  <Pie data={selectedCard === 'tiposAlumnos' ? tiposAlumnosData : medioPublicitarioData} options={selectedCard === 'tiposAlumnos' ? tiposAlumnosOptions : medioPublicitarioOptions} />
+                )}
+                {selectedGraph === 'bar' && (
+                  <Bar data={selectedCard === 'tiposAlumnos' ? tiposAlumnosData : medioPublicitarioData} options={selectedCard === 'tiposAlumnos' ? tiposAlumnosOptions : medioPublicitarioOptions} />
+                )}
+                {selectedGraph === 'line' && (
+                  <Line data={selectedCard === 'tiposAlumnos' ? tiposAlumnosData : medioPublicitarioData} options={selectedCard === 'tiposAlumnos' ? tiposAlumnosOptions : medioPublicitarioOptions} />
+                )}
+              </div>
             </div>
           )}
-
-          {/* Mostrar el gráfico de Medios Publicitarios si se seleccionó la tarjeta */}
-          {selectedCard === 'medioPublicitario' && medioPublicitario.length > 0 && (
-
-            <div className="mt-6">
-              <Bar data={medioPublicitarioData} />
-            </div>
-          )}
-          {/* Mostrar mensaje cuando no hay datos */}
-          {(selectedCard === 'tiposAlumnos' && tiposAlumnos.length === 0) ||
-            (selectedCard === 'medioPublicitario' && medioPublicitario.length === 0) ? (
-            <div className="text-center text-gray-500 mt-6">No hay datos disponibles para mostrar.</div>
-          ) : null}
         </div>
       </div>
     </AuthenticatedLayout>
