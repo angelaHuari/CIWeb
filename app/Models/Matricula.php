@@ -15,8 +15,10 @@ class Matricula extends Model
     protected $fillable = [
         'fecha',
         'nota',
+        'estado',
         'estudiante_id',
         'grupo_id',
+        'pago_id',
     ];
 
     protected $casts = [
@@ -30,6 +32,10 @@ class Matricula extends Model
     public function grupo()
     {
         return $this->belongsTo(Grupo::class);
+    }
+    public function pago()
+    {
+        return $this->belongsTo(Pago::class);
     }
     
 }

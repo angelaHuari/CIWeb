@@ -73,7 +73,7 @@ class FormularioController extends Controller
             // Antes de crear el formulario, obtén los datos adicionales necesarios
             $grupo = Grupo::with(['ciclo.idioma'])->find($data['horarioIngles']);
             if ($grupo) {
-                $data['cicloIngles'] = $grupo->ciclo->nombre . ' - ' . $grupo->ciclo->idioma->nombre;
+                $data['cicloIngles'] = $grupo->ciclo->nombre . ' - ' . $grupo->ciclo->idioma->nombre. ' - ' .$grupo->ciclo->nivel;
                 $data['horarioIngles'] = $grupo->horario;
             }
 
@@ -155,32 +155,33 @@ class FormularioController extends Controller
             // Buscar el grupo correspondiente
             $grupo = Grupo::where('horario', $formulario->horarioIngles)
                 ->whereHas('ciclo', function ($query) use ($formulario) {
-                    $query->whereRaw("CONCAT(nombre, ' - ', (SELECT nombre FROM idiomas WHERE id = ciclos.idioma_id)) = ?", [$formulario->cicloIngles]);
+                    $query->whereRaw("CONCAT(nombre, ' - ', (SELECT nombre FROM idiomas WHERE id = ciclos.idioma_id), ' - ' ,nivel) = ?", [$formulario->cicloIngles]);
                 })
                 ->first();
 
             if (!$grupo) {
                 throw new \Exception('No se encontró el grupo correspondiente');
             }
-
-            // Crear matrícula
-            $matricula = Matricula::create([
-                'fecha' => Carbon::now(),
-                'estadoPago' => 'pagado',
-                'nota' => 0,
-                'estudiante_id' => $estudiante->id,
-                'grupo_id' => $grupo->id
-            ]);
-
             // Create payment record
             $pago = Pago::create([
                 'fecha' => $formulario->fechaPago,
                 'monto' => $formulario->montoPago,
                 'medioPago' => $formulario->medioPago,
                 'nroComprobante' => $formulario->nroComprobante,
-                'imgComprobante' => $formulario->imgComprobante,
-                'matricula_id' => $matricula->id
+                'imgComprobante' => $formulario->imgComprobante
             ]);
+
+            // Crear matrícula
+            $matricula = Matricula::create([
+                'fecha' => Carbon::now(),
+                'nota' => 0,
+                'estado' => 'vigente',
+                'estudiante_id' => $estudiante->id,
+                'grupo_id' => $grupo->id,
+                'pago_id' => $pago->id
+            ]);
+
+            
 
             // Actualizar el estado del formulario
             $formulario->estado = 'aceptado';

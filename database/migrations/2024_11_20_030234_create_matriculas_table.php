@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->date('fecha');
             $table->integer('nota');
+            $table->string('estado');
             $table->foreignId('estudiante_id')->constrained()->onDelete('cascade');
             $table->foreignId('grupo_id')->constrained()->onDelete('cascade');
+            $table->foreignId('pago_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

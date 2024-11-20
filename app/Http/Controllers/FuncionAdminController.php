@@ -17,5 +17,10 @@ class FuncionAdminController extends Controller
     {
         //
     }
+    
+    public function aprobar(Request $rquest)
+    {
+        
+    }
 
 }

@@ -3,7 +3,7 @@ import { useForm, Link } from '@inertiajs/react';
 
 function FormularioMatriculas({ grupos }) {
   const [voucherPreview, setVoucherPreview] = useState(null); // Estado para la vista previa de la imagen
- 
+
   const { data, setData, post, processing, errors } = useForm({
     fechaMatricula: new Date().toISOString().split('T')[0], // Fecha actual
     cicloIngles: '',
@@ -17,6 +17,7 @@ function FormularioMatriculas({ grupos }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(data);
 
     post(route('estudiante.enviar'));
     // Limpiar los campos (excepto los no mostrados)
@@ -35,16 +36,19 @@ function FormularioMatriculas({ grupos }) {
   // Función para manejar la selección de la imagen
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    setData({ ...data, imgComprobante: e.target.files[0] || null });
     if (file) {
       // Crear una URL temporal para mostrar la vista previa
       const imageUrl = URL.createObjectURL(file);
       setVoucherPreview(imageUrl); // Establecer la URL para la vista previa
-      setData('imgComprobante', file); // Guardar la URL de la imagen en el estado
+      
+      
     } else {
       setVoucherPreview(null);
       setData('imgComprobante', null);
     }
   };
+  
 
   // Limpieza de URLs temporales para liberar memoria
   React.useEffect(() => {
@@ -80,7 +84,7 @@ function FormularioMatriculas({ grupos }) {
               return (
                 <option key={cicloId} value={cicloId}>
                   {/* Si ciclo o idioma son indefinidos, muestra una cadena vacía */}
-                  {`${ciclo?.nombre || ''} - ${ciclo?.idioma?.nombre || ''}`}
+                  {`${ciclo?.nombre || ''} - ${ciclo?.idioma?.nombre || ''} - ${ciclo?.nivel || ''}`}
                 </option>
               );
             })}
@@ -135,6 +139,7 @@ function FormularioMatriculas({ grupos }) {
             required
             className="border border-[#700303] p-2 w-full max-w-full rounded-md focus:outline-none focus:ring-2 focus:ring-[#700303]"
           >
+            <option value="">Seleccione...</option>
             <option value="Caja Institucional">Caja Institucional</option>
             <option value="Banco de la Nación">Banco de la Nación</option>
           </select>
@@ -179,7 +184,7 @@ function FormularioMatriculas({ grupos }) {
         </div>
       </div>
 
-      <div className="text-right mt-8"> 
+      <div className="text-right mt-8">
         <button
           type="submit"
           className="bg-[#700303] hover:bg-[#8c1010] text-white font-semibold py-2 px-6 rounded-md shadow-md transition duration-300"

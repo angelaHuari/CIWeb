@@ -204,7 +204,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
                             <option value="">Seleccione un ciclo</option>
                             {ciclos?.map((ciclo) => (
                                 <option key={ciclo.id} value={ciclo.id}>
-                                    {`${ciclo.idioma.nombre} - ${ciclo.nombre}`} {/* Combina idioma y ciclo */}
+                                    {`${ciclo.idioma.nombre} - ${ciclo.nombre} - ${ciclo.nivel}`} {/* Combina idioma y ciclo */}
                                 </option>
                             ))}
                         </select>

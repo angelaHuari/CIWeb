@@ -13,7 +13,7 @@ function HistorialMatriculas({ matriculas = [] }) {
                         <table className="min-w-full table-auto border-collapse">
                             <thead>
                                 <tr className="bg-[#700303] text-white">
-                                    <th className="p-3">Fecha</th>
+                                    <th className="p-3">Fecha de Matricula </th>
                                     <th className="p-3">Ciclo</th>
                                     <th className="p-3">Horario</th>
                                     <th className="p-3">Calificación</th>
@@ -36,7 +36,7 @@ function HistorialMatriculas({ matriculas = [] }) {
                                 <Link
                                     key={index}
                                     href={link.url}
-                                    className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-red-900 text-white' : 'bg-white text-blue-800'
+                                    className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-black text-white' : 'bg-red-900 text-white'
                                         }`}
                                     dangerouslySetInnerHTML={{ __html: link.label }}
                                 />

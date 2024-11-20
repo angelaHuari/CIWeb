@@ -125,7 +125,7 @@ const DatosAdicionales = ({ data, setData, grupos = [] }) => {
                     setData({ 
                         ...data, 
                         cicloIngles: e.target.value,
-                        cicloNombre: selectedCiclo ? `${selectedCiclo.nombre} - ${selectedCiclo.idioma.nombre}` : '',
+                        cicloNombre: selectedCiclo ? `${selectedCiclo.nombre} - ${selectedCiclo.idioma.nombre} - ${selectedCiclo.nivel}` : '',
                         horarioIngles: '' 
                     });
                 }}
@@ -136,7 +136,7 @@ const DatosAdicionales = ({ data, setData, grupos = [] }) => {
                     const ciclo = grupo?.ciclo;
                     return (
                         <option key={cicloId} value={cicloId}>
-                            {`${ciclo?.nombre} - ${ciclo?.idioma?.nombre || ''}`}
+                            {`${ciclo?.nombre} - ${ciclo?.idioma?.nombre || ''} - ${ciclo?.nivel} `}
                         </option>
                     );
                 })}

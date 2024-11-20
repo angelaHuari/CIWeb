@@ -11,7 +11,7 @@ const VistaMatriculas = ({ matriculas }) => {
 
     // Filtrar matrículas por nombre
     const filteredMatriculas = matriculas.data.filter(ma =>
-        ma.matricula.estudiante.aPaterno.toLowerCase().includes(search.toLowerCase())
+        ma.estudiante.aPaterno.toLowerCase().includes(search.toLowerCase())
     );
 
     const handleViewDetailsClick = (matricula) => {
@@ -52,10 +52,10 @@ const VistaMatriculas = ({ matriculas }) => {
                             {/* Columna para los datos (reducida para dar más espacio a la imagen) */}
                             <div className="w-full flex flex-col justify-center items-center text-center">
                                 <h3 className="text-2xl font-semibold mb-4">Datos de Matrícula</h3>
-                                <p><strong>Nombre:</strong> {selectedMatricula.matricula.estudiante.nombres} {selectedMatricula.matricula.estudiante.aPaterno} {selectedMatricula.matricula.estudiante.aMaterno}</p>
-                                <p><strong>Fecha de Matrícula:</strong> {new Date(selectedMatricula.matricula.fecha).toLocaleDateString()}</p>
-                                <p><strong>Grupo:</strong> {selectedMatricula.matricula.grupo.periodo} {selectedMatricula.matricula.grupo.ciclo.idioma.nombre} {selectedMatricula.matricula.grupo.ciclo.nombre} {selectedMatricula.matricula.grupo.ciclo.nivel}</p>
-                                <p><strong>Nota Estudiante:</strong> {selectedMatricula.matricula.nota || 'No disponible'}</p>
+                                <p><strong>Nombre:</strong> {selectedMatricula.estudiante.nombres} {selectedMatricula.estudiante.aPaterno} {selectedMatricula.estudiante.aMaterno}</p>
+                                <p><strong>Fecha de Matrícula:</strong> {new Date(selectedMatricula.fecha).toLocaleDateString()}</p>
+                                <p><strong>Grupo:</strong> {selectedMatricula.grupo.periodo} {selectedMatricula.grupo.ciclo.idioma.nombre} {selectedMatricula.grupo.ciclo.nombre} {selectedMatricula.grupo.ciclo.nivel}</p>
+                                <p><strong>Nota Estudiante:</strong> {selectedMatricula.nota || 'No disponible'}</p>
                                 <br />
                             </div>
                         </div>
@@ -78,9 +78,9 @@ const VistaMatriculas = ({ matriculas }) => {
                             {filteredMatriculas.length > 0 ? (
                                 filteredMatriculas.map((ma, index) => (
                                     <tr key={index} className="border-b hover:bg-[#F4D6C5]">
-                                        <td className="px-6 py-3">{ma.matricula.estudiante.nombres} {ma.matricula.estudiante.aPaterno} {ma.matricula.estudiante.aMaterno}</td>
-                                        <td className="px-6 py-3">{new Date(ma.matricula.fecha).toLocaleDateString()}</td>
-                                        <td className="px-6 py-3">{ma.matricula.grupo.periodo} {ma.matricula.grupo.ciclo.idioma.nombre} {ma.matricula.grupo.ciclo.nombre} {ma.matricula.grupo.ciclo.nivel}</td>
+                                        <td className="px-6 py-3">{ma.estudiante.nombres} {ma.estudiante.aPaterno} {ma.estudiante.aMaterno}</td>
+                                        <td className="px-6 py-3">{new Date(ma.fecha).toLocaleDateString()}</td>
+                                        <td className="px-6 py-3">{ma.grupo.periodo} {ma.grupo.ciclo.idioma.nombre} {ma.grupo.ciclo.nombre} {ma.grupo.ciclo.nivel}</td>
                                         <td className="px-6 py-3">
                                             <button
                                                 onClick={() => handleViewDetailsClick(ma)}

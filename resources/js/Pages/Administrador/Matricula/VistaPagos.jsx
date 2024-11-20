@@ -11,7 +11,7 @@ const VistaPagos = ({ pagos }) => {
 
     // Filtrar matrículas por nombre
     const filteredPagos = pagos.data.filter(pa =>
-        pa.matricula.estudiante.aPaterno.toLowerCase().includes(search)
+        pa.estudiante.aPaterno.toLowerCase().includes(search)
     );
 
     const handleViewDetailsClick = (pago) => {
@@ -52,21 +52,20 @@ const VistaPagos = ({ pagos }) => {
                             {/* Columna para los datos (reducida para dar más espacio a la imagen) */}
                             <div className="w-1/3 flex flex-col justify-center">
                                 <h3 className="text-2xl font-semibold mb-4">Datos de Matrícula</h3>
-                                <p><strong>Estudiante:</strong> {selectedMatricula.matricula.estudiante.nombres} {selectedMatricula.matricula.estudiante.aPaterno} {selectedMatricula.matricula.estudiante.aMaterno}</p>
-                                <p><strong>Grupo:</strong> {selectedMatricula.matricula.grupo.periodo} {selectedMatricula.matricula.grupo.ciclo.idioma.nombre} {selectedMatricula.matricula.grupo.ciclo.nombre} {selectedMatricula.matricula.grupo.ciclo.nivel}</p>
+                                <p><strong>Estudiante:</strong> {selectedMatricula.estudiante.nombres} {selectedMatricula.estudiante.aPaterno} {selectedMatricula.estudiante.aMaterno}</p>
+                                <p><strong>Grupo:</strong> {selectedMatricula.grupo.periodo} {selectedMatricula.grupo.ciclo.idioma.nombre} {selectedMatricula.grupo.ciclo.nombre} {selectedMatricula.grupo.ciclo.nivel}</p>
                                 <h3 className="text-2xl font-semibold mb-4">Datos de Pago</h3>
-                                <p><strong>Fecha de Pago:</strong> {selectedMatricula ? new Date(selectedMatricula.fecha).toLocaleDateString() : 'No disponible'}</p>
-                                <p><strong>Monto:</strong> {selectedMatricula?.monto || 'No disponible'}</p>
-                                <p><strong>Medio de Pago:</strong> {selectedMatricula?.medioPago || 'No disponible'}</p>
-                                <p><strong>Nro Voucher:</strong> {selectedMatricula?.nroComprobante || 'No disponible'}</p>
+                                <p><strong>Fecha de Pago:</strong> {selectedMatricula.pago ? new Date(selectedMatricula.pago.fecha).toLocaleDateString() : 'No disponible'}</p>
+                                <p><strong>Monto:</strong> {selectedMatricula.pago? (selectedMatricula.pago.monto) : 'No disponible'}</p>
+                                <p><strong>Medio de Pago:</strong> {selectedMatricula.pago?(selectedMatricula.pago.medioPago) : 'No disponible'}</p>
+                                <p><strong>Nro Voucher:</strong> {selectedMatricula.pago?(selectedMatricula.pago.nroComprobante) : 'No disponible'}</p>
                             </div>
 
-                            {/* Columna para la imagen (más grande y centrada) */}
                             <div className="w-2/3 flex justify-center items-center pl-8">
-                                {selectedMatricula?.imgComprobante ? (
+                                {selectedMatricula?.pago?.imgComprobante ? (
                                     <div className="relative w-full h-full flex justify-center items-center">
                                         <img
-                                            src={selectedMatricula.imgComprobante}
+                                            src={selectedMatricula.pago.imgComprobante}
                                             alt="Foto del Voucher"
                                             className="max-w-[500px] max-h-[500px] object-contain rounded-md" /* Imagen más grande */
                                         />
@@ -93,8 +92,8 @@ const VistaPagos = ({ pagos }) => {
                             {filteredPagos.length > 0 ? (
                                 filteredPagos.map((ma, index) => (
                                     <tr key={index} className="border-b hover:bg-[#F4D6C5]">
-                                        <td className="px-6 py-3">{ma.matricula.estudiante.nombres} {ma.matricula.estudiante.aPaterno} {ma.matricula.estudiante.aMaterno}</td>
-                                        <td className="px-6 py-3">{new Date(ma.fecha).toLocaleDateString()}</td>
+                                        <td className="px-6 py-3">{ma.estudiante.nombres} {ma.estudiante.aPaterno} {ma.estudiante.aMaterno}</td>
+                                        <td className="px-6 py-3">{new Date(ma.pago.fecha).toLocaleDateString()}</td>
                                         <td className="px-6 py-3">
                                             <button
                                                 onClick={() => handleViewDetailsClick(ma)}

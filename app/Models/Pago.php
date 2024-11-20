@@ -15,10 +15,6 @@ class Pago extends Model
         'monto',
         'medioPago',
         'imgComprobante',
-        'matricula_id',
     ];
-    public function matricula()
-    {
-        return $this->belongsTo(Matricula::class);
-    }
+    
 }

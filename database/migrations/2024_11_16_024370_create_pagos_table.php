@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer('monto');
             $table->string('medioPago');
             $table->string('imgComprobante')->nullable();
-            $table->foreignId('matricula_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

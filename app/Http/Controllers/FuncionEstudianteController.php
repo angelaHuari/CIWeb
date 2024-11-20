@@ -36,9 +36,10 @@ class FuncionEstudianteController extends Controller
 
 
         // Obtiene las matrículas del estudiante, paginadas
-        $matriculas = Matricula::with(['estudiante', 'grupo.ciclo'])
+        $matriculas = Matricula::with(['estudiante', 'grupo.ciclo.idioma', 'pago'])
             ->where('estudiante_id', $estudianteId)
             ->paginate(10); // Ajusta el número de elementos por página según lo necesario
+
 
         return Inertia::render('Estudiante/VerMatriculas', [
             'ListaMatriculas' => $matriculas
@@ -62,13 +63,14 @@ class FuncionEstudianteController extends Controller
             'nroComprobante' => 'required|string',
             'imgComprobante' => 'nullable|image|max:2048',
         ]);
+        
 
         try {
             // Asocia el estudiante ID
             $data['estudiante_id'] = $estudianteId;
             $grupo = Grupo::with(['ciclo.idioma'])->find($data['horarioIngles']);
             if ($grupo) {
-                $data['cicloIngles'] = $grupo->ciclo->nombre . ' - ' . $grupo->ciclo->idioma->nombre;
+                $data['cicloIngles'] = $grupo->ciclo->nombre . ' - ' . $grupo->ciclo->idioma->nombre . ' - ' . $grupo->ciclo->nivel;
                 $data['horarioIngles'] = $grupo->horario;
             }
 

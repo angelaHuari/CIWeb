@@ -91,14 +91,14 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                         </div>
 
                         {/* Datos de Pago */}
-                        <div>
+                        <div className="border-b pb-4">
                             <h2 className="text-2xl font-bold mb-4 text-[#800020]">Datos de Pago</h2>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Pago</label>
                                     <input
                                         type="date"
-                                        value={new Date(selectedForm.fechaPago)}
+                                        value={selectedForm.fechaPago}
                                         readOnly
                                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                     />
@@ -130,7 +130,23 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                     />
                                 </div>
+
                             </div>
+                            <div className="mt-4">
+                                <label className="block text-gray-700 mb-">Comprobante de Pago:</label>
+                                {selectedForm.imgComprobante ? (
+                                    <div className="mb-2 text-center">
+                                        <img
+                                            src={selectedForm.imgComprobante}
+                                            alt="Comprobante"
+                                            className="w-100 h-100 object-cover border border-gray-300 rounded inline-block"
+                                        />
+                                    </div>
+                                ) : (
+                                    <p className="text-gray-500 italic">No se ha subido comprobante</p>
+                                )}
+                            </div>
+
                         </div>
 
                         {/* Botón Aceptar */}
@@ -140,6 +156,15 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                 className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition duration-200"
                             >
                                 Aceptar
+                            </button>
+                        </div>
+                        {/* Botón Rechazar */}
+                        <div className="flex justify-end">
+                            <button
+                                type="submit"
+                                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition duration-200"
+                            >
+                                Rechazar
                             </button>
                         </div>
                     </form>
