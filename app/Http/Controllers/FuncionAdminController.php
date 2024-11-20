@@ -18,28 +18,28 @@ class FuncionAdminController extends Controller
         return Inertia::render('Administrador/Usuarios/Index');
     }
 
-   
+
     public function create()
     {
         //
     }
-    
+
     public function aprobar(Request $request)
     {
         try {
             $formulario = FormularioMatricula::findOrFail($request->id);
 
             // Buscar el grupo correspondiente
-            $grupo = Grupo::where('horario', $formulario->horarioIngles)
-                ->whereHas('ciclo', function ($query) use ($formulario) {
-                    $query->whereRaw("CONCAT(nombre, ' - ', (SELECT nombre FROM idiomas WHERE id = ciclos.idioma_id), ' - ' ,nivel) = ?", [$formulario->cicloIngles]);
+            $grupo = Grupo::where('horario', $request->horarioIngles)
+                ->whereHas('ciclo', function ($query) use ($request) {
+                    $query->whereRaw("CONCAT(nombre, ' - ', (SELECT nombre FROM idiomas WHERE id = ciclos.idioma_id), ' - ' ,nivel) = ?", [$request->cicloIngles]);
                 })
                 ->first();
 
             if (!$grupo) {
                 throw new \Exception('No se encontró el grupo correspondiente');
             }
-            // Create payment record
+            // Create pago
             $pago = Pago::create([
                 'fecha' => $formulario->fechaPago,
                 'monto' => $formulario->montoPago,
@@ -48,7 +48,7 @@ class FuncionAdminController extends Controller
                 'imgComprobante' => $formulario->imgComprobante
             ]);
 
-            // Crear matrícula
+            // Crear matricula
             $matricula = Matricula::create([
                 'fecha' => Carbon::now(),
                 'nota' => 0,
@@ -64,7 +64,7 @@ class FuncionAdminController extends Controller
             $formulario->save();
 
             return redirect()->back()->with([
-                'message' => 'Estudiante, matrícula y pago registrados correctamente',
+                'message' => 'Matrícula y pago registrados correctamente',
                 'formularioId' => $formulario->id
             ]);
         } catch (\Exception $e) {
@@ -72,5 +72,18 @@ class FuncionAdminController extends Controller
             return redirect()->back()->with('error', 'Error al procesar la solicitud: ' . $e->getMessage());
         }
     }
-
+    public function rechazar(Request $request)
+    {
+        try {
+            $formulario = FormularioMatricula::findOrFail($request->id);
+            // Elimina el formulario
+            $formulario->delete();
+            return redirect()->back()->with([
+                'message' => 'Formulario eliminado',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error al eliminar formulario' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error al procesar la solicitud: ' . $e->getMessage());
+        }
+    }
 }

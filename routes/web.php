@@ -72,6 +72,9 @@ Route::middleware('EsAdmin')->group(function () {
     })->name('gestion.estudiantes.grupo');
     
     Route::get('/usuarios',[FuncionAdminController::class, 'index'])->name('usuarios.index');
+
+    Route::post('/aprobar',[FuncionAdminController::class, 'aprobar'])->name('matricula.aprobar');
+    Route::post('/rechazar',[FuncionAdminController::class, 'rechazar'])->name('matricula.rechazar');
 });
 
 Route::resource('formulario', FormularioController::class);

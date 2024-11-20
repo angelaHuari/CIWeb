@@ -1,30 +1,45 @@
 import { Link, useForm } from '@inertiajs/react';
 import React, { useState } from 'react';
-import { FaSearch, FaEye } from 'react-icons/fa';
+import { FaSearch, FaEye, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 
 const TablaFormularios = ({ formMatriculas = [], search }) => {
     /*const filteredPagos = formMatriculas.filter(form => 
         form.estudiante.aPaterno.toLowerCase().includes(search.toLowerCase())
     );*/
-
-
-    const [showForm, setShowForm] = useState(false);
     const [selectedForm, setSelectedForm] = useState(null);
+    const { data, setData, post, processing, errors, reset } = useForm({
+        id: '',
+        cicloIngles: '',
+        horarioIngles: '',
+    });
 
     const handleFormClick = (frm) => {
         setSelectedForm(frm);
-        // setShowForm(true);
+        setData({
+            ...data, // Mantenemos los datos existentes
+            cicloIngles: frm.cicloIngles,
+            horarioIngles: frm.horarioIngles,
+            id: frm.id,
+        });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        //enviar a tabla matriculas y pagos
-        //setShowForm(false);
+    const handleAceptar = (e) => {
+        post(route('matricula.aprobar'));
+        console.log(data);
         setSelectedForm(null);
     };
+
+    const handleRechazar = (e) => {
+        e.preventDefault();
+        post(route('matricula.rechazar'));
+        console.log(data);
+        setSelectedForm(null);
+    };
+
     const closeDetailsModal = () => {
         setSelectedForm(null);
+        reset;
     };
 
     return (
@@ -38,7 +53,7 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                 className="absolute top-2 right-2 text-2xl text-[#800020] cursor-pointer"
                                 onClick={closeDetailsModal}
                             />
-                            <form onSubmit={handleSubmit} className="space-y-6 flex-1 overflow-auto">
+                            <form className="space-y-6 flex-1 overflow-auto">
                                 {/* Datos de Matrícula */}
                                 <div className="border-b pb-4">
                                     <h2 className="text-2xl font-bold mb-4 text-[#800020]">Datos de Matrícula</h2>
@@ -66,7 +81,7 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                             <input
                                                 type="text"
                                                 value={selectedForm.cicloIngles}
-                                                onChange={(e) => handleInputChange(e, "cicloIngles")}
+                                                readOnly
                                                 className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                             />
                                         </div>
@@ -75,7 +90,7 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                             <input
                                                 type="text"
                                                 value={selectedForm.horarioIngles}
-                                                onChange={(e) => handleInputChange(e, "horarioIngles")}
+                                                readOnly
                                                 className="w-full p-2 border border-gray-300 rounded-md bg-gray-50"
                                             />
                                         </div>
@@ -114,7 +129,7 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Nro Voucher -Comprobante</label>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Nro Voucher - Comprobante</label>
                                             <input
                                                 type="text"
                                                 value={selectedForm.nroComprobante}
@@ -134,19 +149,18 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                                 />
                                             </div>
                                         ) : (
-                                            <p className="text-gray-500 italic">No se ha subido comprobante</p>
+                                            <p className="text-gray-500 italic">No se ha encontrado el comprobante</p>
                                         )}
                                     </div>
                                 </div>
 
-                                {/* Botones Aceptar y Rechazar centrados */}
+                                {/* Botones Aceptar y Rechazar*/}
                                 <div className="flex justify-center space-x-4 mt-4">
                                     <button
                                         type="button"
                                         onClick={() => {
                                             if (window.confirm("¿Estás seguro de aceptar este formulario?")) {
-                                                // Aquí puedes manejar la lógica para aceptar el formulario
-                                                handleAccept();
+                                                handleAceptar();
                                             }
                                         }}
                                         className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition duration-200"
@@ -156,9 +170,8 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                     <button
                                         type="button"
                                         onClick={() => {
-                                            if (window.confirm("¿Estás seguro de rechazar este formulario?")) {
-                                                // Aquí puedes manejar la lógica para rechazar el formulario
-                                                handleReject();
+                                            if (window.confirm("¿Estás seguro de rechazar este formulario? Se eliminaran los datos de este formulario")) {
+                                                handleRechazar();
                                             }
                                         }}
                                         className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded transition duration-200"
@@ -187,14 +200,35 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                 formMatriculas.data.map((form) => (
                                     <tr key={form.id} className="border-b hover:bg-[#F4D6C5]">
                                         <td className="px-6 py-3">{form.estudiante.nombres} {form.estudiante.aMaterno} {form.estudiante.aPaterno}</td>
-                                        <td className="px-6 py-3">{form.estado}</td>
                                         <td className="px-6 py-3">
-                                            <button
-                                                onClick={() => handleFormClick(form)}
-                                                className="text-[#800020] hover:text-[#6A4E3C]"
-                                            >
-                                                <FaEye className="text-xl" />
-                                            </button>
+                                            {form.estado === 'aceptado' ? (
+                                                <span className="text-green-500 flex items-center">
+                                                    <FaCheckCircle className="mr-2" /> ACEPTADO
+                                                </span>
+                                            ) : form.estado === 'pendiente' ? (
+                                                <span className="text-red-500 flex items-center">
+                                                    <FaTimesCircle className="mr-2" /> PENDIENTE
+                                                </span>
+                                            ) : (
+                                                <span className="text-red-500 flex items-center">
+                                                    indefinido
+                                                </span>
+                                            )}
+                                        </td>
+                                        <td className="px-6 py-3">
+                                            {form.estado === 'pendiente' ? (
+                                                <button
+                                                    onClick={() => handleFormClick(form)}
+                                                    className="text-[#800020] hover:text-[#6A4E3C]"
+                                                >
+                                                    <FaEye className="text-xl" />
+                                                </button>
+                                            ) : (
+                                                <span className="text-black flex items-center">
+                                                    <FaTimesCircle className="mr-2" /> 
+                                                </span>
+                                            )}
+
                                         </td>
                                     </tr>
                                 ))
