@@ -68,6 +68,7 @@ class FuncionEstudianteController extends Controller
         try {
             // Asocia el estudiante ID
             $data['estudiante_id'] = $estudianteId;
+            $data['estado'] = 'pendiente';
             $grupo = Grupo::with(['ciclo.idioma'])->find($data['horarioIngles']);
             if ($grupo) {
                 $data['cicloIngles'] = $grupo->ciclo->nombre . ' - ' . $grupo->ciclo->idioma->nombre . ' - ' . $grupo->ciclo->nivel;

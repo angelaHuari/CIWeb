@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('montoPago');
             $table->string('medioPago');
             $table->String('imgComprobante');
+            $table->String('estado');
             $table->timestamps();
         });
     }

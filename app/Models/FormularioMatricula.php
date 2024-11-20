@@ -20,6 +20,7 @@ class FormularioMatricula extends Model
         'nroComprobante',
         'imgComprobante',
         'estudiante_id',
+        'estado',
     ];
     public function estudiante()
     {
