@@ -1,15 +1,48 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
+import { FaUsers, FaLayerGroup } from 'react-icons/fa';
+import React, { useState } from 'react';
 import GestionGrupos from './GestionGrupos';
+import CiclosIndex from '../Ciclos/Index';  // Renombramos el componente importado
 
-export default function Index({ auth, grupos, ciclos, docentes }) {
+export default function Index({ auth, grupos, ciclos, docentes}) {
+    const [view, setView] = useState(null); // Estado para controlar qué vista se muestra
+
+    // Función para manejar clics en las tarjetas y cambiar de vista
+    const handleCardClick = (value) => {
+        setView(value); // Establece la vista de la tarjeta que fue clickeada
+    };
+
+    const renderContent = () => {
+        // Verifica qué vista está seleccionada
+        if (view === 'Gestion de Grupos') {
+            return (
+                <GestionGrupos
+                    grupos={grupos}
+                    ciclos={ciclos}
+                    docentes={docentes}
+                />
+            );
+        } else if (view === 'Ciclos e Idiomas') {
+            return (
+                <CiclosIndex  /> // Usamos el nuevo nombre
+            );
+        } else {
+            return (
+                <div className="text-center p-6">
+                    <h3 className="text-2xl text-[#800020]">Selecciona una opción para ver más detalles.</h3>
+                </div>
+            );
+        }
+    };
+
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={
                 <div className="flex justify-between items-center bg-gradient-to-r from-[#800020] to-[#6A4E3C] p-4 rounded-lg shadow-lg">
                     <h2 className="text-3xl font-bold leading-tight text-white">
-                        Grupos
+                        Gestión de Grupos
                     </h2>
                     <Link
                         href={route('ciclo.index')} // Reemplaza con tu ruta
@@ -21,20 +54,41 @@ export default function Index({ auth, grupos, ciclos, docentes }) {
             }
         >
             <Head title="SGMCI - Gestión de Grupos" />
-            
-            <div className="py-8">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="p-4 text-gray-900">
-                            <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
-                                <div className="flex-1 bg-white rounded-md">
-                                    <GestionGrupos
-                                        grupos={grupos}
-                                        ciclos={ciclos}
-                                        docentes={docentes}
-                                    />
+
+            <div className="py-12 bg-gradient-to-b from-[#800020] to-[#F5D0A9] min-h-screen flex items-center justify-center">
+                <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8">
+                    {/* Card Principal - Bienvenida */}
+                    <div className="overflow-hidden bg-amber-50 shadow-xl sm:rounded-lg mb-10">
+                        <div className="p-8 text-gray-800 text-center">
+                            {/* Cards Section - Centrado */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 justify-center mx-auto">
+                                {/* Card Gestión de Grupos */}
+                                <div
+                                    className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
+                                    onClick={() => handleCardClick('Gestion de Grupos')}
+                                    aria-label="Gestión de Grupos"
+                                    tabIndex="0"
+                                >
+                                    <FaUsers className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Gestión de Grupos</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Gestiona los grupos, ciclos e idiomas asociados para los estudiantes.</p>
+                                </div>
+
+                                {/* Card Ciclos e Idiomas */}
+                                <div
+                                    className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
+                                    onClick={() => handleCardClick('Ciclos e Idiomas')}
+                                    aria-label="Ciclos e Idiomas"
+                                    tabIndex="0"
+                                >
+                                    <FaLayerGroup className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Ciclos e Idiomas</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Gestiona los ciclos y los idiomas disponibles en tu sistema.</p>
                                 </div>
                             </div>
+
+                            {/* Mostrar el contenido dependiendo de la vista seleccionada */}
+                            {renderContent()}
                         </div>
                     </div>
                 </div>

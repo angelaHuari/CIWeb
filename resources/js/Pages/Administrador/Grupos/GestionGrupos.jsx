@@ -7,10 +7,12 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
         modalidad: '',
         nroEstudiantes: '',
         nroVacantes: '',
-        horario: '',
+        horarioEntrada: '',
+        horarioSalida: '',
         docente_id: '',
         ciclo_id: '',
     });
+
     const periodOptions = [
         'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
@@ -18,7 +20,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
 
     const [editing, setEditing] = useState(false);
     const [selectedGrupo, setSelectedGrupo] = useState(null);
-    const [modalidadError, setModalidadError] = useState(''); // Estado para el error de modalidad
+    const [modalidadError, setModalidadError] = useState('');
     const [cicloError, setCicloError] = useState('');
     const [docenteError, setDocenteError] = useState('');
 
@@ -26,16 +28,41 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
         const { name, value } = e.target;
         setData(name, value);
 
-        // Limpiar los errores al seleccionar una opción válida
         if (name === 'modalidad' && value !== '') setModalidadError('');
         if (name === 'ciclo_id' && value !== '') setCicloError('');
         if (name === 'docente_id' && value !== '') setDocenteError('');
     };
 
+    // Función para convertir horario de 12 horas (AM/PM) a 24 horas
+    const formatTo24Hour = (timeStr) => {
+        if (!timeStr) return '';
+
+        const [time, modifier] = timeStr.split(' ');
+        let [hours, minutes] = time.split(':');
+
+        hours = parseInt(hours, 10);
+        if (modifier === 'PM' && hours < 12) {
+            hours += 12;
+        } else if (modifier === 'AM' && hours === 12) {
+            hours = 0;
+        }
+
+        return `${hours.toString().padStart(2, '0')}:${minutes}`;
+    };
+
+    // Función para convertir de 24 horas a AM/PM
+    const formatAMPM = (time) => {
+        const [hours, minutes] = time.split(':');
+        let hour = parseInt(hours, 10);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        hour = hour % 12;
+        hour = hour ? hour : 12;
+        return `${hour}:${minutes} ${ampm}`;
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Validaciones para campos de selección
         let isValid = true;
         if (!data.modalidad) {
             setModalidadError('Por favor, seleccione una modalidad válida.');
@@ -50,8 +77,13 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
             isValid = false;
         }
 
-        // Si alguna validación falla, no enviar el formulario
         if (!isValid) return;
+
+        if (data.horarioEntrada && data.horarioSalida) {
+            const horarioEntradaFormatted = formatAMPM(data.horarioEntrada);
+            const horarioSalidaFormatted = formatAMPM(data.horarioSalida);
+            data.horario = `${horarioEntradaFormatted} - ${horarioSalidaFormatted}`;
+        }
 
         if (editing && selectedGrupo) {
             router.put(`/grupo/${selectedGrupo.id}`, data, {
@@ -74,12 +106,17 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
 
     const handleEdit = (grupo) => {
         setSelectedGrupo(grupo);
+        const horarios = grupo.horario ? grupo.horario.split(' - ') : [];
+        const horarioEntrada = horarios[0] ? formatTo24Hour(horarios[0]) : '';
+        const horarioSalida = horarios[1] ? formatTo24Hour(horarios[1]) : '';
+
         setData({
             periodo: grupo.periodo || '',
             modalidad: grupo.modalidad || '',
             nroEstudiantes: grupo.nroEstudiantes || '',
             nroVacantes: grupo.nroVacantes || '',
-            horario: grupo.horario || '',
+            horarioEntrada,
+            horarioSalida,
             docente_id: grupo.docente_id || '',
             ciclo_id: grupo.ciclo_id || '',
         });
@@ -90,9 +127,9 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
         setEditing(false);
         reset();
         setSelectedGrupo(null);
-        setModalidadError(''); // Limpiar el error al cancelar la edición
-        setCicloError(''); // Limpiar el error al cancelar la edición
-        setDocenteError(''); // Limpiar el error al cancelar la edición
+        setModalidadError('');
+        setCicloError('');
+        setDocenteError('');
     };
 
     return (
@@ -102,9 +139,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow">
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium mb-1" htmlFor="periodo">
-                            Periodo
-                        </label>
+                        <label className="block text-sm font-medium mb-1">Periodo</label>
                         <select
                             value={data.periodo}
                             onChange={(e) => setData('periodo', e.target.value)}
@@ -116,19 +151,15 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
                                 <option key={index} value={month}>{month}</option>
                             ))}
                         </select>
-
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1" htmlFor="modalidad">
-                            Modalidad
-                        </label>
+                        <label className="block text-sm font-medium mb-1">Modalidad</label>
                         <select
-                            id="modalidad"
                             name="modalidad"
                             value={data.modalidad}
                             onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            className="w-full rounded-md border-gray-300 shadow-sm"
                         >
                             <option value="">Seleccione una modalidad</option>
                             <option value="Presencial">Presencial</option>
@@ -140,71 +171,61 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1" htmlFor="nroEstudiantes">
-                            Número de Estudiantes
-                        </label>
+                        <label className="block text-sm font-medium mb-1">Número de Estudiantes</label>
                         <input
                             type="number"
-                            id="nroEstudiantes"
                             name="nroEstudiantes"
                             value={data.nroEstudiantes}
                             onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            className="w-full rounded-md border-gray-300 shadow-sm"
                         />
-                        {errors.nroEstudiantes && (
-                            <div className="text-red-500 text-sm mt-1">{errors.nroEstudiantes}</div>
-                        )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1" htmlFor="nroVacantes">
-                            Número de Vacantes
-                        </label>
+                        <label className="block text-sm font-medium mb-1">Número de Vacantes</label>
                         <input
                             type="number"
-                            id="nroVacantes"
                             name="nroVacantes"
                             value={data.nroVacantes}
                             onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            className="w-full rounded-md border-gray-300 shadow-sm"
                         />
-                        {errors.nroVacantes && (
-                            <div className="text-red-500 text-sm mt-1">{errors.nroVacantes}</div>
-                        )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1" htmlFor="horario">
-                            Horario
-                        </label>
+                        <label className="block text-sm font-medium mb-1">Horario de Entrada</label>
                         <input
-                            type="text"
-                            id="horario"
-                            name="horario"
-                            value={data.horario}
+                            type="time"
+                            name="horarioEntrada"
+                            value={data.horarioEntrada}
                             onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            className="w-full rounded-md border-gray-300 shadow-sm"
                         />
-                        {errors.horario && (
-                            <div className="text-red-500 text-sm mt-1">{errors.horario}</div>
-                        )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1" htmlFor="ciclo_id">
-                            Ciclo
-                        </label>
+                        <label className="block text-sm font-medium mb-1">Horario de Salida</label>
+                        <input
+                            type="time"
+                            name="horarioSalida"
+                            value={data.horarioSalida}
+                            onChange={handleChange}
+                            className="w-full rounded-md border-gray-300 shadow-sm"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Ciclo</label>
                         <select
-                            id="ciclo_id"
                             name="ciclo_id"
                             value={data.ciclo_id}
                             onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            className="w-full rounded-md border-gray-300 shadow-sm"
                         >
                             <option value="">Seleccione un ciclo</option>
                             {ciclos?.map((ciclo) => (
                                 <option key={ciclo.id} value={ciclo.id}>
-                                    {`${ciclo.idioma.nombre} - ${ciclo.nombre} - ${ciclo.nivel}`} {/* Combina idioma y ciclo */}
+                                    {`${ciclo.idioma.nombre} - ${ciclo.nombre}`}
                                 </option>
                             ))}
                         </select>
@@ -214,15 +235,12 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1" htmlFor="docente_id">
-                            Docente
-                        </label>
+                        <label className="block text-sm font-medium mb-1">Docente</label>
                         <select
-                            id="docente_id"
                             name="docente_id"
                             value={data.docente_id}
                             onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            className="w-full rounded-md border-gray-300 shadow-sm"
                         >
                             <option value="">Seleccione un docente</option>
                             {docentes?.map((docente) => (
@@ -237,88 +255,72 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
                     </div>
                 </div>
 
-                <div className="flex justify-end gap-4">
+                <div className="flex items-center justify-end mt-6">
+                    <button
+                        type="submit"
+                        disabled={processing}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
+                    >
+                        {editing ? 'Actualizar Grupo' : 'Registrar Grupo'}
+                    </button>
                     {editing && (
                         <button
                             type="button"
                             onClick={handleCancelEdit}
-                            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
-                            disabled={processing}
+                            className="ml-4 text-gray-500"
                         >
                             Cancelar
                         </button>
                     )}
-                    <button
-                        type="submit"
-                        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-                        disabled={processing}
-                    >
-                        {editing ? 'Actualizar Grupo' : 'Crear Grupo'}
-                    </button>
                 </div>
             </form>
 
-            <div className="mt-8 overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+            <div className="mt-8">
+                <h2 className="text-xl font-semibold mb-4">Grupos Registrados</h2>
+                <table className="w-full table-auto border-collapse border border-gray-300">
+                    <thead>
                         <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Periodo
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Modalidad
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Estudiantes
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Vacantes
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Horario
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Ciclo
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Docente
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Acciones
-                            </th>
+                            <th className="border border-gray-300 p-2">Periodo</th>
+                            <th className="border border-gray-300 p-2">Modalidad</th>
+                            <th className="border border-gray-300 p-2">Número de Estudiantes</th>
+                            <th className="border border-gray-300 p-2">Número de Vacantes</th>
+                            <th className="border border-gray-300 p-2">Horario</th>
+                            <th className="border border-gray-300 p-2">Docente</th>
+                            <th className="border border-gray-300 p-2">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody>
                         {grupos.data?.map((grupo) => (
-                            <tr key={grupo.id} className="hover:bg-gray-50">
-                                <td className="px-6 py-4 whitespace-nowrap">{grupo.periodo}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{grupo.modalidad}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{grupo.nroEstudiantes}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{grupo.nroVacantes}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{grupo.horario}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    {grupo.ciclo?.nombre}
+                            <tr key={grupo.id}>
+                                <td className="border border-gray-300 p-2">{grupo.periodo}</td>
+                                <td className="border border-gray-300 p-2">{grupo.modalidad}</td>
+                                <td className="border border-gray-300 p-2">{grupo.nroEstudiantes}</td>
+                                <td className="border border-gray-300 p-2">{grupo.nroVacantes}</td>
+                                <td className="border border-gray-300 p-2">{grupo.horario}</td>
+                                <td className="border border-gray-300 p-2">
+                                    {grupo.docente ? `${grupo.docente.nombres} ${grupo.docente.aPaterno}` : 'N/A'}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    {grupo.docente
-                                        ? `${grupo.docente.nombres} ${grupo.docente.aPaterno} ${grupo.docente.aMaterno}`
-                                        : 'N/A'}
+                                <td className="border border-gray-300 p-2">
+                                    <div className="flex items-center">
+                                        <button
+                                            onClick={() => handleEdit(grupo)}
+                                            className="text-[#800020] hover:text-[#6A4E3C] mr-2"
+                                        >
+                                            <img src="/imagenes/editar.png" alt="Editar" className="h-5 w-5" />
+                                        </button>
+                                        <Link
+                                            href={`/gestionestudiantesgrupo?grupo=${grupo.id}`}
+                                            className="text-green-600 hover:text-green-900 transition-colors flex items-center"
+                                        >
+                                            <img
+                                                src="/imagenes/ojo.png"
+                                                alt="Ver Estudiantes"
+                                                className="mr-2 w-5 h-5"
+                                            />
+                                        </Link>
+                                    </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap space-x-2">
-                                    <button
-                                        onClick={() => handleEdit(grupo)}
-                                        className="text-indigo-600 hover:text-indigo-900 transition-colors"
-                                    >
-                                        Editar
-                                    </button>
-                                    <br/> 
-                                    <Link
-                                        href={`/gestionestudiantesgrupo?grupo=${grupo.id}`}
-                                        className="text-green-600 hover:text-green-900 transition-colors"
-                                    >
-                                        Ver estudiantes
-                                    </Link>
-                                </td>
+
                             </tr>
                         ))}
                     </tbody>
