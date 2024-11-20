@@ -21,6 +21,7 @@ const FormularioDocentes = ({ docentes = [] }) => {
     const [previewImage, setPreviewImage] = useState(null);
 
     const handleEdit = (docente) => {
+
         setEditingDocente(docente);
         setData({
             ...docente,
@@ -53,11 +54,50 @@ const FormularioDocentes = ({ docentes = [] }) => {
     const handleChange = (e) => {
         const key = e.target.name;
         const value = e.target.type === 'file' ? e.target.files[0] : e.target.value;
+        
 
-        setData(key, value);
+        // Validación de email institucional
+        if (key === 'emailInstitucional') {
+            if (value && !value.endsWith('@istta.edu.pe')) {
+                // Si no tiene el dominio correcto, agregarlo automáticamente
+                setData({
+                    ...data,
+                    [key]: value.split('@')[0] + '@istta.edu.pe', // Mantiene el nombre antes del arroba y agrega el dominio
+                });
+            } else {
+                setData({
+                    ...data,
+                    [key]: value,
+                });
+            }
+        }
+        // Validación de teléfono
+        else if (key === 'celular' || key === 'dni') {
+            // Verifica si el valor contiene solo números y no está vacío
+            const numericValue = value.replace(/\D/g, ''); // Elimina cualquier carácter que no sea un número
+            if (numericValue === value) {
+                setData({
+                    ...data,
+                    [key]: numericValue, // Solo permite valores numéricos
+                });
+            } else {
+                // Puedes mostrar un mensaje de error si lo deseas, por ejemplo:
+                console.log("Este campo debe contener solo números.");
+            }
+        }
+        else {
+            setData({
+                ...data,
+                [key]: value,
+            });
+        }
+
+        // Validación de fecha de nacimiento
         if (key === 'fechaNacimiento' && e.target.value) {
             errors['fechaNacimiento'] = validarFecha(value);
         }
+
+        // Validación de foto docente (preview)
         if (key === 'fotoDocente' && e.target.files[0]) {
             setPreviewImage(URL.createObjectURL(e.target.files[0]));
         }
@@ -211,6 +251,7 @@ const FormularioDocentes = ({ docentes = [] }) => {
                             value={data.dni || ''}
                             onChange={handleChange}
                             className="border p-2 w-full"
+                            maxLength={8} // Limita la cantidad de caracteres a 9
                         />
                         {errors.dni && (
                             <span className="text-red-500">{errors.dni}</span>
@@ -224,6 +265,7 @@ const FormularioDocentes = ({ docentes = [] }) => {
                             value={data.celular || ''}
                             onChange={handleChange}
                             className="border p-2 w-full"
+                            maxLength={9} // Limita la cantidad de caracteres a 9
                         />
                         {errors.celular && (
                             <span className="text-red-500">{errors.celular}</span>

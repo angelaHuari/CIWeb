@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { FaEye } from 'react-icons/fa';
 
@@ -20,6 +21,9 @@ const TablaDocentes = ({ docentes, onEdit }) => {
 
     return (
         <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
+            <h2 className="text-xl font-semibold">
+                    {'Lista de Docentes'}
+                </h2>
             <table className="min-w-full table-auto">
                 <thead className="bg-[#800020] text-white">
                     <tr>
@@ -84,7 +88,7 @@ const TablaDocentes = ({ docentes, onEdit }) => {
 
                         <div className="flex">
                             <div className="flex-1 text-left pr-4">
-                                <h3 className="text-lg font-semibold mb-2">Detalles del Docente</h3>
+                               
                                 <p><strong>Nombres:</strong> {selectedDocente.nombres || 'No disponible'}</p>
                                 <p><strong>Apellido Paterno:</strong> {selectedDocente.aPaterno || 'No disponible'}</p>
                                 <p><strong>Apellido Materno:</strong> {selectedDocente.aMaterno || 'No disponible'}</p>
