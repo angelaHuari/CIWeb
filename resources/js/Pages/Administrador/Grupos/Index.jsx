@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import GestionGrupos from './GestionGrupos';
 import CiclosIndex from '../Ciclos/Index';  // Renombramos el componente importado
 
-export default function Index({ auth, grupos, ciclos, docentes}) {
+export default function Index({ auth, grupos, ciclos, docentes }) {
     const [view, setView] = useState(null); // Estado para controlar qué vista se muestra
 
     // Función para manejar clics en las tarjetas y cambiar de vista
@@ -15,17 +15,22 @@ export default function Index({ auth, grupos, ciclos, docentes}) {
 
     const renderContent = () => {
         // Verifica qué vista está seleccionada
-        if (view === 'Gestion de Grupos') {
+        if (view === 'formulario') {
             return (
-                <GestionGrupos
-                    grupos={grupos}
-                    ciclos={ciclos}
-                    docentes={docentes}
-                />
+                <>
+                    <GestionGrupos
+                        grupos={grupos}
+                        ciclos={ciclos}
+                        docentes={docentes}
+                    />
+                </>
+
             );
-        } else if (view === 'Ciclos e Idiomas') {
+        } else if (view === 'lista') {
             return (
-                <CiclosIndex  /> // Usamos el nuevo nombre
+                <>
+
+                </>
             );
         } else {
             return (
@@ -65,25 +70,25 @@ export default function Index({ auth, grupos, ciclos, docentes}) {
                                 {/* Card Gestión de Grupos */}
                                 <div
                                     className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
-                                    onClick={() => handleCardClick('Gestion de Grupos')}
+                                    onClick={() => handleCardClick('formulario')}
                                     aria-label="Gestión de Grupos"
                                     tabIndex="0"
                                 >
                                     <FaUsers className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Gestión de Grupos</h4>
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Formulario de Grupos</h4>
                                     <p className="text-[#F5D0A9] text-sm">Gestiona los grupos, ciclos e idiomas asociados para los estudiantes.</p>
                                 </div>
 
                                 {/* Card Ciclos e Idiomas */}
                                 <div
                                     className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
-                                    onClick={() => handleCardClick('Ciclos e Idiomas')}
+                                    onClick={() => handleCardClick('lista')}
                                     aria-label="Ciclos e Idiomas"
                                     tabIndex="0"
                                 >
                                     <FaLayerGroup className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Ciclos e Idiomas</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Gestiona los ciclos y los idiomas disponibles en tu sistema.</p>
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Lista de Grupos</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Lista los grupos disponibles en tu sistema.</p>
                                 </div>
                             </div>
 
