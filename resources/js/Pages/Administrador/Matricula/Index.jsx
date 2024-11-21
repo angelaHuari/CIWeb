@@ -78,7 +78,7 @@ export default function Index({ ListaMatriculas, ListaFormulariosMatricula }) {
                                     tabIndex="0"
                                 >
                                     <FaUserGraduate className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Verificacion de Matriculas</h4>
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Verificacion de Matriculas - Mensualidades</h4>
                                     <p className="text-[#F5D0A9] text-sm">Verifica y aprueba los formularios de matriculas -mensualidades realizados por los estudiantes, incluyendo los comprobantes de pago.</p>
                                 </div>
                                 {/* Card Gestión de Matrículas */}

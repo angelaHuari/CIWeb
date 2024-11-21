@@ -4,9 +4,10 @@ import { FaSearch, FaEye, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 
 const TablaFormularios = ({ formMatriculas = [], search }) => {
-    /*const filteredPagos = formMatriculas.filter(form => 
+    
+    const filteredForms = formMatriculas.data.filter(form => 
         form.estudiante.aPaterno.toLowerCase().includes(search.toLowerCase())
-    );*/
+    );
     const [selectedForm, setSelectedForm] = useState(null);
     const { data, setData, post, processing, errors, reset } = useForm({
         id: '',
@@ -196,9 +197,9 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {formMatriculas.data.length > 0 ? (
-                                formMatriculas.data.map((form) => (
-                                    <tr key={form.id} className="border-b hover:bg-[#F4D6C5]">
+                            {filteredForms.length > 0 ? (
+                                filteredForms.map((form,index) => (
+                                    <tr key={index} className="border-b hover:bg-[#F4D6C5] items-center">
                                         <td className="px-6 py-3">{form.estudiante.nombres} {form.estudiante.aMaterno} {form.estudiante.aPaterno}</td>
                                         <td className="px-6 py-3">
                                             {form.estado === 'aceptado' ? (

@@ -235,7 +235,7 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
                 </button>
               </div>
 
-              <div className="flex w-75 h-75 mx-auto"> {/* Tamaño moderado */}        
+              <div className="flex w-50 h-50 mx-flex"> {/* Tamaño moderado */}        
                 {selectedGraph === 'pie' && (
                   <Pie data={selectedCard === 'tiposAlumnos' ? tiposAlumnosData : medioPublicitarioData} options={selectedCard === 'tiposAlumnos' ? tiposAlumnosOptions : medioPublicitarioOptions} />
                 )}

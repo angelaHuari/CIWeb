@@ -2,8 +2,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
 import { FaUserGraduate, FaCreditCard, FaRegListAlt } from 'react-icons/fa';
 import React, { useState } from 'react';
+import ListaUsuarios from './ListaUsuarios';
 
-export default function Index() {
+export default function Index({usuarios}) {
     const [view, setView] = useState(null); // Estado para controlar qué vista se muestra
     // Función para manejar clics en las tarjetas y cambiar de vista
     const handleCardClick = (value) => {
@@ -14,7 +15,7 @@ export default function Index() {
         if (view === 'lista') {
             return (
                 <>
-                    
+                    <ListaUsuarios ListaUsuarios={usuarios}></ListaUsuarios>
                 </>
             );
         }else {

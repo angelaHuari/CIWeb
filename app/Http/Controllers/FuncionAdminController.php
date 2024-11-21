@@ -6,6 +6,7 @@ use App\Models\FormularioMatricula;
 use App\Models\Grupo;
 use App\Models\Matricula;
 use App\Models\Pago;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +16,8 @@ class FuncionAdminController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Administrador/Usuarios/Index');
+        $usuarios=User::paginate(15);
+        return Inertia::render('Administrador/Usuarios/Index',['usuarios'=>$usuarios]);
     }
 
 
