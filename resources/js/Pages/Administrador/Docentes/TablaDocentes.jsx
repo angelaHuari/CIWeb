@@ -1,9 +1,11 @@
 
 import React, { useState } from 'react';
 import { FaEye } from 'react-icons/fa';
+import FormularioDocentes from './FormularioDocentes';
 
-const TablaDocentes = ({ docentes, onEdit }) => {
+const TablaDocentes = ({ docentes }) => {
     const [showModal, setShowModal] = useState(false);
+    const [showModalEdit, setShowModalEdit] = useState(false);
     const [selectedDocente, setSelectedDocente] = useState(null);
     const [showCredentials, setShowCredentials] = useState(false);
 
@@ -13,8 +15,15 @@ const TablaDocentes = ({ docentes, onEdit }) => {
         setShowModal(true);
     };
 
+    const handleShowModalEdit = (docente) => {
+        //if (!docente) return;
+        setSelectedDocente(docente);
+        setShowModalEdit(true);
+    };
+
     const handleCloseModal = () => {
         setShowModal(false);
+        setShowModalEdit(false);
         setSelectedDocente(null);
         setShowCredentials(false);
     };
@@ -49,7 +58,7 @@ const TablaDocentes = ({ docentes, onEdit }) => {
                                 <td className="px-6 py-3">{docente.emailInstitucional || 'No disponible'}</td>
                                 <td className="px-6 py-3">
                                     <button
-                                        onClick={() => onEdit(docente)}
+                                        onClick={() => handleShowModalEdit(docente)}
                                         className="text-[#800020] hover:text-[#6A4E3C] mr-2"
                                     >
                                         <img src="/imagenes/editar.png" alt="Editar" className="h-5 w-5" />
@@ -141,6 +150,23 @@ const TablaDocentes = ({ docentes, onEdit }) => {
                     </div>
                 </div>
             )}
+
+            {showModalEdit && selectedDocente && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-[600px] border-2 border-gray-300">
+                         <FormularioDocentes Docente={selectedDocente} closeModal={setShowModalEdit}></FormularioDocentes>
+
+                        <button
+                            onClick={handleCloseModal}
+                            className="mt-4 bg-gray-500 text-white px-4 py-2 rounded"
+                        >
+                            Cerrar 
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            
         </div>
     );
 };

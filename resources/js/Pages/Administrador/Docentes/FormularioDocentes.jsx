@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
-import TablaDocentes from './TablaDocentes';
 
-const FormularioDocentes = ({ docentes = [] }) => {
+const FormularioDocentes = ({ Docente }) => {
+
     const [editingDocente, setEditingDocente] = useState(null);
+    const [previewImage, setPreviewImage] = useState(null);
     const isEdit = Boolean(editingDocente);
-
     const { data, setData, post, errors, processing, reset } = useForm({
         nombres: '',
         aPaterno: '',
@@ -18,8 +18,6 @@ const FormularioDocentes = ({ docentes = [] }) => {
         fotoDocente: null,
     });
 
-    const [previewImage, setPreviewImage] = useState(null);
-
     const handleEdit = (docente) => {
 
         setEditingDocente(docente);
@@ -31,7 +29,18 @@ const FormularioDocentes = ({ docentes = [] }) => {
         setPreviewImage(docente.fotoDocente);  // Mantener la imagen previa
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
+    
 
+    useEffect(() => {
+        if (Docente != null) {
+            handleEdit(Docente)
+            console.log(Docente);
+
+        }
+
+    }, [Docente]);
+
+  
     const validarFecha = (fecha) => {
         const fechaIngresada = new Date(fecha);
         const hoy = new Date();
@@ -151,26 +160,12 @@ const FormularioDocentes = ({ docentes = [] }) => {
         }
     };
 
-    const handleCancelEdit = () => {
-        setEditingDocente(null);
-        reset();
-        setPreviewImage(null);
-    };
-
     return (
         <div className="container mx-auto p-4 space-y-6">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">
                     {isEdit ? 'Editar Docente' : 'Registrar Docente'}
                 </h2>
-                {isEdit && (
-                    <button
-                        onClick={handleCancelEdit}
-                        className="bg-gray-500 text-white px-4 py-2 rounded"
-                    >
-                        Cancelar Edición
-                    </button>
-                )}
             </div>
 
             <form
@@ -344,7 +339,6 @@ const FormularioDocentes = ({ docentes = [] }) => {
                 </div>
             </form>
 
-            <TablaDocentes docentes={docentes} onEdit={handleEdit} />
         </div>
     );
 };

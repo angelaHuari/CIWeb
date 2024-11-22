@@ -14,14 +14,23 @@ export default function Index({ ListaDocentes }) {
 
     const renderContent = () => {
         // Renderiza el contenido basado en la vista seleccionada
-        if (view === 'Agregar Docente') {
+        if (view === 'agregar') {
             return (
-                <FormularioDocentes docentes={ListaDocentes}></FormularioDocentes>
+                <>
+                    <FormularioDocentes editingDocente={null}  ></FormularioDocentes>
+                </>
+
             );
-        } else if (view === 'Lista Docentes') {
+        } else if (view === 'lista') {
+
             return (
-                <TablaDocentes docentes={ListaDocentes}></TablaDocentes>
+                <>
+                    <TablaDocentes docentes={ListaDocentes}></TablaDocentes>
+                </>
+
             );
+
+
         } else {
             return (
                 <div className="text-center p-6">
@@ -51,7 +60,7 @@ export default function Index({ ListaDocentes }) {
                                 {/* Card Agregar Docente */}
                                 <div
                                     className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
-                                    onClick={() => handleCardClick('Agregar Docente')}
+                                    onClick={() => handleCardClick('agregar')}
                                     aria-label="Agregar Docente"
                                     tabIndex="0"
                                 >
@@ -60,15 +69,15 @@ export default function Index({ ListaDocentes }) {
                                 </div>
 
                                 {/* Card Lista de Docentes */}
-                                {/* <div
+                                <div
                                     className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
-                                    onClick={() => handleCardClick('Lista Docentes')}
+                                    onClick={() => handleCardClick('lista')}
                                     aria-label="Lista Docentes"
                                     tabIndex="0"
                                 >
                                     <h4 className="text-lg font-semibold text-[#F5D0A9]">Lista de Docentes</h4>
                                     <p className="text-[#F5D0A9] text-sm">Consulta y administra la lista de docentes registrados.</p>
-                                </div>*/}
+                                </div>
                             </div>
 
                             {/* Mostrar el contenido dependiendo de la vista seleccionada */}
