@@ -1,11 +1,12 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
 
-const FormularioDocentes = ({ editingDocente,onCancelEdit }) => {
+const FormularioDocentes = ({ Docente }) => {
 
+    const [editingDocente, setEditingDocente] = useState(null);
+    const [previewImage, setPreviewImage] = useState(null);
     const isEdit = Boolean(editingDocente);
-
-    const { data, setData, post,put, errors, processing, reset } = useForm({
+    const { data, setData, post, errors, processing, reset } = useForm({
         nombres: '',
         aPaterno: '',
         aMaterno: '',
@@ -17,33 +18,29 @@ const FormularioDocentes = ({ editingDocente,onCancelEdit }) => {
         fotoDocente: null,
     });
 
-    const [previewImage, setPreviewImage] = useState(null);
-    const [initialLoad, setInitialLoad] = useState(false); // Nueva variable de estado
+    const handleEdit = (docente) => {
+
+        setEditingDocente(docente);
+        setData({
+            ...docente,
+            fotoDocente: null,  // Esto elimina la foto cuando editas
+            _method: 'PUT',     // Asegúrate de enviar el método PUT si estás editando
+        });
+        setPreviewImage(docente.fotoDocente);  // Mantener la imagen previa
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    
 
     useEffect(() => {
-        if (editingDocente && initialLoad) {
-            setData(editingDocente); // Asignar directamente a data
-            setPreviewImage(editingDocente.fotoDocente);
-            setInitialLoad(false); // Evitar futuras ejecuciones con el mismo editingDocente
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (Docente != null) {
+            handleEdit(Docente)
+            console.log(Docente);
 
         }
 
-    }, [editingDocente, initialLoad, setData]);
+    }, [Docente]);
 
-     useEffect(()=>{
-        // Limpia el formulario cuando editingDocente sea nulo
-         if(!editingDocente){
-            reset();
-            setPreviewImage(null);
-            setInitialLoad(false); // Reiniciar para la próxima edición
-         }else{
-            setInitialLoad(true);
-         }
-     },[editingDocente,reset])
-
-   // const handleEdit = () => { };
-
+  
     const validarFecha = (fecha) => {
         const fechaIngresada = new Date(fecha);
         const hoy = new Date();
@@ -64,69 +61,101 @@ const FormularioDocentes = ({ editingDocente,onCancelEdit }) => {
 
 
     const handleChange = (e) => {
-        const { name, value, type, files } = e.target; // Obtener name, value, type, files
+        const key = e.target.name;
+        const value = e.target.type === 'file' ? e.target.files[0] : e.target.value;
+        
 
-        // Asignar el nuevo valor al estado del formulario
-        setData(name, type === 'file' ? files[0] : value);
-
-
-        // Validaciones (se pueden simplificar o mover a otro lugar)
-        if (name === 'emailInstitucional' && value && !value.endsWith('@istta.edu.pe')) {
-            setData('emailInstitucional', value.split('@')[0] + '@istta.edu.pe');
-        } else if (name === 'celular' || name === 'dni') {
-            const numericValue = value.replace(/\D/g, '');
-            if (numericValue !== value) {
+        // Validación de email institucional
+        if (key === 'emailInstitucional') {
+            if (value && !value.endsWith('@istta.edu.pe')) {
+                // Si no tiene el dominio correcto, agregarlo automáticamente
+                setData({
+                    ...data,
+                    [key]: value.split('@')[0] + '@istta.edu.pe', // Mantiene el nombre antes del arroba y agrega el dominio
+                });
+            } else {
+                setData({
+                    ...data,
+                    [key]: value,
+                });
+            }
+        }
+        // Validación de teléfono
+        else if (key === 'celular' || key === 'dni') {
+            // Verifica si el valor contiene solo números y no está vacío
+            const numericValue = value.replace(/\D/g, ''); // Elimina cualquier carácter que no sea un número
+            if (numericValue === value) {
+                setData({
+                    ...data,
+                    [key]: numericValue, // Solo permite valores numéricos
+                });
+            } else {
+                // Puedes mostrar un mensaje de error si lo deseas, por ejemplo:
                 console.log("Este campo debe contener solo números.");
             }
-            setData(name, numericValue);
-
-        } else if (name === 'fechaNacimiento' && value) {
-            errors['fechaNacimiento'] = validarFecha(value)
-
         }
-           if (errors[name]) { //limpia los errores despues de que se actualize el input
-           delete errors[name]; 
+        else {
+            setData({
+                ...data,
+                [key]: value,
+            });
         }
 
-
-        if (name === 'fotoDocente' && files[0]) {
-            setPreviewImage(URL.createObjectURL(files[0]));
+        // Validación de fecha de nacimiento
+        if (key === 'fechaNacimiento' && e.target.value) {
+            errors['fechaNacimiento'] = validarFecha(value);
         }
 
-
+        // Validación de foto docente (preview)
+        if (key === 'fotoDocente' && e.target.files[0]) {
+            setPreviewImage(URL.createObjectURL(e.target.files[0]));
+        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const formData = new FormData();  // Crea el FormData aquí para evitar problemas con el archivo
-        for (const key in data) {
-            if (data[key] !== null && key !== '_method') {
-                formData.append(key, data[key]);
-            }
-        }
-
-
         if (isEdit) {
-            put(route('docente.update', editingDocente.id), {
-                forceFormData: true,
-                data: formData,  // Usar formData
+            const formData = new FormData();
+            Object.keys(data).forEach(key => {
+                if (data[key] !== null) {
+                    formData.append(key, data[key]);
+                }
+            });
+
+            // Asegúrate de que el método PUT se esté enviando
+            formData.append('_method', 'PUT');
+
+            post(route('docente.update', editingDocente.id), {
+                forceFormData: true, // Usamos FormData
+                data: formData,
                 onSuccess: () => {
                     reset();
-                    onCancelEdit(); // Llamar a onCancelEdit para limpiar el formulario en el padre
+                    setEditingDocente(null);
                     setPreviewImage(null);
                 },
-                // ... (onError)
+                onError: (errors) => {
+                    console.log('Errores:', errors);
+                },
             });
         } else {
+            const formData = new FormData();
+            Object.keys(data).forEach(key => {
+                if (data[key] !== null && key !== '_method') {
+                    formData.append(key, data[key]);
+                }
+            });
+
             post(route('docente.store'), {
                 forceFormData: true,
-                data: formData,  // Usar formData
+                data: formData,
                 onSuccess: () => {
                     reset();
                     setPreviewImage(null);
                 },
-                // ... (onError)
+                onError: (errors) => {
+                    console.log('Errores:', errors);
+                },
             });
         }
     };

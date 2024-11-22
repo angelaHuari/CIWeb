@@ -20,9 +20,6 @@ const TablaDocentes = ({ docentes }) => {
         setSelectedDocente(docente);
         setShowModalEdit(true);
     };
-    const handleCancelEdit = () => {
-        setSelectedDocente(null);
-    };
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -157,13 +154,13 @@ const TablaDocentes = ({ docentes }) => {
             {showModalEdit && selectedDocente && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-[600px] border-2 border-gray-300">
-                         <FormularioDocentes editingDocente={selectedDocente} onCancelEdit={handleCancelEdit}></FormularioDocentes>
+                         <FormularioDocentes Docente={selectedDocente} closeModal={setShowModalEdit}></FormularioDocentes>
 
                         <button
                             onClick={handleCloseModal}
                             className="mt-4 bg-gray-500 text-white px-4 py-2 rounded"
                         >
-                            Cerrar
+                            Cerrar 
                         </button>
                     </div>
                 </div>
