@@ -131,35 +131,37 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
   return (
     <AuthenticatedLayout
       header={
-        <h2 className="text-3xl font-bold leading-tight text-white bg-gradient-to-r from-[#4B0C00] to-[#5A0B0F] p-4 rounded-lg shadow-lg text-center">
+        <h2 className="text-3xl font-bold leading-tight text-white bg-gradient-to-r from-[#800020] to-[#6A4E3C] p-4 rounded-lg shadow-lg text-center">
           Estadísticas
         </h2>
       }
     >
       <Head title="Estadísticas" />
-      <div className="py-8 bg-[#FFFBF0]">
+      <div className="py-12 bg-gradient-to-b from-[#800020] to-[#F5D0A9]">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-center items-center">
             <div
-              className="bg-gradient-to-r from-[#5A0B0F] via-[#6B0F00] to-[#4B0C00] p-8 rounded-lg shadow-lg border border-gray-200 hover:shadow-xl transition duration-300 ease-in-out cursor-pointer text-center"
+              className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
               onClick={() => handleCardClick('tiposAlumnos')}
+              aria-label="tiposAlumnos"
             >
               <div className="flex justify-center items-center mb-4">
-                <FaUserGraduate className="text-white text-5xl" />
+                <FaUserGraduate className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
               </div>
-              <h3 className="text-2xl font-semibold text-white">Tipos de Estudiante</h3>
-              <p className="mt-4 text-white">Información sobre los diferentes tipos de estudiantes en el sistema.</p>
+              <h4 className="text-2xl text-center font-semibold text-[#F5D0A9]">Tipos de Estudiante</h4>
+              <p className="text-[#F5D0A9]">Información sobre los diferentes tipos de estudiantes en el sistema.</p>
             </div>
 
             <div
-              className="bg-gradient-to-r from-[#5A0B0F] via-[#3B0906] to-[#4B0C00] p-8 rounded-lg shadow-lg border border-gray-200 hover:shadow-xl transition duration-300 ease-in-out cursor-pointer text-center"
+              className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
               onClick={() => handleCardClick('medioPublicitario')}
+              aria-label="medioPublicitario"
             >
               <div className="flex justify-center items-center mb-4">
-                <FaBullhorn className="text-white text-5xl" />
+                <FaBullhorn className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
               </div>
-              <h3 className="text-2xl font-semibold text-white">Publicidad</h3>
-              <p className="mt-4 text-white">Estadísticas sobre las campañas publicitarias y su rendimiento.</p>
+              <h4 className="text-2xl text-center font-semibold text-[#F5D0A9]">Medios Publicitarios</h4>
+              <p className="text-[#F5D0A9]">Estadísticas sobre las campañas publicitarias y su rendimiento.</p>
             </div>
           </div>
 
@@ -171,12 +173,12 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
 
           <div className="mt-10 flex flex-col sm:flex-row gap-6 mb-6 justify-center items-center sm:items-start">
             <div className="text-center sm:text-left mb-6 sm:mb-0 w-full">
-              <h2 className="text-2xl font-semibold text-[#333333]">Filtrar por mes y año</h2>
-              <p className="text-sm text-gray-500 mt-2">Selecciona el mes y el año para filtrar los resultados.</p>
+              <h2 className="text-2xl font-semibold text-[#33333]">Filtrar por mes y año</h2>
+              <p className="text-sm text-gray-50 mt-2">Selecciona el mes y el año para filtrar los resultados.</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-6 items-center justify-center sm:items-start w-full">
               <div className="w-full sm:w-auto">
-                <label htmlFor="month" className="block text-sm font-medium text-[#333333]">Mes</label>
+                <label htmlFor="month" className="block text-sm font-medium text-[#3333332]">Mes</label>
                 <input
                   id="month"
                   type="month"
@@ -187,7 +189,7 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
                 />
               </div>
               <div className="w-full sm:w-auto">
-                <label htmlFor="year" className="block text-sm font-medium text-[#333333]">Año</label>
+                <label htmlFor="year" className="block text-sm font-medium text-[#3333331]">Año</label>
                 <input
                   id="year"
                   type="number"
@@ -200,52 +202,64 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
               <div className="w-full sm:w-auto">
                 <button
                   onClick={handleFilterChange}
-                  disabled={loading}
-                  className={`px-6 py-3 text-lg ${loading ? 'bg-gray-400' : 'bg-[#3E0B10] hover:bg-[#2D080C]'} text-white rounded-md w-full sm:w-auto mt-4 sm:mt-0 focus:outline-none focus:ring-2 focus:ring-[#3E0B10] transition duration-300 ease-in-out`}
-                  aria-label="Aplicar filtro"
+                  className="mt-4 sm:mt-0 inline-block px-6 py-3 text-white bg-[#800020] hover:bg-[#6A4E3C] rounded-md shadow-lg"
                 >
-                  {loading ? 'Cargando...' : 'Filtrar'}
+                  Filtrar
                 </button>
               </div>
             </div>
           </div>
 
-          {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+          <div className="flex justify-center mb-6">
+            <button
+              onClick={() => handleGraphChange('pie')}
+              className={`py-2 px-4 mr-4 rounded-lg ${selectedGraph === 'pie' ? 'bg-[#800020] text-white' : 'bg-white  text-gray-700'}`}
+            >
+             Gráfico de Torta  o Circular
+            </button>
+            <button
+              onClick={() => handleGraphChange('bar')}
+              className={`py-2 px-4 mr-4 rounded-lg ${selectedGraph === 'bar' ? 'bg-[#800020] text-white' : 'bg-white text-gray-700'}`}
+            >
+              Gráfico de Barras
+            </button>
+            <button
+              onClick={() => handleGraphChange('line')}
+              className={`py-2 px-4 rounded-lg ${selectedGraph === 'line' ? 'bg-[#800020] text-white' : 'bg-white text-gray-700'}`}
+            >
+              Gráfico de Linea
+            </button>
+          </div>
 
-          {selectedCard && (
-            <div className="mt-10">
-              <div className="flex justify-center mb-6 gap-4">
-                <button
-                  onClick={() => handleGraphChange('pie')}
-                  className={`px-6 py-2 text-md rounded-md ${selectedGraph === 'pie' ? 'bg-[#3E0B10] text-white' : 'bg-gray-200 text-black'}`}
-                >
-                  Gráfico de Torta o Circular
-                </button>
-                <button
-                  onClick={() => handleGraphChange('bar')}
-                  className={`px-6 py-2 text-md rounded-md ${selectedGraph === 'bar' ? 'bg-[#3E0B10] text-white' : 'bg-gray-200 text-black'}`}
-                >
-                  Gráfico de Barras
-                </button>
-                <button
-                  onClick={() => handleGraphChange('line')}
-                  className={`px-6 py-2 text-md rounded-md ${selectedGraph === 'line' ? 'bg-[#3E0B10] text-white' : 'bg-gray-200 text-black'}`}
-                >
-                  Gráfico de Líneas
-                </button>
-              </div>
+          {selectedCard === 'tiposAlumnos' && (
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              {loading && <div>Loading...</div>}
+              {error && <div className="text-red-600">{error}</div>}
+              {selectedGraph === 'pie' && (
+                <Pie data={tiposAlumnosData} options={tiposAlumnosOptions} />
+              )}
+              {selectedGraph === 'bar' && (
+                <Bar data={tiposAlumnosData} options={tiposAlumnosOptions} />
+              )}
+              {selectedGraph === 'line' && (
+                <Line data={tiposAlumnosData} options={tiposAlumnosOptions} />
+              )}
+            </div>
+          )}
 
-              <div className="flex w-50 h-50 mx-flex"> {/* Tamaño moderado */}        
-                {selectedGraph === 'pie' && (
-                  <Pie data={selectedCard === 'tiposAlumnos' ? tiposAlumnosData : medioPublicitarioData} options={selectedCard === 'tiposAlumnos' ? tiposAlumnosOptions : medioPublicitarioOptions} />
-                )}
-                {selectedGraph === 'bar' && (
-                  <Bar data={selectedCard === 'tiposAlumnos' ? tiposAlumnosData : medioPublicitarioData} options={selectedCard === 'tiposAlumnos' ? tiposAlumnosOptions : medioPublicitarioOptions} />
-                )}
-                {selectedGraph === 'line' && (
-                  <Line data={selectedCard === 'tiposAlumnos' ? tiposAlumnosData : medioPublicitarioData} options={selectedCard === 'tiposAlumnos' ? tiposAlumnosOptions : medioPublicitarioOptions} />
-                )}
-              </div>
+          {selectedCard === 'medioPublicitario' && (
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              {loading && <div>Loading...</div>}
+              {error && <div className="text-red-600">{error}</div>}
+              {selectedGraph === 'pie' && (
+                <Pie data={medioPublicitarioData} options={medioPublicitarioOptions} />
+              )}
+              {selectedGraph === 'bar' && (
+                <Bar data={medioPublicitarioData} options={medioPublicitarioOptions} />
+              )}
+              {selectedGraph === 'line' && (
+                <Line data={medioPublicitarioData} options={medioPublicitarioOptions} />
+              )}
             </div>
           )}
         </div>

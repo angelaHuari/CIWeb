@@ -42,7 +42,7 @@ export default function Index({usuarios}) {
                         <div className="p-8 text-gray-800 text-center">
 
                             {/* Cards Section - Centrado */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 justify-center mx-auto">
+                            <div className="flex justify-center sm:grid-cols-2 gap-6 justify-center mx-auto">
 
                                 {/* Card Gestión de Matrículas */}
                                 <div

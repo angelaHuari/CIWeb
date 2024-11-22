@@ -23,6 +23,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
     const [modalidadError, setModalidadError] = useState('');
     const [cicloError, setCicloError] = useState('');
     const [docenteError, setDocenteError] = useState('');
+    const [formErrors, setFormErrors] = useState([]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -63,28 +64,41 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        let isValid = true;
+        let validationErrors = [];
+
         if (!data.modalidad) {
-            setModalidadError('Por favor, seleccione una modalidad válida.');
-            isValid = false;
+            validationErrors.push('Por favor, seleccione una modalidad válida.');
         }
         if (!data.ciclo_id) {
-            setCicloError('Por favor, seleccione un ciclo válido.');
-            isValid = false;
+            validationErrors.push('Por favor, seleccione un ciclo válido.');
         }
         if (!data.docente_id) {
-            setDocenteError('Por favor, seleccione un docente válido.');
-            isValid = false;
+            validationErrors.push('Por favor, seleccione un docente válido.');
+        }
+        if (!data.nroEstudiantes || data.nroEstudiantes < 0) {
+            validationErrors.push('Por favor, ingrese un número válido de estudiantes.');
+        }
+        if (!data.nroVacantes || data.nroVacantes < 0) {
+            validationErrors.push('Por favor, ingrese un número válido de vacantes.');
+        }
+        if (data.horarioEntrada && data.horarioSalida && data.horarioEntrada >= data.horarioSalida) {
+            validationErrors.push('La hora de entrada debe ser anterior a la hora de salida.');
         }
 
-        if (!isValid) return;
+        // Si hay errores de validación, se detiene el envío
+        if (validationErrors.length > 0) {
+            setFormErrors(validationErrors);
+            return;
+        }
 
+        // Formatear horarios si se ingresaron
         if (data.horarioEntrada && data.horarioSalida) {
             const horarioEntradaFormatted = formatAMPM(data.horarioEntrada);
             const horarioSalidaFormatted = formatAMPM(data.horarioSalida);
             data.horario = `${horarioEntradaFormatted} - ${horarioSalidaFormatted}`;
         }
 
+        // Enviar datos de formulario
         if (editing && selectedGrupo) {
             router.put(`/grupo/${selectedGrupo.id}`, data, {
                 onSuccess: () => {
@@ -134,10 +148,18 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
 
     return (
         <div className="container mx-auto p-6">
-            <h1 className="text-2xl font-bold mb-6">Gestión de Grupos</h1>
+            <h1 className="text-2xl text-justifyfont-bold mb-6">Gestión de Grupos</h1>
+
+            {formErrors.length > 0 && (
+                <div className="text-red-500 mb-4">
+                    {formErrors.map((error, index) => (
+                        <p key={index}>{error}</p>
+                    ))}
+                </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow">
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div>
                         <label className="block text-sm font-medium mb-1">Periodo</label>
                         <select
@@ -320,7 +342,6 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
                                         </Link>
                                     </div>
                                 </td>
-
                             </tr>
                         ))}
                     </tbody>
