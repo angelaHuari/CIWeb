@@ -13,7 +13,8 @@ const DatosGenerales = ({ data, setData, errors }) => {
 
 
             <label>Documento de Identidad (DNI):</label>
-            <input type="text" value={data.dni} onChange={(e) => setData({ ...data, dni: e.target.value })} />
+            <input type="text" value={data.dni} onChange={(e) => setData({ ...data, dni: e.target.value })} 
+            maxLength={8} />
 
             <label>Sexo:</label>
             <select value={data.sexo} onChange={(e) => setData({ ...data, sexo: e.target.value })}>
@@ -23,7 +24,8 @@ const DatosGenerales = ({ data, setData, errors }) => {
             </select>
 
             <label>Número de Celular:</label>
-            <input type="text" value={data.celular} onChange={(e) => setData({ ...data, celular: e.target.value })} />
+            <input type="text" value={data.celular} onChange={(e) => setData({ ...data, celular: e.target.value })}
+                maxLength={9} />
 
             <label>Fecha de Nacimiento:</label>
             <input type="date" value={data.fechaNacimiento} onChange={(e) => setData({ ...data, fechaNacimiento: e.target.value })} />

@@ -1,25 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { FaClipboardCheck, FaHandsHelping, FaLightbulb, FaComments, FaShieldAlt } from 'react-icons/fa';
-import { useState } from 'react';
+import { FaWpforms, FaChalkboardTeacher, FaLanguage, FaChartBar, FaUsers } from 'react-icons/fa';
 
 export default function Dashboard() {
-    const [info, setInfo] = useState('');
-
-    // Función para manejar clics en los valores
-    const handleCardClick = (value) => {
-        if (value === 'Responsabilidad') {
-            setInfo('La responsabilidad es clave para el éxito de cualquier organización.');
-        } else if (value === 'Empatía') {
-            setInfo('La empatía nos permite entender y conectar con los demás.');
-        } else if (value === 'Creatividad') {
-            setInfo('La creatividad es fundamental para encontrar soluciones innovadoras.');
-        } else if (value === 'Comunicación') {
-            setInfo('Una buena comunicación facilita la colaboración y el entendimiento.');
-        } else if (value === 'Integridad') {
-            setInfo('La integridad es la base de una ética sólida y relaciones de confianza.');
-        }
-    };
     return (
         <AuthenticatedLayout
         header={
@@ -41,112 +24,89 @@ export default function Dashboard() {
                                 {/* Imagen 1 - Logo */}
                                 <div className="overflow-hidden rounded-lg shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105">
                                     <img
-                                        src="/imagenes/Ins.png" // Ruta de tu logo
+                                        src="/imagenes/2.jpg"
                                         alt="Logo de la aplicación"
-                                        className="w-full h-40 object-contain" // Ajustar el tamaño de la imagen
+                                        className="w-full h-40 object-contain"
                                     />
                                 </div>
 
                                 {/* Imagen 2 - Idiomas */}
                                 <div className="overflow-hidden rounded-lg shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105">
                                     <img
-                                        src="/imagenes/idiomaE.jpg" // Ruta de la tercera imagen
+                                        src="/imagenes/3.jpeg"
                                         alt="Idiomas"
-                                        className="w-full h-40 object-contain" // Ajustar el tamaño de la imagen
+                                        className="w-full h-40 object-contain"
                                     />
                                 </div>
 
                                 {/* Imagen 3 - Curso de Inglés */}
                                 <div className="overflow-hidden rounded-lg shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105">
                                     <img
-                                        src="/imagenes/inglesCurso.jpg" // Ruta de la segunda imagen
+                                        src="/imagenes/4.png"
                                         alt="Curso de Inglés"
-                                        className="w-full h-40 object-contain" // Ajustar el tamaño de la imagen
+                                        className="w-full h-40 object-contain"
                                     />
                                 </div>
                             </div>
 
-                            <h3 className="text-2xl font-semibold mb-4 text-[#6A4E3C]">
-                                ¡Bienvenido!
+                            
+                            
+                            <h3 className="text-2xl font-semibold mb-4 text-[#800020]">
+                                Estas serán tus funciones dentro del sistema :)
                             </h3>
                             <p className="mb-6 text-[#4B4B4B]">
                                 Aquí podrás gestionar todas las configuraciones necesarias para el correcto funcionamiento de la aplicación.
                                 Utiliza las opciones en el menú para navegar entre las distintas secciones y realizar las acciones que necesites.
                             </p>
-                            <h3 className="text-2xl font-semibold mb-4 text-[#800020]">
-                                Funciones del Sistema
-                            </h3>
 
-                            {/* Información adicional al hacer clic */}
-                            {info && (
-                                <div className="bg-[#F5D0A9] p-4 rounded-lg shadow-md mb-6 text-center text-[#800020]">
-                                    <p>{info}</p>
-                                </div>
-                            )}
-
-                            {/* Cards Section - Valores */}
+                            {/* Cards Section - Funciones Administrativas */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                                {/* Card Responsabilidad */}
+                                {/* Card Verificar Formularios */}
                                 <div
-                                    className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer"
-                                    onClick={() => handleCardClick('Responsabilidad')}
-                                    aria-label="Responsabilidad"
-                                    tabIndex="0"
+                                    className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all"
                                 >
-                                    <FaClipboardCheck className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Responsabilidad</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Nos comprometemos a cumplir con nuestras tareas y obligaciones.</p>
+                                    <FaWpforms className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Verificar Formularios</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Revisar formularios de inscripción y matrícula</p>
                                 </div>
 
-                                {/* Card Empatía */}
+                                {/* Card Registrar Docentes */}
                                 <div
-                                    className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer"
-                                    onClick={() => handleCardClick('Empatía')}
-                                    aria-label="Empatía"
-                                    tabIndex="0"
+                                    className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all"
                                 >
-                                    <FaHandsHelping className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Empatía</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Escuchamos y comprendemos las necesidades de los demás.</p>
+                                    <FaChalkboardTeacher className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Registrar Docentes</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Agregar y gestionar información de profesores</p>
                                 </div>
 
-                                {/* Card Creatividad */}
+                                {/* Card Ciclos e Idiomas */}
                                 <div
-                                    className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer"
-                                    onClick={() => handleCardClick('Creatividad')}
-                                    aria-label="Creatividad"
-                                    tabIndex="0"
+                                    className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all"
                                 >
-                                    <FaLightbulb className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Creatividad</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Buscamos soluciones innovadoras para superar desafíos.</p>
+                                    <FaLanguage className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Ciclos e Idiomas</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Crear nuevos ciclos, grupos e idiomas</p>
                                 </div>
                             </div>
 
                             {/* Additional Cards Section */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-6">
-                                {/* Card Comunicación */}
+                                {/* Card Estadísticas */}
                                 <div
-                                    className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer"
-                                    onClick={() => handleCardClick('Comunicación')}
-                                    aria-label="Comunicación"
-                                    tabIndex="0"
+                                    className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all"
                                 >
-                                    <FaComments className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Comunicación</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Mantenemos un diálogo abierto y honesto.</p>
+                                    <FaChartBar className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Estadísticas</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Consultar reportes y análisis de datos</p>
                                 </div>
 
-                                {/* Card Integridad */}
+                                {/* Card Gestión de Usuarios */}
                                 <div
-                                    className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer"
-                                    onClick={() => handleCardClick('Integridad')}
-                                    aria-label="Integridad"
-                                    tabIndex="0"
+                                    className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all"
                                 >
-                                    <FaShieldAlt className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Integridad</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Actuamos con honestidad y ética en todas nuestras interacciones.</p>
+                                    <FaUsers className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Gestión de Usuarios</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Administrar cuentas de usuarios del sistema</p>
                                 </div>
                             </div>
                         </div>
