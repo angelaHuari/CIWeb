@@ -26,6 +26,7 @@ const TablaInscripciones = ({ inscripciones=[], setIns }) => {
                     <tr className="bg-gray-100">
                         <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Nombres</th>
                         <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Apellido Materno</th>
+                        <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Estado</th> {/* Añadir columna de estado */}
                         <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Acciones</th>
                     </tr>
                 </thead>
@@ -33,15 +34,28 @@ const TablaInscripciones = ({ inscripciones=[], setIns }) => {
                     {inscripciones.data.map((inscripcion) => (
                         <tr 
                             key={inscripcion.id} 
-                            className={`border-t ${aceptadas.has(inscripcion.id) ? 'bg-green-100' : ''}`}
+                            className={`border-t ${inscripcion.estado === 'aceptado' ? 'bg-green-100' : ''}`}
                         >
                             <td className="px-4 py-2 text-sm text-gray-700">{inscripcion.nombres}</td>
                             <td className="px-4 py-2 text-sm text-gray-700">{inscripcion.aMaterno}</td>
+                            <td className="px-4 py-2 text-sm text-gray-700">{inscripcion.estado}</td> {/* Mostrar el estado */}
                             <td className="px-4 py-2 text-sm text-gray-700">
-                                <button onClick={() => { 
-                                    setIns({...inscripcion, onStatusChange: handleInscripcionStatus}); 
-                                }}>
-                                    VerForm
+                                <button 
+                                    onClick={() => { 
+                                        setIns({...inscripcion}); 
+                                    }}
+                                    className={`flex items-center gap-2 px-3 py-1 rounded ${
+                                        inscripcion.estado === 'aceptado' 
+                                        ? 'bg-green-100 text-green-800' 
+                                        : 'bg-blue-100 text-blue-800'
+                                    }`}
+                                >
+                                    <img 
+                                        src="/imagenes/ojo.png" 
+                                        alt="Ver" 
+                                        className="w-4 h-4"
+                                    />
+                                    {inscripcion.estado === 'aceptado' ? '' : ''}
                                 </button>
                             </td>
                         </tr>

@@ -36,5 +36,6 @@ class Formulario extends Model
         'montoPago',
         'nroComprobante',
         'imgComprobante',
+        'estado',
     ];
 }

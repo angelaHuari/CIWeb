@@ -232,15 +232,25 @@ const ResumenInscripcion = ({ inscripcion }) => {
                     <div className="mt-6 flex justify-center gap-4">
                         <button 
                             type="button" 
-                            className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200" 
+                            className={`px-6 py-2 text-white rounded transition-colors duration-200 ${
+                                inscripcion.estado === 'aceptado' 
+                                ? 'bg-gray-400 cursor-not-allowed' 
+                                : 'bg-green-500 hover:bg-green-600'
+                            }`}
                             onClick={handleAceptar}
+                            disabled={inscripcion.estado === 'aceptado'}
                         >
                             Aceptar
                         </button>
                         <button 
                             type="button" 
-                            className="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors duration-200" 
+                            className={`px-6 py-2 text-white rounded transition-colors duration-200 ${
+                                inscripcion.estado === 'aceptado' 
+                                ? 'bg-gray-400 cursor-not-allowed' 
+                                : 'bg-red-500 hover:bg-red-600'
+                            }`}
                             onClick={handleRechazar}
+                            disabled={inscripcion.estado === 'aceptado'}
                         >
                             Rechazar
                         </button>

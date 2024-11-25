@@ -38,6 +38,7 @@ return new class extends Migration
             $table->integer('montoPago');
             $table->string('medioPago');
             $table->string('imgComprobante')->nullable();
+            $table->string('estado')->default('Pendiente');
             $table->timestamps();
         });
     }

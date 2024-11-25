@@ -67,9 +67,13 @@ class FormularioController extends Controller
             'montoPago' => 'required|numeric',
             'nroComprobante' => 'required|string',
             'imgComprobante' => 'nullable|image|max:2048', // Valida que sea una imagen
+            'estado' => 'required|string', // Add this line
         ]);
 
         try {
+            // Ensure estado is set to 'Pendiente' before creating
+            $data['estado'] = 'Pendiente';
+            
             // Antes de crear el formulario, obtén los datos adicionales necesarios
             $grupo = Grupo::with(['ciclo.idioma'])->find($data['horarioIngles']);
             if ($grupo) {

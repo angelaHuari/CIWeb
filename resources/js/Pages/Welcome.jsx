@@ -32,6 +32,7 @@ export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
         montoPago: 0,
         nroComprobante: '',
         imgComprobante: null,
+        estado: 'Pendiente', // Add estado with default value
     });
 
     const validarFecha = (fecha) => {
@@ -85,6 +86,7 @@ export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
             montoPago: 0,
             medioPago: '',
             imgComprobante: null,
+            estado: 'Pendiente', // Make sure to reset estado to 'Pendiente'
         });
     };
 
