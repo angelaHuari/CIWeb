@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { useForm, router, Link } from '@inertiajs/react';
 
-const GestionGrupos = ({ grupos, ciclos, docentes }) => {
+const GestionGrupos = ({ selectGrupo, ciclos, docentes }) => {
     const { data, setData, processing, errors, reset } = useForm({
         periodo: '',
         modalidad: '',
@@ -23,6 +23,15 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
     const [modalidadError, setModalidadError] = useState('');
     const [cicloError, setCicloError] = useState('');
     const [docenteError, setDocenteError] = useState('');
+
+    useEffect(() => {
+        if (selectGrupo != null) {
+            handleEdit(selectGrupo)
+            console.log(selectGrupo);
+
+        }
+
+    }, [selectGrupo]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -137,121 +146,127 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
             <h1 className="text-2xl font-bold mb-6">Gestión de Grupos</h1>
 
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow">
-                <div className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Periodo</label>
-                        <select
-                            value={data.periodo}
-                            onChange={(e) => setData('periodo', e.target.value)}
-                            required
-                            className="p-2 border border-gray-300 rounded w-full"
-                        >
-                            <option value="" disabled>Selecciona un Período</option>
-                            {periodOptions.map((month, index) => (
-                                <option key={index} value={month}>{month}</option>
-                            ))}
-                        </select>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Periodo</label>
+                            <select
+                                value={data.periodo}
+                                onChange={(e) => setData('periodo', e.target.value)}
+                                required
+                                className="p-2 border border-gray-300 rounded w-full"
+                            >
+                                <option value="" disabled>Selecciona un Período</option>
+                                {periodOptions.map((month, index) => (
+                                    <option key={index} value={month}>{month}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Modalidad</label>
+                            <select
+                                name="modalidad"
+                                value={data.modalidad}
+                                onChange={handleChange}
+                                className="w-full rounded-md border-gray-300 shadow-sm"
+                            >
+                                <option value="">Seleccione una modalidad</option>
+                                <option value="Presencial">Presencial</option>
+                                <option value="Virtual">Virtual</option>
+                            </select>
+                            {modalidadError && (
+                                <div className="text-red-500 text-sm mt-1">{modalidadError}</div>
+                            )}
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Número de Estudiantes</label>
+                            <input
+                                type="number"
+                                name="nroEstudiantes"
+                                value={data.nroEstudiantes}
+                                onChange={handleChange}
+                                className="w-full rounded-md border-gray-300 shadow-sm"
+                            />
+                        </div>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Modalidad</label>
-                        <select
-                            name="modalidad"
-                            value={data.modalidad}
-                            onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm"
-                        >
-                            <option value="">Seleccione una modalidad</option>
-                            <option value="Presencial">Presencial</option>
-                            <option value="Virtual">Virtual</option>
-                        </select>
-                        {modalidadError && (
-                            <div className="text-red-500 text-sm mt-1">{modalidadError}</div>
-                        )}
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Número de Vacantes</label>
+                            <input
+                                type="number"
+                                name="nroVacantes"
+                                value={data.nroVacantes}
+                                onChange={handleChange}
+                                className="w-full rounded-md border-gray-300 shadow-sm"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Horario de Entrada</label>
+                            <input
+                                type="time"
+                                name="horarioEntrada"
+                                value={data.horarioEntrada}
+                                onChange={handleChange}
+                                className="w-full rounded-md border-gray-300 shadow-sm"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Horario de Salida</label>
+                            <input
+                                type="time"
+                                name="horarioSalida"
+                                value={data.horarioSalida}
+                                onChange={handleChange}
+                                className="w-full rounded-md border-gray-300 shadow-sm"
+                            />
+                        </div>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Número de Estudiantes</label>
-                        <input
-                            type="number"
-                            name="nroEstudiantes"
-                            value={data.nroEstudiantes}
-                            onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm"
-                        />
-                    </div>
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Ciclo</label>
+                            <select
+                                name="ciclo_id"
+                                value={data.ciclo_id}
+                                onChange={handleChange}
+                                className="w-full rounded-md border-gray-300 shadow-sm"
+                            >
+                                <option value="">Seleccione un ciclo</option>
+                                {ciclos?.map((ciclo) => (
+                                    <option key={ciclo.id} value={ciclo.id}>
+                                        {`${ciclo.idioma.nombre} - ${ciclo.nombre} - ${ciclo.nivel}`}
+                                    </option>
+                                ))}
+                            </select>
+                            {cicloError && (
+                                <div className="text-red-500 text-sm mt-1">{cicloError}</div>
+                            )}
+                        </div>
 
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Número de Vacantes</label>
-                        <input
-                            type="number"
-                            name="nroVacantes"
-                            value={data.nroVacantes}
-                            onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Horario de Entrada</label>
-                        <input
-                            type="time"
-                            name="horarioEntrada"
-                            value={data.horarioEntrada}
-                            onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Horario de Salida</label>
-                        <input
-                            type="time"
-                            name="horarioSalida"
-                            value={data.horarioSalida}
-                            onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Ciclo</label>
-                        <select
-                            name="ciclo_id"
-                            value={data.ciclo_id}
-                            onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm"
-                        >
-                            <option value="">Seleccione un ciclo</option>
-                            {ciclos?.map((ciclo) => (
-                                <option key={ciclo.id} value={ciclo.id}>
-                                    {`${ciclo.idioma.nombre} - ${ciclo.nombre}`}
-                                </option>
-                            ))}
-                        </select>
-                        {cicloError && (
-                            <div className="text-red-500 text-sm mt-1">{cicloError}</div>
-                        )}
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Docente</label>
-                        <select
-                            name="docente_id"
-                            value={data.docente_id}
-                            onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm"
-                        >
-                            <option value="">Seleccione un docente</option>
-                            {docentes?.map((docente) => (
-                                <option key={docente.id} value={docente.id}>
-                                    {`${docente.nombres} ${docente.aPaterno} ${docente.aMaterno}`}
-                                </option>
-                            ))}
-                        </select>
-                        {docenteError && (
-                            <div className="text-red-500 text-sm mt-1">{docenteError}</div>
-                        )}
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Docente</label>
+                            <select
+                                name="docente_id"
+                                value={data.docente_id}
+                                onChange={handleChange}
+                                className="w-full rounded-md border-gray-300 shadow-sm"
+                            >
+                                <option value="">Seleccione un docente</option>
+                                {docentes?.map((docente) => (
+                                    <option key={docente.id} value={docente.id}>
+                                        {`${docente.nombres} ${docente.aPaterno} ${docente.aMaterno}`}
+                                    </option>
+                                ))}
+                            </select>
+                            {docenteError && (
+                                <div className="text-red-500 text-sm mt-1">{docenteError}</div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
@@ -275,57 +290,8 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
                 </div>
             </form>
 
-            <div className="mt-8">
-                <h2 className="text-xl font-semibold mb-4">Grupos Registrados</h2>
-                <table className="w-full table-auto border-collapse border border-gray-300">
-                    <thead>
-                        <tr>
-                            <th className="border border-gray-300 p-2">Periodo</th>
-                            <th className="border border-gray-300 p-2">Modalidad</th>
-                            <th className="border border-gray-300 p-2">Número de Estudiantes</th>
-                            <th className="border border-gray-300 p-2">Número de Vacantes</th>
-                            <th className="border border-gray-300 p-2">Horario</th>
-                            <th className="border border-gray-300 p-2">Docente</th>
-                            <th className="border border-gray-300 p-2">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {grupos.data?.map((grupo) => (
-                            <tr key={grupo.id}>
-                                <td className="border border-gray-300 p-2">{grupo.periodo}</td>
-                                <td className="border border-gray-300 p-2">{grupo.modalidad}</td>
-                                <td className="border border-gray-300 p-2">{grupo.nroEstudiantes}</td>
-                                <td className="border border-gray-300 p-2">{grupo.nroVacantes}</td>
-                                <td className="border border-gray-300 p-2">{grupo.horario}</td>
-                                <td className="border border-gray-300 p-2">
-                                    {grupo.docente ? `${grupo.docente.nombres} ${grupo.docente.aPaterno}` : 'N/A'}
-                                </td>
-                                <td className="border border-gray-300 p-2">
-                                    <div className="flex items-center">
-                                        <button
-                                            onClick={() => handleEdit(grupo)}
-                                            className="text-[#800020] hover:text-[#6A4E3C] mr-2"
-                                        >
-                                            <img src="/imagenes/editar.png" alt="Editar" className="h-5 w-5" />
-                                        </button>
-                                        <Link
-                                            href={`/gestionestudiantesgrupo?grupo=${grupo.id}`}
-                                            className="text-green-600 hover:text-green-900 transition-colors flex items-center"
-                                        >
-                                            <img
-                                                src="/imagenes/ojo.png"
-                                                alt="Ver Estudiantes"
-                                                className="mr-2 w-5 h-5"
-                                            />
-                                        </Link>
-                                    </div>
-                                </td>
 
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+
         </div>
     );
 };

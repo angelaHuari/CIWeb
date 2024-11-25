@@ -4,10 +4,11 @@ import { FaUsers, FaLayerGroup } from 'react-icons/fa';
 import React, { useState } from 'react';
 import GestionGrupos from './GestionGrupos';
 import CiclosIndex from '../Ciclos/Index';  // Renombramos el componente importado
+import { VistaGrupos } from './VistaGrupos';
 
 export default function Index({ auth, grupos, ciclos, docentes }) {
     const [view, setView] = useState(null); // Estado para controlar qué vista se muestra
-
+    const [selectGrupo, setSelectGrupo] = useState(null);
     // Función para manejar clics en las tarjetas y cambiar de vista
     const handleCardClick = (value) => {
         setView(value); // Establece la vista de la tarjeta que fue clickeada
@@ -19,9 +20,9 @@ export default function Index({ auth, grupos, ciclos, docentes }) {
             return (
                 <>
                     <GestionGrupos
-                        grupos={grupos}
                         ciclos={ciclos}
                         docentes={docentes}
+                        selectGrupo={selectGrupo}
                     />
                 </>
 
@@ -29,7 +30,7 @@ export default function Index({ auth, grupos, ciclos, docentes }) {
         } else if (view === 'lista') {
             return (
                 <>
-
+                    <VistaGrupos grupos={grupos} ciclos={ciclos} docentes={docentes}></VistaGrupos>
                 </>
             );
         } else {
@@ -76,7 +77,7 @@ export default function Index({ auth, grupos, ciclos, docentes }) {
                                 >
                                     <FaUsers className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
                                     <h4 className="text-lg font-semibold text-[#F5D0A9]">Formulario de Grupos</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Gestiona los grupos, ciclos e idiomas asociados para los estudiantes.</p>
+                                    <p className="text-[#F5D0A9] text-sm">Gestiona los grupos asociados a las matriculas de los estudiantes.</p>
                                 </div>
 
                                 {/* Card Ciclos e Idiomas */}

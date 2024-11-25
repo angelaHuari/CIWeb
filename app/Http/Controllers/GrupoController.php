@@ -15,7 +15,7 @@ class GrupoController extends Controller
      */
     public function index()
     {
-        $grupos = Grupo::with(['ciclo', 'docente'])->paginate(10);
+        $grupos = Grupo::with(['ciclo.idioma', 'docente'])->paginate(10);
         $ciclos = Ciclo::with('idioma')->get(); // Cargar el idioma junto con el ciclo
         $docentes = Docente::all();
 
