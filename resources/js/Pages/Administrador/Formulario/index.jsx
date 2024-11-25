@@ -65,8 +65,8 @@ export default function Index({ ListaFormularios }) {
                                     aria-label="Inscripciones Aprobadas"
                                     tabIndex="0"
                                 >
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Inscripciones Aprobadas</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Consulta los formularios de inscripción aprobados.</p>
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Inscripciones Pendientes</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Consulta los formularios de inscripción pendientes de aprobación.</p>
                                 </div>
 
                                 {/* Card Inscripciones Desaprobadas */}
@@ -79,8 +79,8 @@ export default function Index({ ListaFormularios }) {
                                     aria-label="Inscripciones Desaprobadas"
                                     tabIndex="0"
                                 >
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Inscripciones Desaprobadas</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Consulta los formularios de inscripción desaprobados.</p>
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Inscripciones Aprobadas</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Consulta los formularios de inscripción aprobadas.</p>
                                 </div>
                             </div>
 
