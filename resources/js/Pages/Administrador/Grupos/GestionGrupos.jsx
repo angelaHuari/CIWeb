@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm, router, Link } from '@inertiajs/react';
 
-const GestionGrupos = ({ grupos, ciclos, docentes }) => {
+const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
     const { data, setData, processing, errors, reset } = useForm({
         periodo: '',
         modalidad: '',
@@ -105,6 +105,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
                     reset();
                     setEditing(false);
                     setSelectedGrupo(null);
+                    if (onClose) onClose(); // Cerrar el modal después de actualizar exitosamente
                 },
                 preserveScroll: true,
             });
@@ -137,6 +138,27 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
         setEditing(true);
     };
 
+    React.useEffect(() => {
+        if (editingGrupo) {
+            const horarios = editingGrupo.horario ? editingGrupo.horario.split(' - ') : [];
+            const horarioEntrada = horarios[0] ? formatTo24Hour(horarios[0]) : '';
+            const horarioSalida = horarios[1] ? formatTo24Hour(horarios[1]) : '';
+
+            setData({
+                periodo: editingGrupo.periodo || '',
+                modalidad: editingGrupo.modalidad || '',
+                nroEstudiantes: editingGrupo.nroEstudiantes || '',
+                nroVacantes: editingGrupo.nroVacantes || '',
+                horarioEntrada,
+                horarioSalida,
+                docente_id: editingGrupo.docente_id || '',
+                ciclo_id: editingGrupo.ciclo_id || '',
+            });
+            setEditing(true);
+            setSelectedGrupo(editingGrupo);
+        }
+    }, [editingGrupo]);
+
     const handleCancelEdit = () => {
         setEditing(false);
         reset();
@@ -144,6 +166,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
         setModalidadError('');
         setCicloError('');
         setDocenteError('');
+        if (onClose) onClose();
     };
 
     return (
@@ -296,57 +319,6 @@ const GestionGrupos = ({ grupos, ciclos, docentes }) => {
                     )}
                 </div>
             </form>
-
-            <div className="mt-8">
-                <h2 className="text-xl font-semibold mb-4">Grupos Registrados</h2>
-                <table className="w-full table-auto border-collapse border border-gray-300">
-                    <thead>
-                        <tr>
-                            <th className="border border-gray-300 p-2">Periodo</th>
-                            <th className="border border-gray-300 p-2">Modalidad</th>
-                            <th className="border border-gray-300 p-2">Número de Estudiantes</th>
-                            <th className="border border-gray-300 p-2">Número de Vacantes</th>
-                            <th className="border border-gray-300 p-2">Horario</th>
-                            <th className="border border-gray-300 p-2">Docente</th>
-                            <th className="border border-gray-300 p-2">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {grupos.data?.map((grupo) => (
-                            <tr key={grupo.id}>
-                                <td className="border border-gray-300 p-2">{grupo.periodo}</td>
-                                <td className="border border-gray-300 p-2">{grupo.modalidad}</td>
-                                <td className="border border-gray-300 p-2">{grupo.nroEstudiantes}</td>
-                                <td className="border border-gray-300 p-2">{grupo.nroVacantes}</td>
-                                <td className="border border-gray-300 p-2">{grupo.horario}</td>
-                                <td className="border border-gray-300 p-2">
-                                    {grupo.docente ? `${grupo.docente.nombres} ${grupo.docente.aPaterno}` : 'N/A'}
-                                </td>
-                                <td className="border border-gray-300 p-2">
-                                    <div className="flex items-center">
-                                        <button
-                                            onClick={() => handleEdit(grupo)}
-                                            className="text-[#800020] hover:text-[#6A4E3C] mr-2"
-                                        >
-                                            <img src="/imagenes/editar.png" alt="Editar" className="h-5 w-5" />
-                                        </button>
-                                        <Link
-                                            href={`/gestionestudiantesgrupo?grupo=${grupo.id}`}
-                                            className="text-green-600 hover:text-green-900 transition-colors flex items-center"
-                                        >
-                                            <img
-                                                src="/imagenes/ojo.png"
-                                                alt="Ver Estudiantes"
-                                                className="mr-2 w-5 h-5"
-                                            />
-                                        </Link>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
         </div>
     );
 };

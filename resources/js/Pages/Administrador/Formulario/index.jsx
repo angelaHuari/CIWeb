@@ -7,6 +7,7 @@ import ResumenInscripcion from './ResumenIncripcion';
 export default function Index({ ListaFormularios }) {
     const [verForm, setVerForm] = useState(false);
     const [ins, setIns] = useState(null);
+    const [filter, setFilter] = useState('Pendiente');
 
     const verFormulario = (ver) => {
         if (ver === false) {
@@ -34,7 +35,7 @@ export default function Index({ ListaFormularios }) {
         } else {
             return (
                 <div className="text-center p-6">
-                    <TablaInscripciones inscripciones={ListaFormularios} setIns={setIns}></TablaInscripciones>
+                    <TablaInscripciones inscripciones={ListaFormularios} setIns={setIns} filter={filter}></TablaInscripciones>
                 </div>
             );
         }
@@ -55,28 +56,30 @@ export default function Index({ ListaFormularios }) {
                     <div className="overflow-hidden bg-amber-50 shadow-xl sm:rounded-lg mb-10">
                         <div className="p-8 text-gray-800 text-center">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 justify-center mx-auto">
-                                {/* Card Inscripciones Aprobadas */}
+                                {/* Card Inscripciones Pendientes */}
                                 <div
                                     className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
                                     onClick={() => {
                                         setVerForm(true);
                                         setIns(null);
+                                        setFilter('Pendiente');
                                     }}
-                                    aria-label="Inscripciones Aprobadas"
+                                    aria-label="Inscripciones Pendientes"
                                     tabIndex="0"
                                 >
                                     <h4 className="text-lg font-semibold text-[#F5D0A9]">Inscripciones Pendientes</h4>
                                     <p className="text-[#F5D0A9] text-sm">Consulta los formularios de inscripción pendientes de aprobación.</p>
                                 </div>
 
-                                {/* Card Inscripciones Desaprobadas */}
+                                {/* Card Inscripciones Aprobadas */}
                                 <div
                                     className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
                                     onClick={() => {
                                         setVerForm(true);
                                         setIns(null);
+                                        setFilter('Aceptado');
                                     }}
-                                    aria-label="Inscripciones Desaprobadas"
+                                    aria-label="Inscripciones Aprobadas"
                                     tabIndex="0"
                                 >
                                     <h4 className="text-lg font-semibold text-[#F5D0A9]">Inscripciones Aprobadas</h4>

@@ -31,4 +31,9 @@ class Estudiante extends Model
     {
         return $this->belongsToMany(Grupo::class, 'matriculas', 'estudiante_id', 'grupo_id');
     }
+
+    public function matricula()
+    {
+        return $this->hasOne(Matricula::class);
+    }
 }

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import AuthenticatedLayoutDoc from '@/Layouts/AuthenticatedLayoutDoc';
 import { Head, useForm } from '@inertiajs/react';
@@ -39,6 +38,17 @@ export default function VerGrupos({ docente = {}, grupos = [], error }) {
             },
             preserveScroll: true,
         });
+    };
+
+    const handleCancelarNota = () => {
+        reset();
+        setEditingStudentId(null);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setEditingStudentId(null);
+        reset();
     };
 
     const nombreCompleto = docente?.nombres && docente?.aPaterno && docente?.aMaterno
@@ -109,7 +119,7 @@ export default function VerGrupos({ docente = {}, grupos = [], error }) {
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {grupos.map((grupo) => (
-                                        <tr key={grupo.id} className="hover:bg-[#6A4E3C]">
+                                        <tr key={grupo.id} className="hover:bg-[#F4D6C5]">
                                             <td className="px-6 py-4 whitespace-nowrap">{grupo.periodo}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">{grupo.modalidad}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">{grupo.horario}</td>
@@ -119,7 +129,7 @@ export default function VerGrupos({ docente = {}, grupos = [], error }) {
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <button
                                                     onClick={() => handleOpenModal(grupo)}
-                                                    className="bg-[#F2C49B] hover:bg-[#6A4E3C] text-white font-bold py-2 px-4 rounded"
+                                                    className="bg-[#800020] hover:bg-[#6A4E3C] text-white font-bold py-2 px-4 rounded"
                                                 >
                                                     Ver Detalles
                                                 </button>
@@ -140,7 +150,15 @@ export default function VerGrupos({ docente = {}, grupos = [], error }) {
             {isModalOpen && selectedGrupo && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-8 rounded-lg max-w-4xl w-full max-h-[80vh] overflow-y-auto">
-                        <h2 className="text-2xl font-bold mb-4">Lista de Estudiantes - {selectedGrupo.periodo}</h2>
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-bold">Lista de Estudiantes - {selectedGrupo.periodo}</h2>
+                            <button
+                                onClick={() => window.open(route('docente.reporte.grupo', { grupoId: selectedGrupo.id }), '_blank')}
+                                className="bg-[#800020] hover:bg-[#6A4E3C] text-white px-4 py-2 rounded-lg transition-colors duration-200"
+                            >
+                                Generar Reporte PDF
+                            </button>
+                        </div>
                         <div className="overflow-x-auto">
                             <table className="min-w-full table-auto">
                                 <thead className="bg-[#6A1C1C]">
@@ -160,7 +178,7 @@ export default function VerGrupos({ docente = {}, grupos = [], error }) {
                                         const isEditing = editingStudentId === estudiante.id;
 
                                         return (
-                                            <tr key={estudiante.id} className="border-b">
+                                            <tr key={estudiante.id} className="hover:bg-[#F4D6C5]">
                                                 <td className="px-4 py-2">{estudiante.nombres}</td>
                                                 <td className="px-4 py-2">{`${estudiante.aPaterno} ${estudiante.aMaterno}`}</td>
                                                 <td className="px-4 py-2">{estudiante.emailInstitucional}</td>
@@ -180,17 +198,25 @@ export default function VerGrupos({ docente = {}, grupos = [], error }) {
                                                 </td>
                                                 <td className="px-4 py-2">
                                                     {isEditing ? (
-                                                        <button
-                                                            onClick={handleGuardarNota}
-                                                            className="bg-[#F2C49B] hover:bg-[#6A4E3C] text-white font-bold py-1 px-3 rounded text-sm"
-                                                            disabled={processing}
-                                                        >
-                                                            Guardar
-                                                        </button>
+                                                        <div className="flex space-x-2">
+                                                            <button  
+                                                                onClick={handleGuardarNota}
+                                                                className="bg-[#6A4E3C] hover:bg-[#F4D6C5] text-white font-bold py-1 px-3 rounded text-sm inline-flex"
+                                                                disabled={processing}
+                                                            >
+                                                                Guardar
+                                                            </button>
+                                                            <button
+                                                                onClick={handleCancelarNota}
+                                                                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded text-sm inline-flex"
+                                                            >
+                                                                Cancelar
+                                                            </button>
+                                                        </div>
                                                     ) : (
                                                         <button
                                                             onClick={() => handleEditarNota(matricula?.id, estudiante.id)}
-                                                            className="bg-[#F2C49B] hover:bg-[#6A4E3C] text-white font-bold py-1 px-3 rounded text-sm"
+                                                            className="bg-[#800020] hover:bg-[#6A4E3C] text-white font-bold py-1 px-3 rounded text-sm"
                                                         >
                                                             Ingresar Nota
                                                         </button>
@@ -204,7 +230,7 @@ export default function VerGrupos({ docente = {}, grupos = [], error }) {
                         </div>
                         <div className="mt-6 flex justify-end">
                             <button
-                                onClick={() => setIsModalOpen(false)}
+                                onClick={handleCloseModal}
                                 className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
                             >
                                 Cerrar

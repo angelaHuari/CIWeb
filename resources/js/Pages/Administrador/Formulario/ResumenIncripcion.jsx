@@ -45,7 +45,7 @@ const ResumenInscripcion = ({ inscripcion }) => {
                     if (page.props.flash.message) {
                         alert(page.props.flash.message);
                         if (inscripcion.onStatusChange) {
-                            inscripcion.onStatusChange(inscripcion.id, 'aceptado');
+                            inscripcion.onStatusChange(inscripcion.id, 'Aceptado');
                         }
                         window.location.reload();
                     }
@@ -233,24 +233,24 @@ const ResumenInscripcion = ({ inscripcion }) => {
                         <button 
                             type="button" 
                             className={`px-6 py-2 text-white rounded transition-colors duration-200 ${
-                                inscripcion.estado === 'aceptado' 
+                                inscripcion.estado === 'Aceptado' 
                                 ? 'bg-gray-400 cursor-not-allowed' 
                                 : 'bg-green-500 hover:bg-green-600'
                             }`}
                             onClick={handleAceptar}
-                            disabled={inscripcion.estado === 'aceptado'}
+                            disabled={inscripcion.estado === 'Aceptado'}
                         >
                             Aceptar
                         </button>
                         <button 
                             type="button" 
                             className={`px-6 py-2 text-white rounded transition-colors duration-200 ${
-                                inscripcion.estado === 'aceptado' 
+                                inscripcion.estado === 'Aceptado' 
                                 ? 'bg-gray-400 cursor-not-allowed' 
                                 : 'bg-red-500 hover:bg-red-600'
                             }`}
                             onClick={handleRechazar}
-                            disabled={inscripcion.estado === 'aceptado'}
+                            disabled={inscripcion.estado === 'Aceptado'}
                         >
                             Rechazar
                         </button>

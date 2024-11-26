@@ -5,12 +5,63 @@ import DatosPagoCaja from './Formulario/DatosPagoCaja';
 import DatosPagoBanco from './Formulario/DatosPagoBanco';
 
 export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
-    const { data, setData, post, put, processing, errors, reset } = useForm({
-        // ... previous form state initialization
+    const { data, setData, post, processing, errors, reset } = useForm({
+        nombres: '',
+        aPaterno: '',
+        aMaterno: '',
+        dni: '',
+        sexo: '',
+        celular: '',
+        fechaNacimiento: '',
+        tipoAlumno: '',
+        programaEstudios: '',
+        semestre: '',
+        correoInstitucional: '',
+        email: '',
+        anioEgreso: '',
+        institucionProviene: '',
+        medioPublicitario: '',
+        cicloIngles: '',
+        horarioIngles: '',
+        realizoInglesBasico: '',
+        realizoInglesIntermedio: '',
+        tienecertificadoIngles: '',
+        tieneCertificadoIntermedio: '',
+        medioPago: '',
+        fechaPago: '',
+        montoPago: 0,
+        nroComprobante: '',
+        imgComprobante: null,
+        estado: 'Pendiente'
     });
 
     const handleSubmit = (e) => {
-        // ... previous submit logic
+        e.preventDefault();
+        
+        // Crear un FormData si hay un archivo
+        const formData = new FormData();
+        
+        // Agregar todos los campos al FormData
+        Object.keys(data).forEach(key => {
+            if (key === 'imgComprobante' && data[key] instanceof File) {
+                formData.append(key, data[key]);
+            } else if (data[key] !== null && data[key] !== undefined) {
+                formData.append(key, data[key]);
+            }
+        });
+
+        // Enviar el formulario usando post
+        post(route('formulario.store'), formData, {
+            forceFormData: true,
+            onSuccess: () => {
+                reset();
+                alert('Formulario enviado correctamente');
+            },
+            onError: (errors) => {
+                console.error(errors);
+                alert('Error al enviar el formulario');
+            }
+        });
     };
 
     return (

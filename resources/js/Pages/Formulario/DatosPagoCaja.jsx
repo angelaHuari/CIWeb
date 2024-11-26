@@ -34,9 +34,6 @@ const DatosPagoCaja = ({ data, setData }) => {
             <select value={data.montoPago || 0} onChange={(e) => setData({ ...data, montoPago: Number(e.target.value) })}>
                 <option value={0}>Seleccione...</option>
                 <option value={100} >100 soles (Pago mes actual)</option>
-                <option value={200}>200 soles (Pago mes actual + 01 mes de adelanto)</option>
-                <option value={300}>300 soles (Pago mes actual + 02 meses de adelanto)</option>
-                <option value={400}>400 soles (Pago completo del Ciclo)</option>
             </select>
 
             <label>Adjuntar Voucher de Depósito Bancario:</label>

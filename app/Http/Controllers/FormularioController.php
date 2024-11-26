@@ -188,7 +188,7 @@ class FormularioController extends Controller
             
 
             // Actualizar el estado del formulario
-            $formulario->estado = 'aceptado';
+            $formulario->estado = 'Aceptado';
             $formulario->save();
 
             return redirect()->back()->with([

@@ -28,6 +28,8 @@ Route::get('/', function () {
     ]);
 });
 
+Route::resource('formulario', FormularioController::class);
+
 //Para Todos los Usuarios
 //verifica que sea un usuario
 Route::get('/inicio', function () {
@@ -75,9 +77,10 @@ Route::middleware('EsAdmin')->group(function () {
 
     Route::post('/aprobar',[FuncionAdminController::class, 'aprobar'])->name('matricula.aprobar');
     Route::post('/rechazar',[FuncionAdminController::class, 'rechazar'])->name('matricula.rechazar');
+    
+    Route::get('/reporte-estudiantes-grupo/{grupoId}', [GrupoController::class, 'generarReporte'])
+        ->name('reporte.estudiantes.grupo');
 });
-
-Route::resource('formulario', FormularioController::class);
 
 
 
@@ -94,6 +97,8 @@ Route::middleware('EsEstudiante')->group(function () {
 Route::middleware('EsDocente')->group(function () {
     Route::get('docentes', [FuncionDocenteController::class, 'verGrupos'])->name('docentes.verGrupos');
     Route::post('/docentes/guardar-nota', [FuncionDocenteController::class, 'guardarNota'])->name('docente.guardar-nota');
+    Route::get('/reporte-grupo/{grupoId}', [FuncionDocenteController::class, 'generarReporteGrupo'])
+        ->name('docente.reporte.grupo');
 });
 
 require __DIR__ . '/auth.php';

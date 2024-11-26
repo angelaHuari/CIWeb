@@ -8,6 +8,7 @@ use App\Models\Docente;
 use App\Models\Grupo;
 use App\Models\Matricula;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class FuncionDocenteController extends Controller
 {
@@ -51,6 +52,30 @@ class FuncionDocenteController extends Controller
             return back()->with('success', 'Nota guardada correctamente')->with('matricula', $matricula);
         } catch (\Exception $e) {
             return back()->with('error', 'Error al guardar la nota: ' . $e->getMessage());
+        }
+    }
+
+    public function generarReporteGrupo($grupoId)
+    {
+        try {
+            $grupo = Grupo::with([
+                'docente', 
+                'ciclo.idioma', 
+                'estudiantes' => function($query) use ($grupoId) {
+                    $query->with(['matricula' => function($query) use ($grupoId) {
+                        $query->where('grupo_id', $grupoId);
+                    }]);
+                }
+            ])->findOrFail($grupoId);
+
+            $pdf = PDF::loadView('reportes.estudiantes-grupo-docente', [
+                'grupo' => $grupo,
+                'estudiantes' => $grupo->estudiantes
+            ]);
+
+            return $pdf->download('reporte-estudiantes-'.$grupo->periodo.'.pdf');
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al generar el reporte: ' . $e->getMessage()], 500);
         }
     }
 }

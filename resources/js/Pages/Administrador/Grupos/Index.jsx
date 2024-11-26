@@ -4,33 +4,94 @@ import { FaUsers, FaLayerGroup } from 'react-icons/fa';
 import React, { useState } from 'react';
 import GestionGrupos from './GestionGrupos';
 import CiclosIndex from '../Ciclos/Index';  // Renombramos el componente importado
+import GestionEstudiantesGrupo from './GestionEstudiantesGrupo';
 
 export default function Index({ auth, grupos, ciclos, docentes }) {
     const [view, setView] = useState(null); // Estado para controlar qué vista se muestra
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedGrupo, setSelectedGrupo] = useState(null);
+    const [isEstudiantesModalOpen, setIsEstudiantesModalOpen] = useState(false);
+    const [selectedGrupoEstudiantes, setSelectedGrupoEstudiantes] = useState(null);
 
     // Función para manejar clics en las tarjetas y cambiar de vista
     const handleCardClick = (value) => {
         setView(value); // Establece la vista de la tarjeta que fue clickeada
     };
 
-    const renderContent = () => {
-        // Verifica qué vista está seleccionada
-        if (view === 'formulario') {
-            return (
-                <>
-                    <GestionGrupos
-                        grupos={grupos}
-                        ciclos={ciclos}
-                        docentes={docentes}
-                    />
-                </>
+    const handleEdit = (grupo) => {
+        setSelectedGrupo(grupo);
+        setIsModalOpen(true);
+    };
 
-            );
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedGrupo(null);
+    };
+
+    const handleVerEstudiantes = (grupo) => {
+        console.log('Grupo seleccionado:', grupo); // Para depuración
+        setSelectedGrupoEstudiantes(grupo);
+        setIsEstudiantesModalOpen(true);
+    };
+
+    const handleCloseEstudiantesModal = () => {
+        setIsEstudiantesModalOpen(false);
+        setSelectedGrupoEstudiantes(null);
+    };
+
+    const renderContent = () => {
+        if (view === 'formulario') {
+            return <GestionGrupos grupos={grupos} ciclos={ciclos} docentes={docentes} />;
         } else if (view === 'lista') {
             return (
-                <>
-
-                </>
+                <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
+                    <h2 className="text-xl font-semibold mb-4">Lista de Grupos</h2>
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full table-auto whitespace-nowrap">
+                            <thead className="bg-[#800020] text-white">
+                                <tr>
+                                    <th className="px-6 py-3 text-left" style={{ minWidth: '120px' }}>Periodo</th>
+                                    <th className="px-6 py-3 text-left" style={{ minWidth: '120px' }}>Modalidad</th>
+                                    <th className="px-6 py-3 text-left" style={{ minWidth: '180px' }}>Número de Estudiantes</th>
+                                    <th className="px-6 py-3 text-left" style={{ minWidth: '160px' }}>Número de Vacantes</th>
+                                    <th className="px-6 py-3 text-left" style={{ minWidth: '160px' }}>Horario</th>
+                                    <th className="px-6 py-3 text-left" style={{ minWidth: '200px' }}>Docente</th>
+                                    <th className="px-6 py-3 text-left" style={{ minWidth: '100px' }}>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {grupos.data?.map((grupo) => (
+                                    <tr key={grupo.id} className="border-b hover:bg-[#F4D6C5] cursor-pointer">
+                                        <td className="px-6 py-3">{grupo.periodo || 'No disponible'}</td>
+                                        <td className="px-6 py-3">{grupo.modalidad || 'No disponible'}</td>
+                                        <td className="px-6 py-3">{grupo.nroEstudiantes || 'No disponible'}</td>
+                                        <td className="px-6 py-3">{grupo.nroVacantes || 'No disponible'}</td>
+                                        <td className="px-6 py-3">{grupo.horario || 'No disponible'}</td>
+                                        <td className="px-6 py-3">
+                                            {grupo.docente ? `${grupo.docente.nombres} ${grupo.docente.aPaterno}` : 'N/A'}
+                                        </td>
+                                        <td className="px-6 py-3">
+                                            <div className="flex items-center">
+                                                <button
+                                                    onClick={() => handleEdit(grupo)}
+                                                    className="text-[#800020] hover:text-[#6A4E3C] mr-2"
+                                                >
+                                                    <img src="/imagenes/editar.png" alt="Editar" className="h-5 w-5" />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleVerEstudiantes(grupo)}
+                                                    className="text-green-600 hover:text-green-900 transition-colors flex items-center"
+                                                >
+                                                    <img src="/imagenes/ojo.png" alt="Ver Estudiantes" className="h-5 w-5" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             );
         } else {
             return (
@@ -98,6 +159,58 @@ export default function Index({ auth, grupos, ciclos, docentes }) {
                     </div>
                 </div>
             </div>
+
+            {/* Modal */}
+            {isModalOpen && (
+                <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex">
+                    <div className="relative p-8 bg-white w-full max-w-4xl m-auto rounded-lg">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-bold text-[#800020]">Editar Grupo</h2>
+                            <button
+                                onClick={handleCloseModal}
+                                className="text-gray-500 hover:text-gray-700"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <GestionGrupos
+                            grupos={grupos}
+                            ciclos={ciclos}
+                            docentes={docentes}
+                            editingGrupo={selectedGrupo}
+                            onClose={handleCloseModal}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* Estudiantes Modal */}
+            {isEstudiantesModalOpen && (
+                <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex">
+                    <div className="relative p-8 bg-white w-full max-w-6xl m-auto rounded-lg">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-bold text-[#800020]">
+                                Lista de Estudiantes - {selectedGrupoEstudiantes?.periodo} {selectedGrupoEstudiantes?.modalidad}
+                            </h2>
+                            <button
+                                onClick={handleCloseEstudiantesModal}
+                                className="text-gray-500 hover:text-gray-700"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <GestionEstudiantesGrupo
+                            auth={auth}
+                            grupos={selectedGrupoEstudiantes ? [selectedGrupoEstudiantes] : []}
+                            isModal={true}
+                        />
+                    </div>
+                </div>
+            )}
         </AuthenticatedLayout>
     );
 }
