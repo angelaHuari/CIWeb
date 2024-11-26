@@ -14,30 +14,35 @@ class IdiomaController extends Controller
     public function index()
     {
         $idiomas = Idioma::all();
-        return Inertia::render('Administrador/Idiomas/Index',['Listaidiomas'=>$idiomas]);
+        return Inertia::render('Administrador/Idiomas/Index', ['Listaidiomas' => $idiomas]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-         // Validar la solicitud
-         $request->validate([
-            'nombre' => 'required|string|max:30',
+        // Validar la solicitud
+        $request->validate([
+            'nombre' => 'required|unique:idiomas|string|max:30',
+        ], [
+            'nombre.unique' => 'El nombre de este idioma ya existe, por favor ingrese otro',
+            'nombre.required' => 'El campo nombre es obligatorio.', 
+            'nombre.max' => 'El nombre no puede tener más de 30 caracteres.',
         ]);
+
+        // Crear el nuevo idioma
         Idioma::create([
-            'nombre'=>$request->nombre,
+            'nombre' => $request->nombre,
         ]);
-        return redirect()->route('idioma.index');
+
+        // Redirigir al usuario con un mensaje de éxito
+        return redirect()->route('idioma.index')->with('success', 'Idioma creado exitosamente');
     }
 
     /**
@@ -67,7 +72,7 @@ class IdiomaController extends Controller
         ]);
 
         // Buscar el idioma por su ID
-        $idioma = Idioma::findOrFail($id); 
+        $idioma = Idioma::findOrFail($id);
 
         // Actualizar los atributos del idioma
         $idioma->nombre = $validatedData['nombre'];

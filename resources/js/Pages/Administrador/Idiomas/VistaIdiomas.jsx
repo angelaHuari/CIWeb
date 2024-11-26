@@ -26,9 +26,6 @@ const VistaIdiomas = ({ idiomas = [] }) => {
       post(route('idioma.store'));
 
     }
-    //recargar la pagina
-    window.location.reload();
-
     // Limpiar el formulario
     setData('nombre', '');
   };
@@ -60,6 +57,7 @@ const VistaIdiomas = ({ idiomas = [] }) => {
             >
               {selectedLanguage ? 'Modificar' : 'Agregar'}
             </button>
+            {errors.nombre && <span className="text-red-500 text-sm">{errors.nombre}</span>}
 
             {selectedLanguage && (
               <button

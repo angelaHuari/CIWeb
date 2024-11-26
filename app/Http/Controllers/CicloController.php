@@ -16,7 +16,7 @@ class CicloController extends Controller
     {
         $ciclos = Ciclo::with('idioma')->paginate(10);
         $idiomas = Idioma::all();
-        return Inertia::render('Administrador/Ciclos/Index',['ListaCiclos'=>$ciclos,'ListaIdiomas'=>$idiomas,]);
+        return Inertia::render('Administrador/Ciclos/Index', ['ListaCiclos' => $ciclos, 'ListaIdiomas' => $idiomas,]);
     }
 
     /**
@@ -32,20 +32,24 @@ class CicloController extends Controller
      */
     public function store(Request $request)
     {
-        
-         // Validar la solicitud
-        $ciclo=$request->validate([
-            'nombre' => 'required|string|max:30',
+
+        // Validar la solicitud
+        $request->validate([
+            'nombre' => 'required|string|max:20|unique:ciclos,nombre,NULL,id,idioma_id,' . $request->idioma_id . ',nivel,' . $request->nivel,
             'nivel' => 'required|numeric|min:1|max:30',
             'idioma_id' => 'required|exists:idiomas,id',
+        ], [
+            'nombre.unique' => 'Ya existe un ciclo con el mismo nombre, nivel e idioma.',
+            'nombre.required' => 'El campo de nombre es obligatorio',
+            'nombre.max' => 'El campo de nombre no puede tener más de 20 caracteres',
         ]);
-        
+
         Ciclo::create([
-            'nombre'=>$request->nombre,
-            'nivel'=>$request->nivel,
-            'idioma_id'=>$request->idioma_id,
+            'nombre' => $request->nombre,
+            'nivel' => $request->nivel,
+            'idioma_id' => $request->idioma_id,
         ]);
-       
+
         return redirect()->route('ciclo.index');
     }
 
@@ -72,14 +76,18 @@ class CicloController extends Controller
     {
         // Validar los datos de entrada
         $validatedData = $request->validate([
-            'nombre' => 'required|string|max:40',
+            'nombre' => 'required|string|max:20|unique:ciclos,nombre,NULL,id,idioma_id,' . $request->idioma_id . ',nivel,' . $request->nivel,
             'periodo' => 'required|string|max:10',
             'nivel' => 'required|numeric|min:1|max:30',
             'idioma_id' => 'required|exists:idiomas,id',
+        ], [
+            'nombre.unique' => 'Ya existe un ciclo con el mismo nombre, nivel e idioma.',
+            'nombre.required' => 'El campo de nombre es obligatorio',
+            'nombre.max' => 'El campo de nombre no puede tener más de 20 caracteres',
         ]);
 
         // Buscar el idioma por su ID
-        $idioma = Ciclo::findOrFail($id); 
+        $idioma = Ciclo::findOrFail($id);
 
         // Actualizar los atributos del idioma
         $idioma->nombre = $validatedData['nombre'];

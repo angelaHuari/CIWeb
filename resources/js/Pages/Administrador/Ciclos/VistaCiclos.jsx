@@ -5,7 +5,7 @@ import { useForm, Link } from '@inertiajs/react';
 const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
     const [selectedCycle, setSelectedCycle] = useState(null); // Ciclo seleccionado para edición
 
-    const { data, setData, post, put, processing, errors } = useForm({
+    const { data, setData, post, put, processing, errors,reset } = useForm({
         nombre: '',
         nivel: 1,
         idioma_id: '',
@@ -45,6 +45,11 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
             nivel: cycle.nivel,
             idioma_id: cycle.idioma_id,
         });
+    };
+    // Cancelar la edición de un ciclo
+    const handleCancel = () => {
+        setSelectedCycle(null);
+        reset();
     };
 
     return (
@@ -88,6 +93,7 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                                         placeholder="Nivel"
                                     />
                                 </div>
+                                {errors.nivel && <span className="text-red-500 text-sm">{errors.nivel}</span>}
 
                                 {/* Columna 3: Idioma */}
                                 <div>
@@ -97,8 +103,9 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                                     <select
                                         id="idioma_id"
                                         value={data.idioma_id}
-                                        onChange={(e) => setData('idioma_id',  e.target.value.toUpperCase())}
+                                        onChange={(e) => setData('idioma_id', e.target.value.toUpperCase())}
                                         required
+                                        disabled={selectedCycle !== null}
                                         className="mt-1 p-2 border border-gray-300 rounded w-full uppercase"
                                     >
                                         <option value="" disabled>Selecciona un Idioma</option>
@@ -108,7 +115,7 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                                     </select>
                                 </div>
                             </div>
-
+                            {errors.nombre && <span className="text-red-500 text-sm">{errors.nombre}</span>}
 
                             <div className="flex justify-end">
                                 <button
@@ -120,7 +127,7 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
 
                                 {selectedCycle && (
                                     <button
-                                        onClick={() => setSelectedCycle(null)}
+                                        onClick={() => handleCancel()}
                                         className="bg-red-500 text-white px-4 py-2 rounded w-full md:w-auto hover:bg-red-600"
                                     >
                                         Cancelar
