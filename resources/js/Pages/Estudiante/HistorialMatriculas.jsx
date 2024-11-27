@@ -23,7 +23,7 @@ function HistorialMatriculas({ matriculas = [] }) {
                                 {matriculas.data.map((matricula) => (
                                     <tr key={matricula.id} className="border-b hover:bg-[#F4D6C5] items-center text-center">
                                         <td className="p-3">{matricula.fecha}</td>
-                                        <td className="p-3">{matricula.grupo.ciclo.nombre}</td>
+                                        <td className="p-3">{matricula.grupo.periodo} {matricula.grupo.ciclo.idioma.nombre} {matricula.grupo.ciclo.nombre} {matricula.grupo.ciclo.nivel}</td>
                                         <td className="p-3">{matricula.grupo.horario}</td>
                                         <td className="p-3">{matricula.nota}</td>
                                     </tr>
