@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { FaUserGraduate, FaCreditCard, FaRegListAlt } from 'react-icons/fa';
+import { FaUserGraduate, FaCreditCard, FaRegListAlt,FaPen  } from 'react-icons/fa';
 import React, { useState } from 'react';
 import VistaMatriculas from './VistaMatriculas';
 import VistaFormularios from './VistaFormularios';

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from '@inertiajs/react';
+import { FaEye, FaPen } from 'react-icons/fa';
 
 const VistaIdiomas = ({ idiomas = [] }) => {
   const { data, setData, post, put, processing, errors } = useForm({
@@ -35,6 +36,10 @@ const VistaIdiomas = ({ idiomas = [] }) => {
     setSelectedLanguage(language.id);
     setData('nombre', language.nombre);
   };
+  const handleCancel = () => {
+    setSelectedLanguage(null);
+    setData('nombre', '');
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-[#800020] to-[#F5D0A9] py-12">
@@ -51,22 +56,26 @@ const VistaIdiomas = ({ idiomas = [] }) => {
               required
               className="p-2 border border-gray-300 rounded mb-4 md:mb-0 md:mr-4 w-full md:w-auto"
             />
-            <button
-              type="submit"
-              className={`text-white px-4 py-2 rounded ${selectedLanguage ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600'}`}
-            >
-              {selectedLanguage ? 'Modificar' : 'Agregar'}
-            </button>
-            {errors.nombre && <span className="text-red-500 text-sm">{errors.nombre}</span>}
-
-            {selectedLanguage && (
+            <div className="flex justify-end">
               <button
-                onClick={() => setSelectedLanguage(null)}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                type="submit"
+                className={`text-white px-4 py-2 rounded ${selectedLanguage ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600'}`}
               >
-                Cancelar Edición
+                {selectedLanguage ? 'Modificar' : 'Agregar'}
               </button>
-            )}
+
+              {errors.nombre && <span className="text-red-500 text-sm">{errors.nombre}</span>}
+
+              {selectedLanguage && (
+                <button
+                  onClick={handleCancel}
+                  className="bg-gray-500 text-white px-4 py-2 rounded w-full md:w-auto hover:bg-black-600"
+                >
+                  Cancelar
+                </button>
+              )}
+            </div>
+
           </form>
 
         </div>
@@ -86,9 +95,9 @@ const VistaIdiomas = ({ idiomas = [] }) => {
                     <td className="border-b border-gray-300 px-4 py-2">
                       <button
                         onClick={() => handleEdit(language)}
-                        className="bg-black text-white px-3 py-1 rounded mr-2 hover:bg-green-600"
+                        className="text-[#800020] hover:text-[#6A4E3C]"
                       >
-                        Editar
+                        <FaPen className="text-xl mr-3" />
                       </button>
                     </td>
                   </tr>

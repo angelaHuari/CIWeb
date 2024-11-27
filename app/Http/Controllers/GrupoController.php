@@ -17,7 +17,7 @@ class GrupoController extends Controller
      */
     public function index()
     {
-        $grupos = Grupo::with(['ciclo', 'docente', 'estudiantes'])->paginate(10); // Añadimos 'estudiantes' a la relación
+        $grupos = Grupo::with(['ciclo.idioma', 'docente', 'estudiantes'])->paginate(10); // Añadimos 'estudiantes' a la relación
         $ciclos = Ciclo::with('idioma')->get(); // Cargar el idioma junto con el ciclo
         $docentes = Docente::all();
 
@@ -79,7 +79,7 @@ class GrupoController extends Controller
     {
         $request->validate([
             'modalidad' => 'required|string',
-            'nroEstudiantes' => 'required|integer',
+            'nroEstudiantes' => 'integer',
             'nroVacantes' => 'required|integer',
             'horario' => 'required|string',
             'docente_id' => 'required|exists:docentes,id',

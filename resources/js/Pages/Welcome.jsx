@@ -6,7 +6,7 @@ import DatosPagoCaja from './Formulario/DatosPagoCaja';
 import DatosPagoBanco from './Formulario/DatosPagoBanco';
 
 export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
-    const { data, setData, post, processing, errors: serverErrors, reset } = useForm({
+    const { data, setData, post, processing, errors: serverErrors, reset,onSuccess } = useForm({
         nombres: '',
         aPaterno: '',
         aMaterno: '',
@@ -133,6 +133,7 @@ export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
                 alert('Error al enviar el formulario');
             }
         });
+        
     };
 
     return (

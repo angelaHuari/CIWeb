@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { FaEye } from 'react-icons/fa';
+import { FaEye, FaPen } from 'react-icons/fa';
 import FormularioDocentes from './FormularioDocentes';
 
 const TablaDocentes = ({ docentes }) => {
@@ -58,15 +58,16 @@ const TablaDocentes = ({ docentes }) => {
                                 <td className="px-6 py-3">
                                     <button
                                         onClick={() => handleShowModalEdit(docente)}
-                                        className="text-[#800020] hover:text-[#6A4E3C] mr-2"
+                                        className="text-[#800020] hover:text-[#6A4E3C]"
                                     >
-                                        <img src="/imagenes/editar.png" alt="Editar" className="h-5 w-5" />
+                                        <FaPen className="text-xl mr-3" />
+                                        
                                     </button>
                                     <button
                                         onClick={() => handleShowModal(docente)}
                                         className="text-[#800020] hover:text-[#6A4E3C]"
                                     >
-                                        <img src="/imagenes/ojo.png" alt="Editar" className="h-5 w-5" />
+                                        <FaEye className="text-xl" />
                                     </button>
                                 </td>
                             </tr>

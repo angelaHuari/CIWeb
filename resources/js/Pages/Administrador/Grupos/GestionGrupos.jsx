@@ -14,8 +14,8 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
     });
 
     const periodOptions = [
-        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO',
+        'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'
     ];
 
     const [editing, setEditing] = useState(false);
@@ -75,9 +75,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
         if (!data.docente_id) {
             validationErrors.push('Por favor, seleccione un docente válido.');
         }
-        if (!data.nroEstudiantes || data.nroEstudiantes < 0) {
-            validationErrors.push('Por favor, ingrese un número válido de estudiantes.');
-        }
+        
         if (!data.nroVacantes || data.nroVacantes < 0) {
             validationErrors.push('Por favor, ingrese un número válido de vacantes.');
         }
@@ -147,7 +145,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
             setData({
                 periodo: editingGrupo.periodo || '',
                 modalidad: editingGrupo.modalidad || '',
-                nroEstudiantes: editingGrupo.nroEstudiantes || '',
+                nroEstudiantes: editingGrupo.nroEstudiantes || 0,
                 nroVacantes: editingGrupo.nroVacantes || '',
                 horarioEntrada,
                 horarioSalida,
@@ -182,7 +180,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div>
                         <label className="block text-sm font-medium mb-1">Periodo</label>
                         <select
@@ -207,23 +205,12 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                             className="w-full rounded-md border-gray-300 shadow-sm"
                         >
                             <option value="">Seleccione una modalidad</option>
-                            <option value="Presencial">Presencial</option>
-                            <option value="Virtual">Virtual</option>
+                            <option value="PRESENCIAL">PRESENCIAL</option>
+                            <option value="VIRTUAL">VIRTUAL</option>
                         </select>
                         {modalidadError && (
                             <div className="text-red-500 text-sm mt-1">{modalidadError}</div>
                         )}
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Número de Estudiantes</label>
-                        <input
-                            type="number"
-                            name="nroEstudiantes"
-                            value={data.nroEstudiantes}
-                            onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm"
-                        />
                     </div>
 
                     <div>
@@ -270,7 +257,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                             <option value="">Seleccione un ciclo</option>
                             {ciclos?.map((ciclo) => (
                                 <option key={ciclo.id} value={ciclo.id}>
-                                    {`${ciclo.idioma.nombre} - ${ciclo.nombre}`}
+                                    {`${ciclo.idioma.nombre} - ${ciclo.nombre} - ${ciclo.nivel}`}
                                 </option>
                             ))}
                         </select>
@@ -298,26 +285,37 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                             <div className="text-red-500 text-sm mt-1">{docenteError}</div>
                         )}
                     </div>
+                    <div >
+                        <input
+                            type="number"
+                            name="nroEstudiantes"
+                            value={data.nroEstudiantes || 0}
+                            onChange={handleChange}
+                            className="w-full rounded-md border-gray-300 shadow-sm"
+                            hidden
+                        />
+                    </div>
+                    <div className="flex items-center justify-end mt-6">
+                        <button
+                            type="submit"
+                            disabled={processing}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
+                        >
+                            {editing ? 'Actualizar Grupo' : 'Registrar Grupo'}
+                        </button>
+                        {editing && (
+                            <button
+                                type="button"
+                                onClick={handleCancelEdit}
+                                className="ml-4 text-gray-500"
+                            >
+                                Cancelar
+                            </button>
+                        )}
+                    </div>
                 </div>
 
-                <div className="flex items-center justify-end mt-6">
-                    <button
-                        type="submit"
-                        disabled={processing}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
-                    >
-                        {editing ? 'Actualizar Grupo' : 'Registrar Grupo'}
-                    </button>
-                    {editing && (
-                        <button
-                            type="button"
-                            onClick={handleCancelEdit}
-                            className="ml-4 text-gray-500"
-                        >
-                            Cancelar
-                        </button>
-                    )}
-                </div>
+
             </form>
         </div>
     );

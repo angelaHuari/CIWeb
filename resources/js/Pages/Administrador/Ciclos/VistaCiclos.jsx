@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useForm, Link } from '@inertiajs/react';
-
+import { FaEye, FaPen } from 'react-icons/fa';
 
 const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
     const [selectedCycle, setSelectedCycle] = useState(null); // Ciclo seleccionado para edición
 
-    const { data, setData, post, put, processing, errors,reset } = useForm({
+    const { data, setData, post, put, processing, errors, reset } = useForm({
         nombre: '',
         nivel: 1,
         idioma_id: '',
@@ -120,7 +120,7 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                             <div className="flex justify-end">
                                 <button
                                     type="submit"
-                                    className={`bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto ${selectedCycle ? 'bg-green-500' : 'bg-blue-500'} hover:bg-blue-600`}
+                                    className={`bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto ${selectedCycle ? 'bg-green-500' : 'bg-blue-500'} hover:bg-blue-600 mr-2`}
                                 >
                                     {selectedCycle ? 'Modificar' : 'Agregar'}
                                 </button>
@@ -128,7 +128,7 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                                 {selectedCycle && (
                                     <button
                                         onClick={() => handleCancel()}
-                                        className="bg-red-500 text-white px-4 py-2 rounded w-full md:w-auto hover:bg-red-600"
+                                        className="bg-gray-500 text-white px-4 py-2 rounded w-full md:w-auto hover:bg-black-600"
                                     >
                                         Cancelar
                                     </button>
@@ -143,12 +143,12 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                 {/* Tabla de ciclos */}
                 <div className="overflow-x-auto mt-6">
                     <table className="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg">
-                        <thead className="bg-[#800020] text-white">
+                        <thead className="bg-[#800020] text-white text-center">
                             <tr>
-                                <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Idioma</th>
-                                <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Nombre del Ciclo</th>
-                                <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Nivel</th>
-                                <th className="border-b-2 border-gray-300 px-4 py-2 text-left">Acciones</th>
+                                <th className="border-b-2 border-gray-300 px-4 py-2 ">Idioma</th>
+                                <th className="border-b-2 border-gray-300 px-4 py-2 ">Nombre del Ciclo</th>
+                                <th className="border-b-2 border-gray-300 px-4 py-2 ">Nivel</th>
+                                <th className="border-b-2 border-gray-300 px-4 py-2 ">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -161,9 +161,9 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                                         <td className="border-b border-gray-300 px-4 py-2">
                                             <button
                                                 onClick={() => handleEdit(cycle)}
-                                                className="bg-black text-white px-3 py-1 rounded hover:bg-green-600 w-full md:w-auto"
+                                                className="text-[#800020] hover:text-[#6A4E3C]"
                                             >
-                                                Editar
+                                                <FaPen className="text-xl mr-3" />
                                             </button>
                                         </td>
                                     </tr>

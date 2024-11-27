@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
+import { FaUserGraduate, FaCreditCard, FaRegListAlt,FaPen  } from 'react-icons/fa';
 
 const FormularioDocentes = ({ Docente, closeModal }) => {
 
@@ -29,7 +30,7 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
         setPreviewImage(docente.fotoDocente);  // Mantener la imagen previa
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-    
+
 
     useEffect(() => {
         if (Docente != null) {
@@ -40,7 +41,7 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
 
     }, [Docente]);
 
-  
+
     const validarFecha = (fecha) => {
         const fechaIngresada = new Date(fecha);
         const hoy = new Date();
@@ -62,8 +63,12 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
 
     const handleChange = (e) => {
         const key = e.target.name;
-        const value = e.target.type === 'file' ? e.target.files[0] : e.target.value;
-        
+        const value = e.target.type === 'file'
+            ? e.target.files[0]
+            : e.target.name === 'emailInstitucional'
+                ? e.target.value
+                : e.target.value.toUpperCase();
+
 
         // Validación de email institucional
         if (key === 'emailInstitucional') {
@@ -175,7 +180,7 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
                 encType="multipart/form-data"
             >
                 {/* Fila con dos columnas */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                     <div>
                         <label>Nombres</label>
                         <input
@@ -202,11 +207,6 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
                             <span className="text-red-500">{errors.aPaterno}</span>
                         )}
                     </div>
-
-                </div>
-
-                {/* Fila con dos columnas */}
-                <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label>Apellido Materno</label>
                         <input
@@ -220,6 +220,12 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
                             <span className="text-red-500">{errors.aMaterno}</span>
                         )}
                     </div>
+
+                </div>
+
+                {/* Fila con dos columnas */}
+                <div className="grid grid-cols-3 gap-4">
+
                     <div>
                         <label>Sexo</label>
                         <select
@@ -235,10 +241,6 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
                             <span className="text-red-500">{errors.sexo}</span>
                         )}
                     </div>
-                </div>
-
-                {/* Fila con dos columnas */}
-                <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label>DNI</label>
                         <input
@@ -267,9 +269,20 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
                             <span className="text-red-500">{errors.celular}</span>
                         )}
                     </div>
+
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                {/* Fila con dos columnas */}
+                <div className="grid grid-cols-3 gap-4">
+                    <div>
+                        <label>Foto del Docente</label>
+                        <input
+                            type="file"
+                            name="fotoDocente"
+                            onChange={handleChange}
+                            className="border p-2 w-full"
+                        />
+                    </div>
                     <div>
                         <label>Fecha de Nacimiento</label>
                         <input
@@ -300,29 +313,23 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
 
                 </div>
 
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
 
+                        {errors.fotoDocente && (
+                            <span className="text-red-500">{errors.fotoDocente}</span>
+                        )}
+                        {previewImage && (
+                            <div className="mt-2">
+                                <img
+                                    src={previewImage}
+                                    alt="Vista previa"
+                                    className="w-32 h-32 object-cover rounded"
+                                />
+                            </div>
+                        )}
+                    </div>
 
-
-                <div>
-                    <label>Foto del Docente</label>
-                    <input
-                        type="file"
-                        name="fotoDocente"
-                        onChange={handleChange}
-                        className="border p-2 w-full"
-                    />
-                    {errors.fotoDocente && (
-                        <span className="text-red-500">{errors.fotoDocente}</span>
-                    )}
-                    {previewImage && (
-                        <div className="mt-2">
-                            <img
-                                src={previewImage}
-                                alt="Vista previa"
-                                className="w-32 h-32 object-cover rounded"
-                            />
-                        </div>
-                    )}
                 </div>
 
                 <div className="flex gap-2">
