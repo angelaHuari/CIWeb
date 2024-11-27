@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/react';
 import React, { useState } from 'react';
 import FormularioDocentes from './FormularioDocentes';
 import TablaDocentes from './TablaDocentes';
+import { FaUsers, FaLayerGroup, FaEye, FaPen } from 'react-icons/fa';
 
 export default function Index({ ListaDocentes }) {
     const [view, setView] = useState(null); // Estado para controlar qué vista se muestra
@@ -56,25 +57,27 @@ export default function Index({ ListaDocentes }) {
                     {/* Card Principal - Opciones */}
                     <div className="overflow-hidden bg-amber-50 shadow-xl sm:rounded-lg mb-10">
                         <div className="p-8 text-gray-800 text-center">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 justify-center mx-auto">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 justify-center mx-auto">
                                 {/* Card Agregar Docente */}
                                 <div
-                                    className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
+                                    className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer "
                                     onClick={() => handleCardClick('agregar')}
                                     aria-label="Agregar Docente"
                                     tabIndex="0"
                                 >
+                                    <FaUsers className="text-3xl md:text-4xl text-[#F5D0A9] mb-2 md:mb-4 mx-auto transition-transform transform hover:scale-110" />
                                     <h4 className="text-lg font-semibold text-[#F5D0A9]">Agregar Docente</h4>
                                     <p className="text-[#F5D0A9] text-sm">Llena el formulario para agregar un nuevo docente.</p>
                                 </div>
 
                                 {/* Card Lista de Docentes */}
                                 <div
-                                    className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
+                                    className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer "
                                     onClick={() => handleCardClick('lista')}
                                     aria-label="Lista Docentes"
                                     tabIndex="0"
                                 >
+                                    <FaLayerGroup className="text-3xl md:text-4xl text-[#F5D0A9] mb-2 md:mb-4 mx-auto transition-transform transform hover:scale-110" />
                                     <h4 className="text-lg font-semibold text-[#F5D0A9]">Lista de Docentes</h4>
                                     <p className="text-[#F5D0A9] text-sm">Consulta y administra la lista de docentes registrados.</p>
                                 </div>

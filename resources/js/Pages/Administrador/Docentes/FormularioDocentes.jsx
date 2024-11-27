@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
-import { FaUserGraduate, FaCreditCard, FaRegListAlt,FaPen  } from 'react-icons/fa';
+import { FaUserGraduate, FaCreditCard, FaRegListAlt, FaPen } from 'react-icons/fa';
 
 const FormularioDocentes = ({ Docente, closeModal }) => {
 
@@ -168,15 +168,9 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
 
     return (
         <div className="container mx-auto p-4 space-y-6">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">
-                    {isEdit ? 'Editar Docente' : 'Registrar Docente'}
-                </h2>
-            </div>
-
             <form
                 onSubmit={handleSubmit}
-                className="space-y-4"
+                className="space-y-6 bg-white p-6 rounded-lg shadow"
                 encType="multipart/form-data"
             >
                 {/* Fila con dos columnas */}
@@ -342,7 +336,7 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
                             ? 'Guardando...'
                             : isEdit
                                 ? 'Actualizar'
-                                : 'Guardar'}
+                                : 'Registrar'}
                     </button>
                 </div>
             </form>

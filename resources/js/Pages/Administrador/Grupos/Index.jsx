@@ -41,56 +41,71 @@ export default function Index({ auth, grupos, ciclos, docentes }) {
             return <GestionGrupos grupos={grupos} ciclos={ciclos} docentes={docentes} />;
         } else if (view === 'lista') {
             return (
-                <div className="w-full overflow-x-auto shadow-lg rounded-lg bg-white p-4 md:p-6 mb-6">
-                    <h2 className="text-lg md:text-xl font-semibold mb-4">Lista de Grupos</h2>
-                    <div className="overflow-x-auto">
-                        <table className="w-full table-auto whitespace-nowrap text-sm md:text-base">
-                            <thead className="bg-[#800020] text-white text-center">
-                                <tr>
-                                    <th className="px-2 md:px-4 py-2 ">Periodo</th>
-                                    <th className="px-2 md:px-4 py-2 ">Modalidad</th>
-                                    <th className="px-2 md:px-4 py-2 ">Estudiantes</th>
-                                    <th className="px-2 md:px-4 py-2 ">Vacantes</th>
-                                    <th className="px-2 md:px-4 py-2 ">Horario</th>
-                                    <th className="px-2 md:px-4 py-2 ">Ciclo</th>
-                                    <th className="px-2 md:px-4 py-2 ">Docente</th>
-                                    <th className="px-2 md:px-4 py-2 ">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {grupos.data?.map((grupo) => (
-                                    <tr key={grupo.id} className="border-b hover:bg-[#F4D6C5]">
-                                        <td className="px-2 md:px-4 py-2">{grupo.periodo || 'N/D'}</td>
-                                        <td className="px-2 md:px-4 py-2">{grupo.modalidad || 'N/D'}</td>
-                                        <td className="px-2 md:px-4 py-2">{grupo.nroEstudiantes || 'N/D'}</td>
-                                        <td className="px-2 md:px-4 py-2">{grupo.nroVacantes || 'N/D'}</td>
-                                        <td className="px-2 md:px-4 py-2">{grupo.horario || 'N/D'}</td>
-                                        <td className="px-2 md:px-4 py-2">{grupo.ciclo.idioma.nombre} {grupo.ciclo.nombre} {grupo.ciclo.nivel}</td>
-                                        <td className="px-2 md:px-4 py-2">
-                                            {grupo.docente ? `${grupo.docente.nombres} ${grupo.docente.aPaterno}` : 'N/A'}
-                                        </td>
-                                        <td className="px-2 md:px-4 py-2">
-                                            <div className="flex items-center space-x-2">
-                                                <button
-                                                    onClick={() => handleEdit(grupo)}
-                                                    className="text-[#800020] hover:text-[#6A4E3C]"
-                                                >
-                                                    <FaPen className="text-xl mr-3" />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleVerEstudiantes(grupo)}
-                                                    className="text-[#800020] hover:text-[#6A4E3C]"
-                                                >
-                                                    <FaEye className="text-xl" />
-                                                </button>
-                                            </div>
-                                        </td>
+                <>
+                    <br />
+                    <div className="w-full overflow-x-auto shadow-lg rounded-lg bg-white p-4 md:p-6 mb-6">
+                        <div className="overflow-x-auto">
+                            <table className="w-full table-auto whitespace-nowrap text-sm md:text-base">
+                                <thead className="bg-[#800020] text-white text-center">
+                                    <tr>
+                                        <th className="px-2 md:px-4 py-2 ">Periodo</th>
+                                        <th className="px-2 md:px-4 py-2 ">Modalidad</th>
+                                        <th className="px-2 md:px-4 py-2 ">Estudiantes</th>
+                                        <th className="px-2 md:px-4 py-2 ">Vacantes</th>
+                                        <th className="px-2 md:px-4 py-2 ">Horario</th>
+                                        <th className="px-2 md:px-4 py-2 ">Ciclo</th>
+                                        <th className="px-2 md:px-4 py-2 ">Docente</th>
+                                        <th className="px-2 md:px-4 py-2 ">Acciones</th>
                                     </tr>
+                                </thead>
+                                <tbody>
+                                    {grupos.data?.map((grupo) => (
+                                        <tr key={grupo.id} className="border-b hover:bg-[#F4D6C5]">
+                                            <td className="px-2 md:px-4 py-2">{grupo.periodo || 'N/D'}</td>
+                                            <td className="px-2 md:px-4 py-2">{grupo.modalidad || 'N/D'}</td>
+                                            <td className="px-2 md:px-4 py-2">{grupo.nroEstudiantes || 'N/D'}</td>
+                                            <td className="px-2 md:px-4 py-2">{grupo.nroVacantes || 'N/D'}</td>
+                                            <td className="px-2 md:px-4 py-2">{grupo.horario || 'N/D'}</td>
+                                            <td className="px-2 md:px-4 py-2">{grupo.ciclo.idioma.nombre} {grupo.ciclo.nombre} {grupo.ciclo.nivel}</td>
+                                            <td className="px-2 md:px-4 py-2">
+                                                {grupo.docente ? `${grupo.docente.nombres} ${grupo.docente.aPaterno}` : 'N/A'}
+                                            </td>
+                                            <td className="px-2 md:px-4 py-2">
+                                                <div className="flex items-center space-x-2">
+                                                    <button
+                                                        onClick={() => handleEdit(grupo)}
+                                                        className="text-[#800020] hover:text-[#6A4E3C]"
+                                                    >
+                                                        <FaPen className="text-xl mr-3" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleVerEstudiantes(grupo)}
+                                                        className="text-[#800020] hover:text-[#6A4E3C]"
+                                                    >
+                                                        <FaEye className="text-xl" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            {/* Paginación */}
+                            <div className="mt-4">
+                                {grupos.links.map((link, index) => (
+                                    <Link
+                                        key={index}
+                                        href={link.url}
+                                        className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-black text-white' : 'bg-white text-gray'
+                                            }`}
+                                        dangerouslySetInnerHTML={{ __html: link.label }}
+                                    />
                                 ))}
-                            </tbody>
-                        </table>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </>
+
             );
         } else {
             return (
@@ -126,13 +141,13 @@ export default function Index({ auth, grupos, ciclos, docentes }) {
                         <div className="p-4 md:p-8 text-gray-800 text-center">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 justify-center mx-auto">
                                 <div
-                                    className="bg-[#800020] p-4 md:p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer"
+                                    className="bg-[#800020] p-4 md:p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer "
                                     onClick={() => handleCardClick('formulario')}
                                     aria-label="Gestión de Grupos"
                                     tabIndex="0"
                                 >
                                     <FaUsers className="text-3xl md:text-4xl text-[#F5D0A9] mb-2 md:mb-4 mx-auto transition-transform transform hover:scale-110" />
-                                    <h4 className="text-base md:text-lg font-semibold text-[#F5D0A9]">Formulario de Grupos</h4>
+                                    <h4 className="text-base md:text-lg font-semibold text-[#F5D0A9]">Agregar Grupo</h4>
                                     <p className="text-xs md:text-sm text-[#F5D0A9]">Gestiona los grupos, ciclos e idiomas asociados.</p>
                                 </div>
 
@@ -159,16 +174,16 @@ export default function Index({ auth, grupos, ciclos, docentes }) {
                 <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
                     <div className="relative w-full max-w-md md:max-w-4xl bg-white rounded-lg shadow-xl p-4 md:p-8">
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl md:text-2xl font-bold text-[#800020]">Editar Grupo</h2>
                             <button
                                 onClick={handleCloseModal}
-                                className="text-gray-500 hover:text-gray-700"
+                                className="text-gray-500 hover:text-gray-700 ml-auto"
                             >
                                 <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
                         </div>
+
                         <GestionGrupos
                             grupos={grupos}
                             ciclos={ciclos}

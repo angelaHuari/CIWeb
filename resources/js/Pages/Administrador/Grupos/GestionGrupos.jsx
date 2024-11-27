@@ -169,8 +169,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
 
     return (
         <div className="container mx-auto p-6">
-            <h1 className="text-2xl text-justifyfont-bold mb-6">Gestión de Grupos</h1>
-
+            
             {formErrors.length > 0 && (
                 <div className="text-red-500 mb-4">
                     {formErrors.map((error, index) => (
@@ -182,7 +181,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div>
-                        <label className="block text-sm font-medium mb-1">Periodo</label>
+                        <label >Periodo</label>
                         <select
                             value={data.periodo}
                             onChange={(e) => setData('periodo', e.target.value)}
@@ -197,7 +196,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Modalidad</label>
+                        <label >Modalidad</label>
                         <select
                             name="modalidad"
                             value={data.modalidad}
@@ -214,7 +213,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Número de Vacantes</label>
+                        <label >Número de Vacantes</label>
                         <input
                             type="number"
                             name="nroVacantes"
@@ -225,7 +224,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Horario de Entrada</label>
+                        <label >Horario de Entrada</label>
                         <input
                             type="time"
                             name="horarioEntrada"
@@ -236,7 +235,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Horario de Salida</label>
+                        <label >Horario de Salida</label>
                         <input
                             type="time"
                             name="horarioSalida"
@@ -247,7 +246,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Ciclo</label>
+                        <label >Ciclo</label>
                         <select
                             name="ciclo_id"
                             value={data.ciclo_id}
@@ -267,7 +266,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Docente</label>
+                        <label >Docente</label>
                         <select
                             name="docente_id"
                             value={data.docente_id}
@@ -301,7 +300,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                             disabled={processing}
                             className="bg-blue-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
                         >
-                            {editing ? 'Actualizar Grupo' : 'Registrar Grupo'}
+                            {editing ? 'Actualizar' : 'Registrar'}
                         </button>
                         {editing && (
                             <button

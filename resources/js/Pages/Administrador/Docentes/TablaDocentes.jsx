@@ -29,9 +29,6 @@ const TablaDocentes = ({ docentes }) => {
 
     return (
         <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
-            <h2 className="text-xl font-semibold">
-                {'Lista de Docentes'}
-            </h2>
             <table className="min-w-full table-auto">
                 <thead className="bg-[#800020] text-white">
                     <tr>
@@ -153,7 +150,7 @@ const TablaDocentes = ({ docentes }) => {
 
             {showModalEdit && selectedDocente && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-[600px] border-2 border-gray-300">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-[800px] border-2 border-gray-300">
                         <FormularioDocentes
                             Docente={selectedDocente}
                             closeModal={() => setShowModalEdit(false)}
