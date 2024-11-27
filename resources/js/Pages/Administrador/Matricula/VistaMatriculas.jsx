@@ -7,9 +7,8 @@ const VistaMatriculas = ({ matriculas }) => {
 
     const [search, setSearch] = useState(''); // Estado para el buscador
     const [selectedMatricula, setSelectedMatricula] = useState(null);
-    /*const [formularioModal, setFormularioModal] = useState(null);*/ // Estado para manejar el modal de formulario
-
-    // Filtrar matrículas por nombre
+    
+    // Filtrar matrículas por apellido
     const filteredMatriculas = matriculas.data.filter(ma =>
         ma.estudiante.aPaterno.toLowerCase().includes(search.toLowerCase())
     );
@@ -43,7 +42,7 @@ const VistaMatriculas = ({ matriculas }) => {
                 {/* Modal de detalles */}
                 {selectedMatricula && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg relative max-w-[900px] max-h-[90vh] w-full h-full flex overflow-auto">
+                        <div className="bg-white p-6 rounded-lg shadow-lg relative max-w-[400px] max-h-[40vh] w-full h-full flex overflow-auto">
                             <MdClose
                                 className="absolute top-2 right-2 text-2xl text-[#800020] cursor-pointer"
                                 onClick={closeDetailsModal}

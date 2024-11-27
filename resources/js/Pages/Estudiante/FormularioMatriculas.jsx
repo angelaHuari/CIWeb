@@ -1,36 +1,63 @@
 import React, { useState } from 'react';
-import { useForm, Link } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 
 function FormularioMatriculas({ grupos }) {
+  const { flash } = usePage().props;
   const [voucherPreview, setVoucherPreview] = useState(null); // Estado para la vista previa de la imagen
 
   const { data, setData, post, processing, errors } = useForm({
-    fechaMatricula: new Date().toISOString().split('T')[0], // Fecha actual
+    fechaMatricula: new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' }), // Fecha actual
     cicloIngles: '',
     horarioIngles: '',
-    fechaPago: new Date().toISOString().split('T')[0], // Fecha actual
+    fechaPago: new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' }), // Fecha actual
     nroComprobante: '',
     montoPago: 100,
     medioPago: '',
     imgComprobante: null,
   });
+  const validarFecha = (fecha) => {
+    const fechaIngresada = new Date(fecha);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    if (fechaIngresada > hoy) {
+      return 'La fecha no puede estar en el futuro.';
+    }
+    return '';
+  };
+  // Manejador de cambio de fecha
+  const handleFechaChange = (e) => {
+    const nuevaFecha = e.target.value;
+    setData('fechaPago', nuevaFecha); // Actualizar la fecha en el estado
+
+    // Validar la nueva fecha
+    const error = validarFecha(nuevaFecha);
+    if (error) {
+      // Si hay error, establecerlo usando setErrors de Inertia
+      errors.fechaPago = error;
+    } else {
+      // Si no hay error, eliminar el error
+      errors.fechaPago = '';
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(data);
+    //console.log(data);
 
     post(route('estudiante.enviar'));
     // Limpiar los campos (excepto los no mostrados)
     setData({
-      fechaMatricula: new Date().toISOString().split('T')[0], // Fecha actual
+      fechaMatricula: new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' }),// Fecha actual
       cicloIngles: '',
       horarioIngles: '',
-      fechaPago: new Date().toISOString().split('T')[0],
+      fechaPago: new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' }),
       nroComprobante: '',
       montoPago: 100,
       medioPago: '',
       imgComprobante: null,
     });
+    setVoucherPreview(null);
+    console.log(flash);
   };
 
   // Función para manejar la selección de la imagen
@@ -41,14 +68,14 @@ function FormularioMatriculas({ grupos }) {
       // Crear una URL temporal para mostrar la vista previa
       const imageUrl = URL.createObjectURL(file);
       setVoucherPreview(imageUrl); // Establecer la URL para la vista previa
-      
-      
+
+
     } else {
       setVoucherPreview(null);
       setData('imgComprobante', null);
     }
   };
-  
+
 
   // Limpieza de URLs temporales para liberar memoria
   React.useEffect(() => {
@@ -104,8 +131,7 @@ function FormularioMatriculas({ grupos }) {
             {horariosFiltrados.map((grupo) => (<option key={grupo.id} value={grupo.id}> {`${grupo.modalidad} - ${grupo.horario} (Vacantes: ${grupo.nroVacantes})`} </option>))}
 
           </select>
-
-          {errors.horarioIngles && <p className="text-red-500 text-sm mt-1">{errors.horarioIngles.message}</p>}
+          {errors.horarioIngles && <p className="text-red-500 text-sm mt-1">{errors.horarioIngles}</p>}
         </div>
 
 
@@ -115,11 +141,15 @@ function FormularioMatriculas({ grupos }) {
             id="fechaPago"
             type="date"
             value={data.fechaPago}
-            onChange={(e) => setData('fechaPago', e.target.value)}
+            onChange={handleFechaChange}
             required
             className="border border-[#700303] p-2 w-full rounded-md bg-gray-100"
           />
+          {errors.fechaPago && (
+            <span className="text-red-500 text-sm">{errors.fechaPago}</span>
+          )}
         </div>
+
         <div>
           <label className="block text-sm font-medium text-[#700303] mb-1">Monto Pagado:</label>
           <input
@@ -183,6 +213,9 @@ function FormularioMatriculas({ grupos }) {
           )}
         </div>
       </div>
+      {flash && flash.message &&(
+        <span className="text-red-500 text-sm">{flash.message}</span>
+      )}
 
       <div className="text-right mt-8">
         <button
@@ -192,6 +225,7 @@ function FormularioMatriculas({ grupos }) {
           Enviar
         </button>
       </div>
+      
     </form>
   );
 }

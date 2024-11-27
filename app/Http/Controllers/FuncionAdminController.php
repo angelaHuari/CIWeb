@@ -10,14 +10,15 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class FuncionAdminController extends Controller
 {
     public function index()
     {
-        $usuarios=User::paginate(15);
-        return Inertia::render('Administrador/Usuarios/Index',['usuarios'=>$usuarios]);
+        $usuarios = User::paginate(15);
+        return Inertia::render('Administrador/Usuarios/Index', ['usuarios' => $usuarios]);
     }
 
 
@@ -78,6 +79,16 @@ class FuncionAdminController extends Controller
     {
         try {
             $formulario = FormularioMatricula::findOrFail($request->id);
+            // Eliminar el archivo de imagen asociado si existe
+            if ($formulario->imgComprobante) {
+                // Obtener la ruta completa del archivo
+                $filePath = str_replace(config('app.url') . '/storage/', '', $formulario->imgComprobante);
+
+                // Eliminar el archivo de storage
+                if (Storage::exists('public/' . $filePath)) {
+                    Storage::delete('public/' . $filePath);
+                }
+            }
             // Elimina el formulario
             $formulario->delete();
             return redirect()->back()->with([

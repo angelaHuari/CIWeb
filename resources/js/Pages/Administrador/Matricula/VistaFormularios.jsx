@@ -4,8 +4,8 @@ import { FaSearch, FaEye, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 
 const TablaFormularios = ({ formMatriculas = [], search }) => {
-    
-    const filteredForms = formMatriculas.data.filter(form => 
+
+    const filteredForms = formMatriculas.data.filter(form =>
         form.estudiante.aPaterno.toLowerCase().includes(search.toLowerCase())
     );
     const [selectedForm, setSelectedForm] = useState(null);
@@ -27,14 +27,13 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
 
     const handleAceptar = (e) => {
         post(route('matricula.aprobar'));
-        console.log(data);
+        //console.log(data);
         setSelectedForm(null);
     };
 
     const handleRechazar = (e) => {
-        e.preventDefault();
         post(route('matricula.rechazar'));
-        console.log(data);
+        //console.log(data);
         setSelectedForm(null);
     };
 
@@ -198,7 +197,7 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                         </thead>
                         <tbody>
                             {filteredForms.length > 0 ? (
-                                filteredForms.map((form,index) => (
+                                filteredForms.map((form, index) => (
                                     <tr key={index} className="border-b hover:bg-[#F4D6C5] items-center">
                                         <td className="px-6 py-3">{form.estudiante.nombres} {form.estudiante.aMaterno} {form.estudiante.aPaterno}</td>
                                         <td className="px-6 py-3">
@@ -225,9 +224,9 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                                     <FaEye className="text-xl" />
                                                 </button>
                                             ) : (
-                                                <span className="text-black flex items-center">
-                                                    <FaTimesCircle className="mr-2" /> 
-                                                </span>
+                                                <button className="text-black ">
+                                                   <FaEye className="text-xl" />
+                                                </button>
                                             )}
 
                                         </td>
@@ -273,7 +272,7 @@ const VistaFormularios = ({ ListaFormularios }) => {
                             type="text"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Buscar por nombre de estudiante"
+                            placeholder="Buscar por Apellido Paterno del estudiante"
                             className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#800020]"
                         />
                         <FaSearch className="absolute right-3 top-2 text-gray-500" />

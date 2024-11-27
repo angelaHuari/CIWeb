@@ -7,6 +7,7 @@ use App\Models\Grupo;
 use App\Models\Matricula;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -56,14 +57,31 @@ class FuncionEstudianteController extends Controller
         $data = $request->validate([
             'fechaMatricula' => 'required|date',
             'cicloIngles' => 'required|exists:ciclos,id',
-            'horarioIngles' => 'required|exists:grupos,id',
+            'horarioIngles' => [
+                'required',
+                'exists:grupos,id',
+                function ($attribute, $value, $fail) use ($estudianteId) {
+                    // Verifica si ya existe una matrícula con el mismo estudiante y grupo
+                    $exists = DB::table('matriculas')
+                        ->where('grupo_id', $value)
+                        ->where('estudiante_id', $estudianteId)
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('Ya te matriculaste en este ciclo y horario.');
+                    }
+                }
+            ],
             'medioPago' => 'required|string',
-            'fechaPago' => 'required|date',
+            'fechaPago' => 'required|date|before_or_equal:today',
             'montoPago' => 'required|numeric',
             'nroComprobante' => 'required|string',
             'imgComprobante' => 'nullable|image|max:2048',
+        ], [
+            'horarioIngles.unique' => 'Ya te matriculaste en este ciclo y horario',
+            'fechaPago.before_or_equal' => 'La fecha no puede estar en el futuro.',
         ]);
-        
+
 
         try {
             // Asocia el estudiante ID
@@ -84,10 +102,10 @@ class FuncionEstudianteController extends Controller
             // Registro en la base de datos
             FormularioMatricula::create($data);
 
-            return redirect()->route('estudiante.registrar')->with('message', 'Matrícula enviada correctamente');
+            return redirect()->route('estudiante.registrar')->with('message', 'Formulario de Matrícula enviada correctamente');
         } catch (\Exception $e) {
             Log::error('Error al enviar el formulario: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Error al enviar el formulario: ' . $e->getMessage());
+            return redirect()->back()->with('message', 'Error al enviar el formulario: ' . $e->getMessage());
         }
     }
 }
