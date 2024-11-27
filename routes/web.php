@@ -28,8 +28,8 @@ Route::get('/', function () {
     ]);
 });
 
-Route::resource('formulario', FormularioController::class);
 
+Route::post('/formulario',[FormularioController::class,'store'])->name('formulario.store');
 //Para Todos los Usuarios
 //verifica que sea un usuario
 Route::get('/inicio', function () {
@@ -56,7 +56,7 @@ Route::middleware('auth')->group(function () {
 
 //Para Administrador
 Route::middleware('EsAdmin')->group(function () {
-
+    Route::get('/formulario',[FormularioController::class,'index'])->name('formulario.index');
     Route::resource('idioma', IdiomaController::class);
     Route::resource('ciclo', CicloController::class);
     Route::resource('docente', DocenteController::class);
