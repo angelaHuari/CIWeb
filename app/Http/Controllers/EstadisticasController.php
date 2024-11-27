@@ -43,6 +43,7 @@ class EstadisticasController extends Controller
         // Verifica que los parámetros estén llegando correctamente
         // dd($month, $year, $type); // Descomenta esto si necesitas depurar
 
+    
         // Filtrar según el tipo solicitado
         if ($type === 'tiposAlumnos') {
             // Obtener los datos de tipos de alumnos según el tipo_alumno
@@ -53,7 +54,7 @@ class EstadisticasController extends Controller
                 ->get();
 
             // Depura los resultados
-            dd($tiposAlumnos);
+           // dd($tiposAlumnos);
 
             return Inertia::render('Administrador/Estadisticas/Estadisticas', ['tiposAlumnos' => $tiposAlumnos]);
         } else if ($type === 'medioPublicitario') {

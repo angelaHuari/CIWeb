@@ -47,7 +47,7 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
     datasets: [
       {
         data: dataTiposAlumnos.map((item) => Math.round(item.cantidad)),
-        backgroundColor: ['#6D9DC5', '#FFB81C', '#34A853'], // Colores más claros
+        backgroundColor: ['#40E0D0 ', '#FFD700 ', '#50C878 '], // Colores más claros
       },
     ],
   };
@@ -79,7 +79,7 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
       {
         label: 'Medios Publicitarios',
         data: datamedioPublicitario.map((item) => Math.round(item.cantidad)),
-        backgroundColor: ['#FF6F61', '#6B7F0E', '#1D9BF0', '#F39C12'], // Colores más suaves
+        backgroundColor: ['#D6A8E4 ', '#6C1C2C ', '#A3C6D8 ', '#F5D679 ' , '#C8E6C9 ' , '#F5A6B1 '], // Colores más suaves
       },
     ],
   };
@@ -139,7 +139,9 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
       <Head title="Estadísticas" />
       <div className="py-12 bg-gradient-to-b from-[#800020] to-[#F5D0A9]">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+         <div className="bg-amber-50 p-8 rounded-lg shadow-xl">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-center items-center">
+            
             <div
               className="bg-[#800020] p-6 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer max-w-xs mx-auto"
               onClick={() => handleCardClick('tiposAlumnos')}
@@ -163,6 +165,7 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
               <h4 className="text-2xl text-center font-semibold text-[#F5D0A9]">Medios Publicitarios</h4>
               <p className="text-[#F5D0A9]">Estadísticas sobre las campañas publicitarias y su rendimiento.</p>
             </div>
+          </div>
           </div>
 
           <div className="mt-10 text-center">
@@ -232,7 +235,7 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
           </div>
 
           {selectedCard === 'tiposAlumnos' && (
-            <div className="bg-white p-6 rounded-lg shadow-lg">
+            <div className="bg-amber-50 p-6 rounded-lg shadow-lg">
               {loading && <div>Loading...</div>}
               {error && <div className="text-red-600">{error}</div>}
               {selectedGraph === 'pie' && (
@@ -248,7 +251,7 @@ const Estadisticas = ({ datos = [], tiposAlumnos = [], medioPublicitario = [] })
           )}
 
           {selectedCard === 'medioPublicitario' && (
-            <div className="bg-white p-6 rounded-lg shadow-lg">
+            <div className="bg-amber-50 p-6 rounded-lg shadow-md">
               {loading && <div>Loading...</div>}
               {error && <div className="text-red-600">{error}</div>}
               {selectedGraph === 'pie' && (
