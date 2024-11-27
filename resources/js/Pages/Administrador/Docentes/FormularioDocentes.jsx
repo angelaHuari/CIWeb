@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
 
-const FormularioDocentes = ({ Docente }) => {
+const FormularioDocentes = ({ Docente, closeModal }) => {
 
     const [editingDocente, setEditingDocente] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
@@ -133,6 +133,7 @@ const FormularioDocentes = ({ Docente }) => {
                     reset();
                     setEditingDocente(null);
                     setPreviewImage(null);
+                    closeModal();
                 },
                 onError: (errors) => {
                     console.log('Errores:', errors);

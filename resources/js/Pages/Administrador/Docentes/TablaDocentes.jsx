@@ -16,7 +16,6 @@ const TablaDocentes = ({ docentes }) => {
     };
 
     const handleShowModalEdit = (docente) => {
-        //if (!docente) return;
         setSelectedDocente(docente);
         setShowModalEdit(true);
     };
@@ -31,8 +30,8 @@ const TablaDocentes = ({ docentes }) => {
     return (
         <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
             <h2 className="text-xl font-semibold">
-                    {'Lista de Docentes'}
-                </h2>
+                {'Lista de Docentes'}
+            </h2>
             <table className="min-w-full table-auto">
                 <thead className="bg-[#800020] text-white">
                     <tr>
@@ -97,7 +96,7 @@ const TablaDocentes = ({ docentes }) => {
 
                         <div className="flex">
                             <div className="flex-1 text-left pr-4">
-                               
+
                                 <p><strong>Nombres:</strong> {selectedDocente.nombres || 'No disponible'}</p>
                                 <p><strong>Apellido Paterno:</strong> {selectedDocente.aPaterno || 'No disponible'}</p>
                                 <p><strong>Apellido Materno:</strong> {selectedDocente.aMaterno || 'No disponible'}</p>
@@ -154,19 +153,21 @@ const TablaDocentes = ({ docentes }) => {
             {showModalEdit && selectedDocente && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-[600px] border-2 border-gray-300">
-                         <FormularioDocentes Docente={selectedDocente} closeModal={setShowModalEdit}></FormularioDocentes>
-
+                        <FormularioDocentes
+                            Docente={selectedDocente}
+                            closeModal={() => setShowModalEdit(false)}
+                        />
                         <button
-                            onClick={handleCloseModal}
+                            onClick={() => setShowModalEdit(false)}
                             className="mt-4 bg-gray-500 text-white px-4 py-2 rounded"
                         >
-                            Cerrar 
+                            Cerrar
                         </button>
                     </div>
                 </div>
             )}
 
-            
+
         </div>
     );
 };

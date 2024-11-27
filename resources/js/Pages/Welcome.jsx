@@ -1,11 +1,12 @@
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useState } from 'react'; // Añadir este import
 import DatosGenerales from './Formulario/DatosGenerales';
 import DatosAdicionales from './Formulario/DatosAdicionales';
 import DatosPagoCaja from './Formulario/DatosPagoCaja';
 import DatosPagoBanco from './Formulario/DatosPagoBanco';
 
 export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors: serverErrors, reset } = useForm({
         nombres: '',
         aPaterno: '',
         aMaterno: '',
@@ -35,9 +36,78 @@ export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
         estado: 'Pendiente'
     });
 
+    const [validationErrors, setValidationErrors] = useState({}); // Añadir estado local para errores
+
+    const validateForm = () => {
+        let formErrors = {};
+        let isValid = true;
+
+        // Validar DNI
+        if (!data.dni || data.dni.length !== 8 || !/^\d+$/.test(data.dni)) {
+            formErrors.dni = 'DNI debe tener 8 dígitos';
+            isValid = false;
+        }
+
+        // Validar campos obligatorios
+        const requiredFields = {
+            nombres: 'Nombres',
+            aPaterno: 'Apellido Paterno',
+            aMaterno: 'Apellido Materno',
+            sexo: 'Sexo',
+            celular: 'Celular',
+            fechaNacimiento: 'Fecha de Nacimiento',
+            tipoAlumno: 'Tipo de Alumno',
+            cicloIngles: 'Ciclo de Inglés',
+            horarioIngles: 'Horario',
+            medioPago: 'Medio de Pago',
+            nroComprobante: 'Número de Comprobante',
+            fechaPago: 'Fecha de Pago',
+            montoPago: 'Monto de Pago'
+        };
+
+        Object.entries(requiredFields).forEach(([field, label]) => {
+            if (!data[field]) {
+                formErrors[field] = `${label} es obligatorio`;
+                isValid = false;
+            }
+        });
+
+        // Validar celular
+        if (data.celular && data.celular.length !== 9) {
+            formErrors.celular = 'El celular debe tener 9 dígitos';
+            isValid = false;
+        }
+
+        // Validar correos según tipo de alumno
+        if (data.tipoAlumno === 'alumno') {
+            if (!data.correoInstitucional || !data.correoInstitucional.endsWith('@istta.edu.pe')) {
+                formErrors.correoInstitucional = 'Correo institucional inválido';
+                isValid = false;
+            }
+        } else if (data.tipoAlumno === 'no_alumno' && !data.email) {
+            formErrors.email = 'Correo personal es obligatorio';
+            isValid = false;
+        }
+
+        // Validar comprobante de pago
+        if (!data.imgComprobante) {
+            formErrors.imgComprobante = 'Debe adjuntar un comprobante';
+            isValid = false;
+        }
+
+        setValidationErrors(formErrors); // Usar setValidationErrors en lugar de setErrors
+        return isValid;
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         
+        if (!validateForm()) {
+            window.scrollTo(0, 0); // Opcional: scroll al inicio para ver errores
+            alert('Por favor, corrija los errores antes de enviar el formulario');
+            return;
+        }
+
         // Crear un FormData si hay un archivo
         const formData = new FormData();
         
@@ -59,6 +129,7 @@ export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
             },
             onError: (errors) => {
                 console.error(errors);
+                setErrors(errors);
                 alert('Error al enviar el formulario');
             }
         });
@@ -108,7 +179,7 @@ export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
                                 <form onSubmit={handleSubmit} encType="multipart/form-data">
                                     <div className="triptico-container grid grid-cols-3 gap-6">
                                         <div className="triptico-section bg-white/90 p-4 rounded-lg shadow-md">
-                                            <DatosGenerales data={data} setData={setData} errors={errors} />
+                                            <DatosGenerales data={data} setData={setData} errors={{...serverErrors, ...validationErrors}} />
                                         </div>
                                         <div className="triptico-section bg-white/90 p-4 rounded-lg shadow-md">
                                             <DatosAdicionales grupos={ListaGrupos} ciclos={ListaCiclos} data={data} setData={setData} />

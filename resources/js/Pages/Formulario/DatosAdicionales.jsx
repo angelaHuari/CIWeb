@@ -1,23 +1,94 @@
 import React, { useState } from 'react';
 
-const DatosAdicionales = ({ data, setData, grupos = [] }) => {
-
+const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
     const [correoEgresado, setCorreoEgresado] = useState('');
+    const [fieldErrors, setFieldErrors] = useState({});
     const handleTipoAlumnoChange = (e) => {
         setData({ ...data, tipoAlumno: e.target.value });
     };
 
+    const validateEmail = (email, type = 'personal') => {
+        let error = '';
+        if (!email) {
+            error = 'El correo es obligatorio';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            error = 'Formato de correo inválido';
+        } else if (type === 'institucional') {
+            if (!email.endsWith('@istta.edu.pe')) {
+                error = 'Debe ser un correo institucional (@istta.edu.pe)';
+            }
+        }
+        return error;
+    };
+
+    const handleEmailChange = (e, type = 'personal') => {
+        const { name, value } = e.target;
+        const error = validateEmail(value, type);
+        
+        setFieldErrors(prev => ({
+            ...prev,
+            [name]: error
+        }));
+
+        setData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const renderEmailField = (type) => {
+        if (type === 'institucional') {
+            return (
+                <div>
+                    <label>Indique su correo institucional: *</label>
+                    <input
+                        type="email"
+                        name="correoInstitucional"
+                        value={data.correoInstitucional}
+                        onChange={(e) => handleEmailChange(e, 'institucional')}
+                        className={fieldErrors.correoInstitucional ? 'error-input' : ''}
+                    />
+                    {fieldErrors.correoInstitucional && 
+                        <span className="error-message">{fieldErrors.correoInstitucional}</span>}
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <label>Indique su correo personal: *</label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={data.email}
+                        onChange={(e) => handleEmailChange(e, 'personal')}
+                        className={fieldErrors.email ? 'error-input' : ''}
+                    />
+                    {fieldErrors.email && 
+                        <span className="error-message">{fieldErrors.email}</span>}
+                </div>
+            );
+        }
+    };
+
     return (
-        <div>
+        <div className="datos-adicionales">
             <strong><h2>Datos Adicionales</h2></strong>
             <label>¿Usted es?</label>
             <div>
-                <select value={data.tipoAlumno} onChange={handleTipoAlumnoChange} required>
+                <select 
+                    name="tipoAlumno"
+                    value={data.tipoAlumno} 
+                    onChange={handleTipoAlumnoChange} 
+                    className={fieldErrors.tipoAlumno || errors?.tipoAlumno ? 'error-input' : ''}
+                    required
+                >
                     <option value="">Seleccione...</option>
                     <option value="alumno">Alumno del Instituto</option>
                     <option value="egresado">Egresado del Instituto</option>
                     <option value="no_alumno">No soy alumno del Instituto</option>
                 </select>
+                {(fieldErrors.tipoAlumno || errors?.tipoAlumno) && 
+                    <span className="error-message">{fieldErrors.tipoAlumno || errors?.tipoAlumno}</span>}
             </div>
 
             {data.tipoAlumno === 'alumno' && (
@@ -48,8 +119,7 @@ const DatosAdicionales = ({ data, setData, grupos = [] }) => {
                         <option value="VI">VI</option>
                     </select>
 
-                    <label>Indique su correo institucional:</label>
-                    <input type="email" value={data.correoInstitucional} onChange={(e) => setData({ ...data, correoInstitucional: e.target.value })} />
+                    {renderEmailField('institucional')}
                 </div>
             )}
 
@@ -79,19 +149,8 @@ const DatosAdicionales = ({ data, setData, grupos = [] }) => {
                         <option value="si">Sí</option>
                         <option value="no">No</option>
                     </select>
-                    {correoEgresado === 'si' && (
-                        <div>
-                            <label>Indique su correo institucional:</label>
-                            <input type="email" value={data.correoInstitucional} onChange={(e) => setData({ ...data, correoInstitucional: e.target.value })} />
-                        </div>
-                    )}
-                    {correoEgresado === 'no' && (
-                        <div>
-                            <label>Indique su correo personal:</label>
-                            <input type="email" value={data.email} onChange={(e) => setData({ ...data, email: e.target.value })} />
-                        </div>
-                    )}
-
+                    {correoEgresado === 'si' && renderEmailField('institucional')}
+                    {correoEgresado === 'no' && renderEmailField('personal')}
                 </div>
             )}
 
@@ -111,8 +170,7 @@ const DatosAdicionales = ({ data, setData, grupos = [] }) => {
                         <option value="familiar">Familiar</option>
                     </select>
 
-                    <label>Indique su correo personal:</label>
-                    <input type="email" value={data.email} onChange={(e) => setData({ ...data, email: e.target.value })} />
+                    {renderEmailField('personal')}
                 </div>
             )}
 
@@ -238,6 +296,17 @@ const DatosAdicionales = ({ data, setData, grupos = [] }) => {
                 </div>
             )}
 
+            <style>{`
+                .datos-adicionales .error-input {
+                    border: 1px solid red;
+                }
+                .datos-adicionales .error-message {
+                    color: red;
+                    font-size: 0.8em;
+                    margin-top: 2px;
+                    display: block;
+                }
+            `}</style>
         </div>
     );
 };
