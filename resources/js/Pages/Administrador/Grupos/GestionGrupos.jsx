@@ -5,7 +5,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
     const { data, setData, processing, errors, reset } = useForm({
         periodo: '',
         modalidad: '',
-        nroEstudiantes: '',
+        nroEstudiantes: 0,
         nroVacantes: '',
         horarioEntrada: '',
         horarioSalida: '',
@@ -28,7 +28,6 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setData(name, value);
-
         if (name === 'modalidad' && value !== '') setModalidadError('');
         if (name === 'ciclo_id' && value !== '') setCicloError('');
         if (name === 'docente_id' && value !== '') setDocenteError('');
@@ -63,7 +62,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        
         let validationErrors = [];
 
         if (!data.modalidad) {
@@ -75,7 +74,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
         if (!data.docente_id) {
             validationErrors.push('Por favor, seleccione un docente válido.');
         }
-        
+
         if (!data.nroVacantes || data.nroVacantes < 0) {
             validationErrors.push('Por favor, ingrese un número válido de vacantes.');
         }
@@ -108,6 +107,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                 preserveScroll: true,
             });
         } else {
+            console.log(data);
             router.post('/grupo', data, {
                 onSuccess: () => {
                     reset();
@@ -169,7 +169,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
 
     return (
         <div className="container mx-auto p-6">
-            
+
             {formErrors.length > 0 && (
                 <div className="text-red-500 mb-4">
                     {formErrors.map((error, index) => (
@@ -288,7 +288,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                         <input
                             type="number"
                             name="nroEstudiantes"
-                            value={data.nroEstudiantes || 0}
+                            value={data.nroEstudiantes}
                             onChange={handleChange}
                             className="w-full rounded-md border-gray-300 shadow-sm"
                             hidden
