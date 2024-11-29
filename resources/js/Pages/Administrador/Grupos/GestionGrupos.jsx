@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useForm, router, Link } from '@inertiajs/react';
+import { useForm, router } from '@inertiajs/react';
 
 const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
     const { data, setData, processing, errors, reset } = useForm({
@@ -15,173 +15,128 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
 
     const periodOptions = [
         'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO',
-        'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'
+        'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE',
     ];
 
-    const [editing, setEditing] = useState(false);
-    const [selectedGrupo, setSelectedGrupo] = useState(null);
-    const [modalidadError, setModalidadError] = useState('');
-    const [cicloError, setCicloError] = useState('');
-    const [docenteError, setDocenteError] = useState('');
-    const [formErrors, setFormErrors] = useState([]);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('success'); // 'success' or 'error'
+    const [formErrors, setFormErrors] = useState({});
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setData(name, value);
-        if (name === 'modalidad' && value !== '') setModalidadError('');
-        if (name === 'ciclo_id' && value !== '') setCicloError('');
-        if (name === 'docente_id' && value !== '') setDocenteError('');
     };
 
-    // Función para convertir horario de 12 horas (AM/PM) a 24 horas
     const formatTo24Hour = (timeStr) => {
         if (!timeStr) return '';
-
         const [time, modifier] = timeStr.split(' ');
         let [hours, minutes] = time.split(':');
-
         hours = parseInt(hours, 10);
-        if (modifier === 'PM' && hours < 12) {
-            hours += 12;
-        } else if (modifier === 'AM' && hours === 12) {
-            hours = 0;
-        }
-
+        if (modifier === 'PM' && hours < 12) hours += 12;
+        else if (modifier === 'AM' && hours === 12) hours = 0;
         return `${hours.toString().padStart(2, '0')}:${minutes}`;
     };
 
-    // Función para convertir de 24 horas a AM/PM
     const formatAMPM = (time) => {
         const [hours, minutes] = time.split(':');
         let hour = parseInt(hours, 10);
         const ampm = hour >= 12 ? 'PM' : 'AM';
-        hour = hour % 12;
-        hour = hour ? hour : 12;
+        hour = hour % 12 || 12;
         return `${hour}:${minutes} ${ampm}`;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        let validationErrors = [];
+        let validationErrors = {};
 
-        if (!data.modalidad) {
-            validationErrors.push('Por favor, seleccione una modalidad válida.');
-        }
-        if (!data.ciclo_id) {
-            validationErrors.push('Por favor, seleccione un ciclo válido.');
-        }
-        if (!data.docente_id) {
-            validationErrors.push('Por favor, seleccione un docente válido.');
-        }
-
-        if (!data.nroVacantes || data.nroVacantes < 0) {
-            validationErrors.push('Por favor, ingrese un número válido de vacantes.');
-        }
+        // Validación de campos
+        if (!data.modalidad) validationErrors.modalidad = 'Por favor, seleccione una modalidad válida.';
+        if (!data.ciclo_id) validationErrors.ciclo_id = 'Por favor, seleccione un ciclo válido.';
+        if (!data.docente_id) validationErrors.docente_id = 'Por favor, seleccione un docente válido.';
+        if (!data.nroVacantes || data.nroVacantes < 0) validationErrors.nroVacantes = 'Ingrese un número válido de vacantes.';
         if (data.horarioEntrada && data.horarioSalida && data.horarioEntrada >= data.horarioSalida) {
-            validationErrors.push('La hora de entrada debe ser anterior a la hora de salida.');
+            validationErrors.horario = 'La hora de entrada debe ser anterior a la hora de salida.';
         }
 
-        // Si hay errores de validación, se detiene el envío
-        if (validationErrors.length > 0) {
+        if (Object.keys(validationErrors).length > 0) {
+            // Mostrar errores
             setFormErrors(validationErrors);
+            setAlertMessage('Corrige los errores antes de continuar.');
+            setAlertType('error');
             return;
         }
 
-        // Formatear horarios si se ingresaron
+        // Formateo de horas
         if (data.horarioEntrada && data.horarioSalida) {
             const horarioEntradaFormatted = formatAMPM(data.horarioEntrada);
             const horarioSalidaFormatted = formatAMPM(data.horarioSalida);
             data.horario = `${horarioEntradaFormatted} - ${horarioSalidaFormatted}`;
         }
 
-        // Enviar datos de formulario
-        if (editing && selectedGrupo) {
-            router.put(`/grupo/${selectedGrupo.id}`, data, {
+        const formData = new FormData();
+        Object.keys(data).forEach(key => {
+            if (data[key] !== null) {
+                formData.append(key, data[key]);
+            }
+        });
+
+        // Enviar formulario
+        if (editingGrupo) {
+            formData.append('_method', 'PUT');
+            router.post(`/grupo/${editingGrupo.id}`, formData, {
+                forceFormData: true,
                 onSuccess: () => {
+                    setAlertMessage('¡Grupo actualizado exitosamente!');
+                    setAlertType('success');
                     reset();
-                    setEditing(false);
-                    setSelectedGrupo(null);
-                    if (onClose) onClose(); // Cerrar el modal después de actualizar exitosamente
+                    if (onClose) onClose();
                 },
-                preserveScroll: true,
+                onError: () => {
+                    setAlertMessage('Ocurrió un error al actualizar el grupo.');
+                    setAlertType('error');
+                },
             });
         } else {
-            console.log(data);
-            router.post('/grupo', data, {
+            router.post('/grupo', formData, {
+                forceFormData: true,
                 onSuccess: () => {
+                    setAlertMessage('¡Grupo registrado exitosamente!');
+                    setAlertType('success');
                     reset();
                 },
-                preserveScroll: true,
+                onError: () => {
+                    setAlertMessage('Ocurrió un error al registrar el grupo.');
+                    setAlertType('error');
+                },
             });
         }
     };
-
-    const handleEdit = (grupo) => {
-        setSelectedGrupo(grupo);
-        const horarios = grupo.horario ? grupo.horario.split(' - ') : [];
-        const horarioEntrada = horarios[0] ? formatTo24Hour(horarios[0]) : '';
-        const horarioSalida = horarios[1] ? formatTo24Hour(horarios[1]) : '';
-
-        setData({
-            periodo: grupo.periodo || '',
-            modalidad: grupo.modalidad || '',
-            nroEstudiantes: grupo.nroEstudiantes || '',
-            nroVacantes: grupo.nroVacantes || '',
-            horarioEntrada,
-            horarioSalida,
-            docente_id: grupo.docente_id || '',
-            ciclo_id: grupo.ciclo_id || '',
-        });
-        setEditing(true);
-    };
-
-    React.useEffect(() => {
-        if (editingGrupo) {
-            const horarios = editingGrupo.horario ? editingGrupo.horario.split(' - ') : [];
-            const horarioEntrada = horarios[0] ? formatTo24Hour(horarios[0]) : '';
-            const horarioSalida = horarios[1] ? formatTo24Hour(horarios[1]) : '';
-
-            setData({
-                periodo: editingGrupo.periodo || '',
-                modalidad: editingGrupo.modalidad || '',
-                nroEstudiantes: editingGrupo.nroEstudiantes || 0,
-                nroVacantes: editingGrupo.nroVacantes || '',
-                horarioEntrada,
-                horarioSalida,
-                docente_id: editingGrupo.docente_id || '',
-                ciclo_id: editingGrupo.ciclo_id || '',
-            });
-            setEditing(true);
-            setSelectedGrupo(editingGrupo);
-        }
-    }, [editingGrupo]);
 
     const handleCancelEdit = () => {
-        setEditing(false);
         reset();
-        setSelectedGrupo(null);
-        setModalidadError('');
-        setCicloError('');
-        setDocenteError('');
         if (onClose) onClose();
+        setAlertMessage('Edición cancelada.');
+        setAlertType('info');
     };
 
     return (
         <div className="container mx-auto p-6">
-
-            {formErrors.length > 0 && (
-                <div className="text-red-500 mb-4">
-                    {formErrors.map((error, index) => (
-                        <p key={index}>{error}</p>
-                    ))}
+            {alertMessage && (
+                <div
+                    className={`p-4 mb-4 text-sm rounded ${
+                        alertType === 'success' ? 'bg-green-100 text-green-700' :
+                        alertType === 'error' ? 'bg-red-100 text-red-700' : 
+                        'bg-blue-100 text-blue-700'
+                    }`}
+                >
+                    {alertMessage}
                 </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div>
-                        <label >Periodo</label>
+                        <label>Periodo</label>
                         <select
                             value={data.periodo}
                             onChange={(e) => setData('periodo', e.target.value)}
@@ -196,7 +151,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                     </div>
 
                     <div>
-                        <label >Modalidad</label>
+                        <label>Modalidad</label>
                         <select
                             name="modalidad"
                             value={data.modalidad}
@@ -207,13 +162,13 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                             <option value="PRESENCIAL">PRESENCIAL</option>
                             <option value="VIRTUAL">VIRTUAL</option>
                         </select>
-                        {modalidadError && (
-                            <div className="text-red-500 text-sm mt-1">{modalidadError}</div>
+                        {formErrors.modalidad && (
+                            <div className="text-red-500 text-sm mt-1">{formErrors.modalidad}</div>
                         )}
                     </div>
 
                     <div>
-                        <label >Número de Vacantes</label>
+                        <label>Número de Vacantes</label>
                         <input
                             type="number"
                             name="nroVacantes"
@@ -221,10 +176,13 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                             onChange={handleChange}
                             className="w-full rounded-md border-gray-300 shadow-sm"
                         />
+                        {formErrors.nroVacantes && (
+                            <div className="text-red-500 text-sm mt-1">{formErrors.nroVacantes}</div>
+                        )}
                     </div>
 
                     <div>
-                        <label >Horario de Entrada</label>
+                        <label>Horario de Entrada</label>
                         <input
                             type="time"
                             name="horarioEntrada"
@@ -235,7 +193,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                     </div>
 
                     <div>
-                        <label >Horario de Salida</label>
+                        <label>Horario de Salida</label>
                         <input
                             type="time"
                             name="horarioSalida"
@@ -243,10 +201,13 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                             onChange={handleChange}
                             className="w-full rounded-md border-gray-300 shadow-sm"
                         />
+                        {formErrors.horario && (
+                            <div className="text-red-500 text-sm mt-1">{formErrors.horario}</div>
+                        )}
                     </div>
 
                     <div>
-                        <label >Ciclo</label>
+                        <label>Ciclo</label>
                         <select
                             name="ciclo_id"
                             value={data.ciclo_id}
@@ -260,13 +221,13 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                                 </option>
                             ))}
                         </select>
-                        {cicloError && (
-                            <div className="text-red-500 text-sm mt-1">{cicloError}</div>
+                        {formErrors.ciclo_id && (
+                            <div className="text-red-500 text-sm mt-1">{formErrors.ciclo_id}</div>
                         )}
                     </div>
 
                     <div>
-                        <label >Docente</label>
+                        <label>Docente</label>
                         <select
                             name="docente_id"
                             value={data.docente_id}
@@ -280,41 +241,38 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
                                 </option>
                             ))}
                         </select>
-                        {docenteError && (
-                            <div className="text-red-500 text-sm mt-1">{docenteError}</div>
+                        {formErrors.docente_id && (
+                            <div className="text-red-500 text-sm mt-1">{formErrors.docente_id}</div>
                         )}
                     </div>
-                    <div >
+
+                    <div>
                         <input
                             type="number"
                             name="nroEstudiantes"
                             value={data.nroEstudiantes}
-                            onChange={handleChange}
-                            className="w-full rounded-md border-gray-300 shadow-sm"
                             hidden
+                            readOnly
                         />
                     </div>
+
                     <div className="flex items-center justify-end mt-6">
                         <button
                             type="submit"
                             disabled={processing}
                             className="bg-blue-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
                         >
-                            {editing ? 'Actualizar' : 'Registrar'}
+                            {editingGrupo ? 'Actualizar' : 'Registrar'}
                         </button>
-                        {editing && (
-                            <button
-                                type="button"
-                                onClick={handleCancelEdit}
-                                className="ml-4 text-gray-500"
-                            >
-                                Cancelar
-                            </button>
-                        )}
+                        <button
+                            type="button"
+                            onClick={handleCancelEdit}
+                            className="ml-3 bg-gray-300 text-black px-4 py-2 rounded-md"
+                        >
+                            Cancelar
+                        </button>
                     </div>
                 </div>
-
-
             </form>
         </div>
     );
