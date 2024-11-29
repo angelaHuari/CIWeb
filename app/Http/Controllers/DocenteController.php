@@ -27,17 +27,35 @@ class DocenteController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nombres' => 'required|string|max:255',
-            'aPaterno' => 'required|string|max:255',
-            'aMaterno' => 'required|string|max:255',
-            'sexo' => 'required|in:MASCULINO,FEMENINO',
-            'dni' => 'required|string|size:8|unique:docentes,dni',
-            'celular' => 'required|string|size:9',
-            'fechaNacimiento' => 'required|date',
-            'emailInstitucional' => 'required|email|unique:docentes,emailInstitucional',
-            'fotoDocente' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+        $validated = $request->validate(
+            [
+                'nombres' => 'required|string|max:255',
+                'aPaterno' => 'required|string|max:255',
+                'aMaterno' => 'required|string|max:255',
+                'sexo' => 'required|in:MASCULINO,FEMENINO',
+                'dni' => 'required|string|size:8|unique:docentes,dni',
+                'celular' => 'required|string|size:9',
+                'fechaNacimiento' => 'required|date',
+                'emailInstitucional' => 'required|email|unique:docentes,emailInstitucional',
+                'fotoDocente' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+
+            ],
+            [
+                'emailInstitucional.unique' => 'El email institucional ya está en uso',
+                'dni.unique' => 'El DNI ya está en uso',
+                'emailInstitucional.required' => 'El email institucional es obligatorio',
+                'dni.required' => 'El DNI es obligatorio',
+                'nombres.required' => 'El nombre es obligatorio',
+                'aPaterno.required' => 'El apellido paterno es obligatorio',
+                'aMaterno.required' => 'El apellido materno es obligatorio',
+                'sexo.required' => 'El sexo es obligatorio',
+                'celular.required' => 'El celular es obligatorio',
+                'fechaNacimiento.required' => 'La fecha de nacimiento es obligatoria',
+                'fotoDocente.image' => 'El archivo debe ser una imagen',
+                'fotoDocente.mimes' => 'El archivo debe ser de tipo: jpeg, png, jpg',
+                'fotoDocente.max' => 'El tamaño máximo de la imagen es de 2MB'
+            ]
+        );
 
         try {
             if ($request->hasFile('fotoDocente')) {
@@ -45,15 +63,15 @@ class DocenteController extends Controller
                 $validated['fotoDocente'] = Storage::url($path);
             }
 
-           // Crear usuario primero
-           $user = User::create([
-            'name' => $validated['nombres'] . ' ' . $validated['aPaterno'] . ' ' . $validated['aMaterno'],
-            'email' => $validated['emailInstitucional'],
-            'password' => bcrypt($validated['dni']),
-            'tipoUsuario' => 'doc',
-            'email_verified_at' => now(), // Añadir verificación de email
-            'remember_token' => Str::random(10), // Añadir remember token
-        ]);
+            // Crear usuario primero
+            $user = User::create([
+                'name' => $validated['nombres'] . ' ' . $validated['aPaterno'] . ' ' . $validated['aMaterno'],
+                'email' => $validated['emailInstitucional'],
+                'password' => bcrypt($validated['dni']),
+                'tipoUsuario' => 'doc',
+                'email_verified_at' => now(), // Añadir verificación de email
+                'remember_token' => Str::random(10), // Añadir remember token
+            ]);
 
             // Añadir user_id al docente
             $validated['user_id'] = $user->id;

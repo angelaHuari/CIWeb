@@ -6,6 +6,8 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
 
     const [editingDocente, setEditingDocente] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const isEdit = Boolean(editingDocente);
     const { data, setData, post, errors, processing, reset } = useForm({
         nombres: '',
@@ -119,6 +121,11 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setSuccessMessage('');
+        setErrorMessage('');
+
+        // Validación para verificar si todos los campos están completos
+        const requiredFields = ['nombres', 'aPaterno', 'aMaterno', 'dni', 'celular', 'fechaNacimiento', 'emailInstitucional', 'fotoDocente'];
 
         if (isEdit) {
             const formData = new FormData();
@@ -128,20 +135,21 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
                 }
             });
 
-            // Asegúrate de que el método PUT se esté enviando
             formData.append('_method', 'PUT');
 
             post(route('docente.update', editingDocente.id), {
-                forceFormData: true, // Usamos FormData
+                forceFormData: true,
                 data: formData,
                 onSuccess: () => {
                     reset();
                     setEditingDocente(null);
                     setPreviewImage(null);
                     closeModal();
+                    setSuccessMessage('Docente actualizado con éxito.');
                 },
                 onError: (errors) => {
                     console.log('Errores:', errors);
+                    setErrorMessage('Hubo un error al actualizar el docente.');
                 },
             });
         } else {
@@ -158,9 +166,11 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
                 onSuccess: () => {
                     reset();
                     setPreviewImage(null);
+                    setSuccessMessage('Docente registrado con éxito.');
                 },
                 onError: (errors) => {
                     console.log('Errores:', errors);
+                    setErrorMessage('Hubo un error al registrar el docente.');
                 },
             });
         }
@@ -168,6 +178,16 @@ const FormularioDocentes = ({ Docente, closeModal }) => {
 
     return (
         <div className="container mx-auto p-4 space-y-6">
+            {successMessage && (
+                <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                    <span className="block sm:inline">{successMessage}</span>
+                </div>
+            )}
+            {errorMessage && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <span className="block sm:inline">{errorMessage}</span>
+                </div>
+            )}
             <form
                 onSubmit={handleSubmit}
                 className="space-y-6 bg-white p-6 rounded-lg shadow"
