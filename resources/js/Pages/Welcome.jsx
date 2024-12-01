@@ -7,7 +7,8 @@ import DatosPagoBanco from './Formulario/DatosPagoBanco';
 
 
 export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
-    const { data, setData, post, processing, errors: serverErrors, reset,onSuccess } = useForm({
+    const [successMessage, setSuccessMessage] = useState('');
+    const { data, setData, post, errors: serverErrors, reset } = useForm({
         nombres: '',
         aPaterno: '',
         aMaterno: '',
@@ -102,16 +103,17 @@ export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        if (!validateForm()) {
-            window.scrollTo(0, 0); // Opcional: scroll al inicio para ver errores
-            alert('Por favor, corrija los errores antes de enviar el formulario');
-            return;
-        }
+        setSuccessMessage('');
+        /*
+                if (!validateForm()) {
+                    window.scrollTo(0, 0); // Opcional: scroll al inicio para ver errores
+                    alert('Por favor, corrija los errores antes de enviar el formulario');
+                    return;
+                }*/
 
         // Crear un FormData si hay un archivo
         const formData = new FormData();
-        
+
         // Agregar todos los campos al FormData
         Object.keys(data).forEach(key => {
             if (key === 'imgComprobante' && data[key] instanceof File) {
@@ -122,11 +124,12 @@ export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
         });
 
         // Enviar el formulario usando post
-        post(route('formulario.store'), formData, {
+        post(route('formulario.store'), {
             forceFormData: true,
+            data: formData,
             onSuccess: () => {
                 reset();
-                alert('Formulario enviado correctamente');
+                setSuccessMessage('Formulario enviado correctamente.');
             },
             onError: (errors) => {
                 console.error(errors);
@@ -134,22 +137,24 @@ export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
                 alert('Error al enviar el formulario');
             }
         });
-        
+
     };
+
+
 
     return (
         <>
             <Head title="Welcome" />
             <div className="bg-gradient-to-b from-[#800020] to-[#F5D0A9] min-h-screen text-black">
                 <div className="fixed top-0 left-0 right-0 z-50 shadow-md">
-                    <header className="flex items-center bg-[#F3F2C6] w-full px-4 py-2">
+                    <header className="flex items-center bg-white w-full px-4 py-2">
                         <div className="flex items-center space-x-4 ml-4">
                             <img
                                 src="imagenes/logo.png"
                                 alt="Logo de la Institución"
                                 className="h-16 w-auto"
                             />
-                            <h2 className="text-l font-semibold text-black mt-4">
+                            <h2 className="text-xl font-semibold text-black mt-4">
                                 CENTRO DE IDIOMAS
                             </h2>
                         </div>
@@ -178,10 +183,16 @@ export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
                         <main className="p-8">
                             <div className="welcome-container">
                                 <h1 className="text-3xl font-bold text-white mb-6 text-center">Formulario de Inscripción</h1>
+
+                                {successMessage && (
+                                    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                                        <span className="block sm:inline">{successMessage}</span>
+                                    </div>
+                                )}
                                 <form onSubmit={handleSubmit} encType="multipart/form-data">
                                     <div className="triptico-container grid grid-cols-3 gap-6">
                                         <div className="triptico-section bg-white/90 p-4 rounded-lg shadow-md">
-                                            <DatosGenerales data={data} setData={setData} errors={{...serverErrors, ...validationErrors}} />
+                                            <DatosGenerales data={data} setData={setData} errors={{ ...serverErrors, ...validationErrors }} />
                                         </div>
                                         <div className="triptico-section bg-white/90 p-4 rounded-lg shadow-md">
                                             <DatosAdicionales grupos={ListaGrupos} ciclos={ListaCiclos} data={data} setData={setData} />
@@ -193,8 +204,8 @@ export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
                                     </div>
                                     <br />
                                     <div className="text-center">
-                                        <button 
-                                            type="submit" 
+                                        <button
+                                            type="submit"
                                             className="bg-[#800020] text-white px-6 py-2 rounded-md hover:bg-[#6A4E3C] transition-colors"
                                         >
                                             Enviar
