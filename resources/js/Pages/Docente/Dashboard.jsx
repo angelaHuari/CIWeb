@@ -1,25 +1,11 @@
 import AuthenticatedLayoutDoc from '@/Layouts/AuthenticatedLayoutDoc';
 import { Head } from '@inertiajs/react';
-import { FaClipboardCheck, FaHandsHelping, FaLightbulb, FaComments, FaShieldAlt } from 'react-icons/fa';
-import { useState } from 'react';
+import { FaUsers, FaFileAlt, FaEdit, FaFilePdf , FaClipboardList } from 'react-icons/fa';
+import { router } from '@inertiajs/react';
 
 export default function Dashboard() {
-    const [info, setInfo] = useState('');
-
-    // Función para manejar clics en los valores
-    const handleCardClick = (value) => {
-        if (value === 'Responsabilidad') {
-            setInfo('La responsabilidad es clave para el éxito de cualquier organización.');
-        } else if (value === 'Empatía') {
-            setInfo('La empatía nos permite entender y conectar con los demás.');
-        } else if (value === 'Creatividad') {
-            setInfo('La creatividad es fundamental para encontrar soluciones innovadoras.');
-        } else if (value === 'Comunicación') {
-            setInfo('Una buena comunicación facilita la colaboración y el entendimiento.');
-        } else if (value === 'Integridad') {
-            setInfo('La integridad es la base de una ética sólida y relaciones de confianza.');
-        }
-    };
+    // Function to handle navigation to different sections
+    
 
     return (
         <AuthenticatedLayoutDoc
@@ -43,117 +29,106 @@ export default function Dashboard() {
                                 {/* Imagen 1 - Logo */}
                                 <div className="overflow-hidden rounded-lg shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105">
                                     <img
-                                        src="/imagenes/Ins.png" // Ruta de tu logo
+                                        src="/imagenes/profe.jpg"
                                         alt="Logo de la aplicación"
-                                        className="w-full h-40 object-contain" // Ajustar el tamaño de la imagen
+                                        className="w-full h-40 object-contain"
                                     />
                                 </div>
 
                                 {/* Imagen 2 - Idiomas */}
                                 <div className="overflow-hidden rounded-lg shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105">
                                     <img
-                                        src="/imagenes/idiomaE.jpg" // Ruta de la tercera imagen
+                                        src="/imagenes/profe2.jpg"
                                         alt="Idiomas"
-                                        className="w-full h-40 object-contain" // Ajustar el tamaño de la imagen
+                                        className="w-full h-40 object-contain"
                                     />
                                 </div>
 
                                 {/* Imagen 3 - Curso de Inglés */}
                                 <div className="overflow-hidden rounded-lg shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105">
                                     <img
-                                        src="/imagenes/inglesCurso.jpg" // Ruta de la segunda imagen
+                                        src="/imagenes/profesor.jpg"
                                         alt="Curso de Inglés"
-                                        className="w-full h-40 object-contain" // Ajustar el tamaño de la imagen
+                                        className="w-full h-40 object-contain"
                                     />
                                 </div>
                             </div>
 
                             <h3 className="text-2xl font-semibold mb-4 text-[#6A4E3C]">
-                                ¡Bienvenido!
+                                Funciones del Docente
                             </h3>
                             <p className="mb-6 text-[#4B4B4B]">
-                                Aquí podrás gestionar todas las configuraciones necesarias para el correcto funcionamiento de la aplicación.
-                                Utiliza las opciones en el menú para navegar entre las distintas secciones y realizar las acciones que necesites.
+                                Accede a las principales funcionalidades para gestionar tus cursos y estudiantes.
                             </p>
-                            <h3 className="text-2xl font-semibold mb-4 text-[#800020]">
-                                Nuestros Valores
-                            </h3>
 
-                            {/* Información adicional al hacer clic */}
-                            {info && (
-                                <div className="bg-[#F5D0A9] p-4 rounded-lg shadow-md mb-6 text-center text-[#800020]">
-                                    <p>{info}</p>
-                                </div>
-                            )}
-
-                            {/* Cards Section - Valores */}
+                            {/* Cards Section - Funciones */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                                {/* Card Responsabilidad */}
+                                {/* Card Lista de Estudiantes */}
                                 <div
                                     className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer"
-                                    onClick={() => handleCardClick('Responsabilidad')}
-                                    aria-label="Responsabilidad"
+                                    
+                                    aria-label="Lista de Estudiantes"
                                     tabIndex="0"
                                 >
-                                    <FaClipboardCheck className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Responsabilidad</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Nos comprometemos a cumplir con nuestras tareas y obligaciones.</p>
+                                    <FaUsers className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Lista de Estudiantes</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Consulta y administra los estudiantes de tus grupos.</p>
                                 </div>
 
-                                {/* Card Empatía */}
+                                {/* Card Generar Reportes */}
                                 <div
                                     className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer"
-                                    onClick={() => handleCardClick('Empatía')}
-                                    aria-label="Empatía"
+                                    
+                                    aria-label="Generar Reportes"
                                     tabIndex="0"
                                 >
-                                    <FaHandsHelping className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Empatía</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Escuchamos y comprendemos las necesidades de los demás.</p>
+                                    <FaFileAlt className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Generar Reportes</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Crea informes sobre la lista de estudiantes de cada grupo.</p>
                                 </div>
 
-                                {/* Card Creatividad */}
+                                {/* Card Registrar Notas */}
                                 <div
                                     className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer"
-                                    onClick={() => handleCardClick('Creatividad')}
-                                    aria-label="Creatividad"
+                                   
+                                    aria-label="Registrar Notas"
                                     tabIndex="0"
                                 >
-                                    <FaLightbulb className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Creatividad</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Buscamos soluciones innovadoras para superar desafíos.</p>
+                                    <FaEdit className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Registrar Calificaciones</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Ingresa calificaciones finales de los estudiantes.</p>
                                 </div>
                             </div>
 
                             {/* Additional Cards Section */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-6">
-                                {/* Card Comunicación */}
+                                {/* Card Estadísticas */}
                                 <div
                                     className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer"
-                                    onClick={() => handleCardClick('Comunicación')}
-                                    aria-label="Comunicación"
+                                    
+                                    aria-label="Estadísticas"
                                     tabIndex="0"
                                 >
-                                    <FaComments className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Comunicación</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Mantenemos un diálogo abierto y honesto.</p>
+                                    <FaFilePdf className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]"  /> 
+                                   
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Generación de PDF</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Visualiza e imprime la lista de estudiantes de cada grupo.</p>
                                 </div>
 
-                                {/* Card Integridad */}
+                                {/* Card Gestión de Cursos */}
                                 <div
                                     className="bg-[#800020] p-4 rounded-lg shadow-lg hover:shadow-2xl hover:bg-[#6A4E3C] transition-all cursor-pointer"
-                                    onClick={() => handleCardClick('Integridad')}
-                                    aria-label="Integridad"
+                                    onClick={() => handleCardClick('/gestion-cursos')}
+                                    aria-label="Gestión de Cursos"
                                     tabIndex="0"
                                 >
-                                    <FaShieldAlt className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
-                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Integridad</h4>
-                                    <p className="text-[#F5D0A9] text-sm">Actuamos con honestidad y ética en todas nuestras interacciones.</p>
+                                    <FaClipboardList className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
+                                    <h4 className="text-lg font-semibold text-[#F5D0A9]">Gestión de Grupos</h4>
+                                    <p className="text-[#F5D0A9] text-sm">Administra los grupos que estas a cargo.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </AuthenticatedLayoutDoc>

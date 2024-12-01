@@ -58,7 +58,7 @@ export default function VerGrupos({ docente = {}, grupos = [], error }) {
     return (
         <AuthenticatedLayoutDoc
             header={
-                <h2 className="text-3xl font-bold leading-tight text-white bg-[#6A1C1C] p-6 rounded-lg shadow-xl text-center">
+                <h2 className="text-3xl font-bold leading-tight text-white bg-gradient-to-r from-[#800020] to-[#6A4E3C] p-6 rounded-lg shadow-xl text-center">
                     Panel de Control - Docente
                 </h2>
             }
@@ -66,28 +66,28 @@ export default function VerGrupos({ docente = {}, grupos = [], error }) {
             <Head title="Dashboard - Docente" />
 
             {/* Información del Docente */}
-            <div className="py-6">
+            <div className="py-12 bg-gradient-to-b from-[#800020] to-[#F5D0A9] min-h-screen">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-[#6A1C1C]  shadow-sm sm:rounded-lg p-6 mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-4">
+                    <div className="bg-[#FCF8E8] shadow-sm sm:rounded-lg p-6 mb-6">
+                        <h3 className="text-2xl font-bold text-black mb-4">
                             Información Personal
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <p className="text-white"><span className="font-semibold">Nombre completo:</span> {nombreCompleto}</p>
-                                <p className="text-white"><span className="font-semibold">DNI:</span> {docente.dni}</p>
-                                <p className="text-white"><span className="font-semibold">Sexo:</span> {docente.sexo}</p>
-                                <p className="text-white"><span className="font-semibold">Fecha de nacimiento:</span> {docente.fechaNacimiento}</p>
+                                <p className="text-black"><span className="font-semibold">Nombre completo:</span> {nombreCompleto}</p>
+                                <p className="text-black"><span className="font-semibold">DNI:</span> {docente.dni}</p>
+                                <p className="text-black"><span className="font-semibold">Sexo:</span> {docente.sexo}</p>
+                                <p className="text-black"><span className="font-semibold">Fecha de nacimiento:</span> {docente.fechaNacimiento}</p>
                             </div>
                             <div>
-                                <p className="text-white"><span className="font-semibold">Email institucional:</span> {docente.emailInstitucional}</p>
-                                <p className="text-white"><span className="font-semibold">Celular:</span> {docente.celular}</p>
+                                <p className="text-black"><span className="font-semibold">Email institucional:</span> {docente.emailInstitucional}</p>
+                                <p className="text-black"><span className="font-semibold">Celular:</span> {docente.celular}</p>
                                 {docente.fotoDocente && (
                                     <div className="mt-4">
                                         <img 
                                             src={docente.fotoDocente} 
                                             alt="Foto del docente"
-                                            className="w-32 h-32 object-cover rounded-full border-4 border-gray-200"
+                                            className="w-32 h-32 object-cover rounded-full border-4 border-[#F5D0A9]"
                                         />
                                     </div>
                                 )}
@@ -95,41 +95,41 @@ export default function VerGrupos({ docente = {}, grupos = [], error }) {
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Grupos del Docente */}
-            <div className="py-6">
+                {/* Grupos del Docente */}
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-[#6A1C1C] shadow-sm sm:rounded-lg p-6">
-                        <h3 className="text-2xl font-bold text-white mb-4">
+                    <div className="bg-[#FCF8E8] shadow-sm sm:rounded-lg p-6">
+                        <h3 className="text-2xl font-bold  mb-4">
                             Mis Grupos Asignados
                         </h3>
                         <div className="overflow-x-auto">
                             <table className="min-w-full table-auto">
-                                <thead className="bg-[#6A1C1C]">
+                                <thead className="bg-[#800020]">
                                     <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Periodo</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Modalidad</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Horario</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Estudiantes</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Vacantes</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Ciclo</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Acciones</th>
+                                        {['Periodo', 'Modalidad', 'Horario', 'Estudiantes', 'Vacantes', 'Ciclo', 'Acciones'].map((header) => (
+                                            <th key={header} className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                                                {header}
+                                            </th>
+                                        ))}
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
+                                <tbody className="bg-amber-50 divide-y divide-gray-200">
                                     {grupos.map((grupo) => (
                                         <tr key={grupo.id} className="hover:bg-[#F4D6C5]">
-                                            <td className="px-6 py-4 whitespace-nowrap">{grupo.periodo}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{grupo.modalidad}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{grupo.horario}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{grupo.nroEstudiantes}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{grupo.nroVacantes}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{grupo.ciclo?.nombre}</td>
+                                            {[
+                                                grupo.periodo, 
+                                                grupo.modalidad, 
+                                                grupo.horario, 
+                                                grupo.nroEstudiantes, 
+                                                grupo.nroVacantes, 
+                                                grupo.ciclo?.nombre
+                                            ].map((value, index) => (
+                                                <td key={index} className="px-6 py-4 whitespace-nowrap">{value}</td>
+                                            ))}
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <button
                                                     onClick={() => handleOpenModal(grupo)}
-                                                    className="bg-[#800020] hover:bg-[#6A4E3C] text-white font-bold py-2 px-4 rounded"
+                                                    className="bg-[#800020] hover:bg-[#6A4E3C] text-[#F5D0A9] font-bold py-2 px-4 rounded"
                                                 >
                                                     Ver Detalles
                                                 </button>
@@ -144,12 +144,15 @@ export default function VerGrupos({ docente = {}, grupos = [], error }) {
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Modal */}
-            {isModalOpen && selectedGrupo && (
+                {/* Resto del código permanece igual */}
+                {/* ... */}
+            </div>
+             {/* Modal */}
+             {isModalOpen && selectedGrupo && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-8 rounded-lg max-w-4xl w-full max-h-[80vh] overflow-y-auto">
+                    <div className="p-8 rounded-lg max-w-4xl w-full max-h-[80vh] overflow-y-auto" style={{ backgroundColor: "#FBF7E7" }}>
+
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-2xl font-bold">Lista de Estudiantes - {selectedGrupo.periodo}</h2>
                             <button
@@ -251,6 +254,3 @@ export default function VerGrupos({ docente = {}, grupos = [], error }) {
         </AuthenticatedLayoutDoc>
     );
 };
-
-
-
