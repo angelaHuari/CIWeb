@@ -63,7 +63,7 @@ Route::middleware('EsAdmin')->group(function () {
     Route::resource('matricula', MatriculaController::class);
     Route::resource('grupo', GrupoController::class);
     Route::resource('/estadisticas', EstadisticasController::class);
-    Route::get('/estadisticas/filtrar', [EstadisticasController::class, 'filtrar']);
+    Route::post('/estadisticas/filtrar', [EstadisticasController::class, 'filtrar']);
     Route::post('/formularios/{id}/aceptar', [FormularioController::class, 'aceptar'])->name('formularios.aceptar');
     Route::post('/formularios/{id}/rechazar', [FormularioController::class, 'rechazar'])->name('formularios.rechazar');
     Route::get('/gestionestudiantesgrupo', function () {
