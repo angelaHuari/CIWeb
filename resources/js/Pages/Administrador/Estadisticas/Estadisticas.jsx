@@ -198,25 +198,29 @@ const Estadisticas = ({ tiposAlumnos = [], medioPublicitario = [] }) => {
                 </select>
               </div>
               <div className="w-full sm:w-auto">
-                <label htmlFor="year" className="block text-sm font-medium text-[#3333331]">Año</label>
-                <select
-                  id="year"
-                  value={year}
-                  onChange={(e) => setYear(e.target.value)}
-                  className="mt-1 px-4 py-3 bg-white text-black rounded-md w-full sm:w-56 border border-gray-300 focus:ring-2 focus:ring-[#3E0B10]"
-                  aria-label="Año de filtro"
-                >
-                  <option value="">Selecciona un año</option>
-                  {[...Array(10)].map((_, index) => {
-                    const yearOption = new Date().getFullYear() - index;
-                    return (
-                      <option key={yearOption} value={yearOption}>
-                        {yearOption}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
+  <label htmlFor="year" className="block text-sm font-medium text-[#3333331]">Año</label>
+  <select
+    id="year"
+    value={year}
+    onChange={(e) => setYear(e.target.value)}
+    className="mt-1 px-4 py-3 bg-white text-black rounded-md w-full sm:w-56 border border-gray-300 focus:ring-2 focus:ring-[#3E0B10]"
+    aria-label="Año de filtro"
+  >
+    <option value="">Selecciona un año</option>
+    {
+      // Generar un rango de años desde 2020 hasta el año actual
+      [...Array(new Date().getFullYear() - 2020 + 1)].map((_, index) => {
+        const yearOption = 2020 + index; // Año empieza en 2020 y se incrementa
+        return (
+          <option key={yearOption} value={yearOption}>
+            {yearOption}
+          </option>
+        );
+      })
+    }
+  </select>
+</div>
+
 
               <div className="w-full sm:w-auto">
              

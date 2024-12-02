@@ -16,8 +16,17 @@ class GrupoFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            //
+        $meses = [
+            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
         ];
+        return [
+            'modalidad' => $this->faker->randomElement(['Presencial', 'Virtual']), // Modalidad del curso
+            'periodo' => $this->faker->year() . ' - ' . $meses[$this->faker->numberBetween(0, 11)], // Año y mes en letras
+            'nroEstudiantes' => $this->faker->numberBetween(20, 100), // Número de estudiantes
+            'nroVacantes' => $this->faker->numberBetween(5, 50), // Número de vacantes
+            'horario' => $this->faker->time('H:i'), // Hora del curso (formato HH:MM)
+        
+     ];
     }
 }
