@@ -21,7 +21,7 @@ use Inertia\Inertia;
 //Pagina de Inicio
 Route::get('/', function () {
     $grupos = Grupo::with(['ciclo.idioma', 'docente'])->get();
-    
+
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'ListaGrupos' => $grupos,
@@ -29,7 +29,7 @@ Route::get('/', function () {
 });
 
 
-Route::post('/formulario',[FormularioController::class,'store'])->name('formulario.store');
+Route::post('/formulario', [FormularioController::class, 'store'])->name('formulario.store');
 //Para Todos los Usuarios
 //verifica que sea un usuario
 Route::get('/inicio', function () {
@@ -52,11 +52,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
+//ver certificados
+Route::get('/verificar-certificado/{codigo}', [FuncionEstudianteController::class, 'verificar'])->name('verificar.certificado');
 
 //Para Administrador
 Route::middleware('EsAdmin')->group(function () {
-    Route::get('/formulario',[FormularioController::class,'index'])->name('formulario.index');
+    Route::get('/formulario', [FormularioController::class, 'index'])->name('formulario.index');
     Route::resource('idioma', IdiomaController::class);
     Route::resource('ciclo', CicloController::class);
     Route::resource('docente', DocenteController::class);
@@ -72,14 +73,19 @@ Route::middleware('EsAdmin')->group(function () {
             'grupos' => $grupos
         ]);
     })->name('gestion.estudiantes.grupo');
-    
-    Route::get('/usuarios',[FuncionAdminController::class, 'index'])->name('usuarios.index');
 
-    Route::post('/aprobar',[FuncionAdminController::class, 'aprobar'])->name('matricula.aprobar');
-    Route::post('/rechazar',[FuncionAdminController::class, 'rechazar'])->name('matricula.rechazar');
-    
+    Route::get('/usuarios', [FuncionAdminController::class, 'index'])->name('usuarios.index');
+
+    Route::post('/aprobar', [FuncionAdminController::class, 'aprobar'])->name('matricula.aprobar');
+    Route::post('/rechazar', [FuncionAdminController::class, 'rechazar'])->name('matricula.rechazar');
+
     Route::get('/reporte-estudiantes-grupo/{grupoId}', [GrupoController::class, 'generarReporte'])
         ->name('reporte.estudiantes.grupo');
+        
+    Route::post('/generar', [FuncionAdminController::class, 'generarCertificado'])->name('generar.certificado');
+
+    Route::get('/mostrarQR/{id}', [FuncionAdminController::class, 'mostrarCertificado'])->name('mostrar.certificado');
+    
 });
 
 
@@ -90,6 +96,7 @@ Route::middleware('EsEstudiante')->group(function () {
     Route::get('estudiante', [FuncionEstudianteController::class, 'registrar'])->name('estudiante.registrar');
     Route::get('estudiante/ver', [FuncionEstudianteController::class, 'ver'])->name('estudiante.ver');
     Route::post('estudiante/enviar', [FuncionEstudianteController::class, 'enviar'])->name('estudiante.enviar');
+    
 });
 
 

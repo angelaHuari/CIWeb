@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Certificado;
+use App\Models\Estudiante;
 use App\Models\FormularioMatricula;
 use App\Models\Grupo;
 use App\Models\Matricula;
@@ -12,19 +14,50 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class FuncionAdminController extends Controller
 {
     public function index()
     {
         $usuarios = User::paginate(15);
-        return Inertia::render('Administrador/Usuarios/Index', ['usuarios' => $usuarios]);
+        $estudiantes = Matricula::with(['estudiante', 'grupo.ciclo'])
+            ->whereHas('grupo.ciclo', function ($query) {
+                $query->where('nombre', 'BASICO')
+                    ->where('nivel', 4);
+            })
+            ->get();
+        $certificados = Certificado::with('estudiante')->paginate(15);
+        return Inertia::render('Administrador/Usuarios/Index', ['usuarios' => $usuarios, 'estudiantes' => $estudiantes, 'certificados' => $certificados]);
     }
 
 
-    public function create()
+    public function generarCertificado(Request $request)
     {
-        //
+        $codigo = Str::uuid(); // Genera un identificador único
+        //$estudiante = Estudiante::findorfail($request->estudiante_id);
+        //$nombre=$estudiante->nombres.$estudiante->aPaterno;
+        $certificado = Certificado::create([
+            'nombre' => $request->nombre,
+            'codigo' => $codigo,
+            'estudiante_id' => $request->idEst,
+        ]);
+
+        return $certificado;
+    }
+
+    public function mostrarCertificado($id)
+    {
+
+        $certificado = Certificado::findOrFail($id);
+
+        // Generar QR y codificarlo en svg
+        $qrCode = QrCode::format('svg')
+            ->size(200)
+            ->generate(route('verificar.certificado', ['codigo' => $certificado->codigo]));
+
+        return view('certificados.mostrar', compact('certificado', 'qrCode'));
     }
 
     public function aprobar(Request $request)

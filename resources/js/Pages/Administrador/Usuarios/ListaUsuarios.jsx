@@ -5,7 +5,7 @@ const ListaUsuarios = ({ ListaUsuarios = [] }) => {
     return (
         <div className="min-h-screen bg-gradient-to-r from-[#800020] to-[#F5D0A9] py-12">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                <h1 className="overflow-x-auto rounded-lg text-red-950 font-semibold " >
+                <h1 className="overflow-x-auto rounded-lg text-white font-semibold " >
                     Usuarios Registrados
                 </h1>
                 <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
