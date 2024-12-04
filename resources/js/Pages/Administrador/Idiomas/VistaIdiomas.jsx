@@ -10,6 +10,7 @@ const VistaIdiomas = ({ idiomas = [] }) => {
   const [languages, setLanguages] = useState(Array.isArray(idiomas) ? idiomas : []);//lista de Idiomas
 
   const [selectedLanguage, setSelectedLanguage] = useState(null); // Idioma seleccionado para edición
+  const [message, setMessage] = useState(''); // Mensaje de confirmación
 
   // Manejar el envío del formulario para registrar o editar un idioma
   const handleSubmit = async (e) => {
@@ -17,14 +18,18 @@ const VistaIdiomas = ({ idiomas = [] }) => {
 
     if (selectedLanguage) {
       // Editar idioma en base de datos
-      put(route('idioma.update', selectedLanguage));
+      put(route('idioma.update', selectedLanguage), {
+        onSuccess: () => setMessage('Idioma modificado exitosamente.')
+      });
 
       // Limpiar selección de idioma
       setSelectedLanguage(null);
 
     } else {
       // Crear y registrar un nuevo idioma en la base de datos
-      post(route('idioma.store'));
+      post(route('idioma.store'), {
+        onSuccess: () => setMessage('Idioma agregado exitosamente.')
+      });
 
     }
     // Limpiar el formulario
@@ -79,6 +84,7 @@ const VistaIdiomas = ({ idiomas = [] }) => {
           </form>
 
         </div>
+        {message && <div className="text-green-500 text-center mb-4">{message}</div>}
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="overflow-x-auto">
             <table className="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg">

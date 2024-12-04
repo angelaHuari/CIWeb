@@ -4,6 +4,7 @@ import { FaEye, FaPen } from 'react-icons/fa';
 
 const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
     const [selectedCycle, setSelectedCycle] = useState(null); // Ciclo seleccionado para edición
+    const [message, setMessage] = useState(''); // Mensaje de confirmación
 
     const { data, setData, post, put, processing, errors, reset } = useForm({
         nombre: '',
@@ -14,19 +15,21 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
     // Opciones de idiomas y periodos
     const languagesOptions = idiomas;
 
-
     // Manejar el envío del formulario para registrar o editar un ciclo
     const handleSubmit = (e) => {
         e.preventDefault();
-        //console.log(data);
 
         if (selectedCycle) {
             // Editar ciclo
-            put(route('ciclo.update', selectedCycle));
+            put(route('ciclo.update', selectedCycle), {
+                onSuccess: () => setMessage('Ciclo modificado exitosamente.')
+            });
             setSelectedCycle(null); // Limpiar selección de ciclo
         } else {
             // Crear nuevo ciclo
-            post(route('ciclo.store'));
+            post(route('ciclo.store'), {
+                onSuccess: () => setMessage('Ciclo agregado exitosamente.')
+            });
         }
 
         // Limpiar el formulario
@@ -59,6 +62,7 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                     {/* Formulario para agregar o editar un ciclo */}
                     <div className="w-full max-w-full mx-auto">
                         <h3 className="text-xl font-semibold mb-4 text-center md:text-left">Registro de Ciclo</h3>
+                        {message && <div className="text-green-500 text-center mb-4">{message}</div>}
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="grid grid-cols-3 gap-4 items-center">
                                 {/* Columna 1: Nombre */}

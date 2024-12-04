@@ -24,6 +24,9 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        if (name === 'nroVacantes' && (value < 0 || value.includes('='))) {
+            return;
+        }
         setData(name, value);
     };
 
@@ -53,7 +56,7 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
         if (!data.modalidad) validationErrors.modalidad = 'Por favor, seleccione una modalidad válida.';
         if (!data.ciclo_id) validationErrors.ciclo_id = 'Por favor, seleccione un ciclo válido.';
         if (!data.docente_id) validationErrors.docente_id = 'Por favor, seleccione un docente válido.';
-        if (!data.nroVacantes || data.nroVacantes < 0) validationErrors.nroVacantes = 'Ingrese un número válido de vacantes.';
+        if (!data.nroVacantes || data.nroVacantes <= 0) validationErrors.nroVacantes = 'Ingrese un número válido de vacantes.';
         if (data.horarioEntrada && data.horarioSalida && data.horarioEntrada >= data.horarioSalida) {
             validationErrors.horario = 'La hora de entrada debe ser anterior a la hora de salida.';
         }
@@ -123,11 +126,10 @@ const GestionGrupos = ({ grupos, ciclos, docentes, editingGrupo, onClose }) => {
         <div className="container mx-auto p-6">
             {alertMessage && (
                 <div
-                    className={`p-4 mb-4 text-sm rounded ${
-                        alertType === 'success' ? 'bg-green-100 text-green-700' :
-                        alertType === 'error' ? 'bg-red-100 text-red-700' : 
-                        'bg-blue-100 text-blue-700'
-                    }`}
+                    className={`p-4 mb-4 text-sm rounded ${alertType === 'success' ? 'bg-green-100 text-green-700' :
+                            alertType === 'error' ? 'bg-red-100 text-red-700' :
+                                'bg-blue-100 text-blue-700'
+                        }`}
                 >
                     {alertMessage}
                 </div>

@@ -28,11 +28,11 @@ class DatabaseSeeder extends Seeder
         
         // User::factory(10)->create();
 
-    //   User::factory()->create([
+       User::factory()->create([
            // para admin
-      //     'name' => 'Cuenta Administrador',
-        //   'email' => 'admin@gmail.com',
-          //  'tipoUsuario' => 'admin',
+           'name' => 'Cuenta Administrador',
+           'email' => 'admin@gmail.com',
+           'tipoUsuario' => 'admin',
             //para estudiante
             /*'name' => 'Cuenta Estudiante',
             'email' => 'estudiante@gmail.com',
@@ -40,8 +40,7 @@ class DatabaseSeeder extends Seeder
             //para docente
             /*'name' => 'Cuenta Docente',
             'email' => 'docente@gmail.com',
-            'tipoUsuario' => 'doc',*/
-    //   ]);
+            'tipoUsuario' => 'doc',*/  ]);
 
         
        
