@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { FaEye, FaPen } from 'react-icons/fa';
 import FormularioDocentes from './FormularioDocentes';
@@ -8,6 +7,31 @@ const TablaDocentes = ({ docentes }) => {
     const [showModalEdit, setShowModalEdit] = useState(false);
     const [selectedDocente, setSelectedDocente] = useState(null);
     const [showCredentials, setShowCredentials] = useState(false);
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const docentesPerPage = 10; // Number of docentes per page
+
+    // Calculate total pages
+    const totalPages = Math.ceil(docentes.length / docentesPerPage);
+
+    // Get current slice of docentes for the current page
+    const indexOfLastDocente = currentPage * docentesPerPage;
+    const indexOfFirstDocente = indexOfLastDocente - docentesPerPage;
+    const currentDocentes = docentes.slice(indexOfFirstDocente, indexOfLastDocente);
+
+    // Handle page change
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
 
     const handleShowModal = (docente) => {
         if (!docente) return;
@@ -41,8 +65,8 @@ const TablaDocentes = ({ docentes }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {docentes.length > 0 ? (
-                        docentes.map((docente) => (
+                    {currentDocentes.length > 0 ? (
+                        currentDocentes.map((docente) => (
                             <tr
                                 key={docente.id}
                                 className="border-b hover:bg-[#F4D6C5] cursor-pointer"
@@ -58,7 +82,6 @@ const TablaDocentes = ({ docentes }) => {
                                         className="text-[#800020] hover:text-[#6A4E3C]"
                                     >
                                         <FaPen className="text-xl mr-3" />
-                                        
                                     </button>
                                     <button
                                         onClick={() => handleShowModal(docente)}
@@ -94,7 +117,6 @@ const TablaDocentes = ({ docentes }) => {
 
                         <div className="flex">
                             <div className="flex-1 text-left pr-4">
-
                                 <p><strong>Nombres:</strong> {selectedDocente.nombres || 'No disponible'}</p>
                                 <p><strong>Apellido Paterno:</strong> {selectedDocente.aPaterno || 'No disponible'}</p>
                                 <p><strong>Apellido Materno:</strong> {selectedDocente.aMaterno || 'No disponible'}</p>
@@ -165,7 +187,32 @@ const TablaDocentes = ({ docentes }) => {
                 </div>
             )}
 
-
+            {/* Pagination controls */}
+            <div className="mt-6 flex justify-center items-center space-x-2">
+            <button
+                    className="px-6 py-2 bg-[#700303] text-white rounded hover:bg-[#6b0202] transition"
+                    onClick={handlePreviousPage(currentPage > 1 ? currentPage -1 :1)}
+                    disabled={currentPage === 1}
+                >
+                    Anterior
+                </button>
+                {Array.from({ length: totalPages }, (_, index) => (
+                            <button
+                                key={index + 1}
+                                className={`px-4 py-2 border rounded ${currentPage === index + 1 ? 'bg-red-900 text-white' : 'bg-white text-[#700303]'}`}
+                                onClick={() => handlePageChange(index + 1)}
+                            >
+                                {index + 1}
+                            </button>
+                        ))}
+                <button
+                    className="px-6 py-2 bg-[#700303] text-white rounded hover:bg-[#6b0202] transition"
+                    onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
+                    disabled={currentPage === totalPages}
+                >
+                    Siguiente
+                </button>
+            </div>
         </div>
     );
 };

@@ -23,7 +23,7 @@ const VistaMatriculas = ({ matriculas }) => {
 
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-[#800020] to-[#F5D0A9] py-12">
+        <div className="min-h-screen bg- py-12">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 {/* Buscador */}
                 <div className="mb-4 flex justify-center">
@@ -77,10 +77,10 @@ const VistaMatriculas = ({ matriculas }) => {
                             {filteredMatriculas.length > 0 ? (
                                 filteredMatriculas.map((ma, index) => (
                                     <tr key={index} className="border-b hover:bg-[#F4D6C5]">
-                                        <td className="px-6 py-3">{ma.estudiante.nombres} {ma.estudiante.aPaterno} {ma.estudiante.aMaterno}</td>
-                                        <td className="px-6 py-3">{new Date(ma.fecha).toLocaleDateString()}</td>
-                                        <td className="px-6 py-3">{ma.grupo.periodo} {ma.grupo.ciclo.idioma.nombre} {ma.grupo.ciclo.nombre} {ma.grupo.ciclo.nivel}</td>
-                                        <td className="px-6 py-3">
+                                        <td className="px-6 py-3 text-center">{ma.estudiante.nombres} {ma.estudiante.aPaterno} {ma.estudiante.aMaterno}</td>
+                                        <td className="px-6 py-3 text-center">{new Date(ma.fecha).toLocaleDateString()}</td>
+                                        <td className="px-6 py-3 text-center">{ma.grupo.periodo} {ma.grupo.ciclo.idioma.nombre} {ma.grupo.ciclo.nombre} {ma.grupo.ciclo.nivel}</td>
+                                        <td className="px-6 py-3 text-center">
                                             <button
                                                 onClick={() => handleViewDetailsClick(ma)}
                                                 className="text-[#800020] hover:text-[#6A4E3C]"
@@ -100,7 +100,7 @@ const VistaMatriculas = ({ matriculas }) => {
                         </tbody>
                     </table>
                     {/* Paginación */}
-                    <div className="mt-4">
+                    <div className="mt-4 flex justify-center">
                         {matriculas.links.map((link, index) => (
                             <Link
                                 key={index}

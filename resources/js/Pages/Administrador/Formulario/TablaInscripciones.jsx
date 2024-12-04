@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useForm, Link } from '@inertiajs/react';
+import { FaEye } from 'react-icons/fa';  // Importar FaEye desde react-icons
+import { Link } from '@inertiajs/react';
 
-const TablaInscripciones = ({ inscripciones=[], setIns, filter }) => {
+const TablaInscripciones = ({ inscripciones = [], setIns, filter }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedInscripcion, setSelectedInscripcion] = useState(null);
     const [aceptadas, setAceptadas] = useState(new Set());
@@ -21,20 +22,20 @@ const TablaInscripciones = ({ inscripciones=[], setIns, filter }) => {
     const filteredInscripciones = inscripciones.data.filter(inscripcion => inscripcion.estado === filter);
 
     return (
-        <div className="overflow-x-auto border border-gray-300 rounded-md">
-            <table className="min-w-full table-auto">
+        <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
+                    <table className="min-w-full table-auto">
                 <thead className="bg-[#800020] text-white">
                     <tr>
-                        <th className="px-4 py-2 text-left text-sm font-semibold">Nombres</th>
-                        <th className="px-4 py-2 text-left text-sm font-semibold">Apellido Paterno</th>
-                        <th className="px-4 py-2 text-left text-sm font-semibold">Estado</th>
-                        <th className="px-4 py-2 text-left text-sm font-semibold">Acciones</th>
+                        <th className="px-6 py-3 text-center">Nombres</th>
+                        <th className="px-6 py-3 text-center">Apellido Paterno</th>
+                        <th className="px-6 py-3 text-center">Estado</th>
+                        <th className="px-6 py-3 text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {filteredInscripciones.length === 0 ? (
                         <tr>
-                            <td colSpan="4" className="px-4 py-2 text-sm text-gray-700 text-center">
+                            <td colSpan="4" className="px-6 py-2 text-gray-700 text-center">
                                 No hay inscripciones pendientes
                             </td>
                         </tr>
@@ -42,28 +43,23 @@ const TablaInscripciones = ({ inscripciones=[], setIns, filter }) => {
                         filteredInscripciones.map((inscripcion) => (
                             <tr 
                                 key={inscripcion.id} 
-                                className={`border-t ${inscripcion.estado === 'Aceptado' ? 'bg-green-100' : ''}`}
+                                className={`border-t hover:bg-[#F4D6C5] ${inscripcion.estado === 'Aceptado' ? 'bg-white' : ''}`}
                             >
-                                <td className="px-4 py-2 text-sm text-gray-700">{inscripcion.nombres}</td>
-                                <td className="px-4 py-2 text-sm text-gray-700">{inscripcion.aPaterno}</td>
-                                <td className="px-4 py-2 text-sm text-gray-700">{inscripcion.estado}</td>
-                                <td className="px-4 py-2 text-sm text-gray-700">
+                                <td className="px-6 py-3text-center">{inscripcion.nombres}</td>
+                                <td className="px-6 py-3">{inscripcion.aPaterno}</td>
+                                <td className="px-6 py-3">{inscripcion.estado}</td>
+                                <td className="px-6 py-3  text-[#800020] flex justify-center items-center">
                                     <button 
                                         onClick={() => { 
-                                            setIns({...inscripcion}); 
+                                            setIns({ ...inscripcion }); 
                                         }}
                                         className={`flex items-center gap-2 px-3 py-1 rounded ${
                                             inscripcion.estado === 'Aceptado' 
-                                            ? 'bg-green-100 text-green-800' 
-                                            : 'bg-blue-100 text-blue-800'
+                                            ? 'text-[#800020]'  
+                                            : ''
                                         }`}
                                     >
-                                        <img 
-                                            src="/imagenes/ojo.png" 
-                                            alt="Ver" 
-                                            className="w-4 h-4"
-                                        />
-                                        {inscripcion.estado === 'Aceptado' ? '' : ''}
+                                        <FaEye className="w-5 h-5" /> {/* Aquí se usa el ícono FaEye */}
                                     </button>
                                 </td>
                             </tr>
@@ -71,7 +67,20 @@ const TablaInscripciones = ({ inscripciones=[], setIns, filter }) => {
                     )}
                 </tbody>
             </table>
+
+            {/* Paginación */}
+            <div className="mt-4 flex justify-center">
+                {inscripciones.links?.map((link, index) => (
+                    <Link
+                        key={index}
+                        href={link.url}
+                        className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-red-900 text-white' : 'bg-white text-blue-800'}`}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                ))}
+            </div>
         </div>
     );
-}
+};
+
 export default TablaInscripciones;

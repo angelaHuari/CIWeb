@@ -106,13 +106,13 @@ export default function Index({ ListaMatriculas, ListaFormulariosMatricula }) {
                                 </div>
 
                             </div>
-
+                            </div>
                             {/* Mostrar el contenido dependiendo de la vista seleccionada */}
                             {renderContent()}
 
                         </div>
                     </div>
-                </div>
+                
             </div>
         </AuthenticatedLayout>
     );

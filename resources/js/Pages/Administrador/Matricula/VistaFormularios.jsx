@@ -43,7 +43,7 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-[#800020] to-[#F5D0A9] py-12">
+        <div className="min-h-screen  py-1">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 {/* Formulario */}
                 {selectedForm && (
@@ -199,8 +199,8 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                             {filteredForms.length > 0 ? (
                                 filteredForms.map((form, index) => (
                                     <tr key={index} className="border-b hover:bg-[#F4D6C5] items-center">
-                                        <td className="px-6 py-3">{form.estudiante.nombres} {form.estudiante.aMaterno} {form.estudiante.aPaterno}</td>
-                                        <td className="px-6 py-3">
+                                        <td className="px-6 py-3 text-center">{form.estudiante.nombres} {form.estudiante.aMaterno} {form.estudiante.aPaterno}</td>
+                                        <td className="px-6 py-3 text-center">
                                             {form.estado === 'aceptado' ? (
                                                 <span className="text-green-500 flex items-center">
                                                     <FaCheckCircle className="mr-2" /> ACEPTADO
@@ -224,7 +224,7 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                                     <FaEye className="text-xl" />
                                                 </button>
                                             ) : (
-                                                <button className="text-black ">
+                                                <button className="text-gradient ">
                                                    <FaEye className="text-xl" />
                                                 </button>
                                             )}
@@ -240,7 +240,7 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                         </tbody>
                     </table>
                     {/* Paginación */}
-                    <div className="mt-4">
+                    <div className="mt-4 flex justify-center">
                         {formMatriculas.links.map((link, index) => (
                             <Link
                                 key={index}
@@ -263,7 +263,7 @@ const VistaFormularios = ({ ListaFormularios }) => {
     const [search, setSearch] = useState('');
 
     return (
-        <div className="overflow-hidden bg-gradient-to-r from-[#800020] to-[#F5D0A9] py-12 min-h-screen">
+        <div className="overflow-hidden bg py-12 min-h-screen">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 {/* Buscador */}
                 <div className="mb-4 flex justify-center">
