@@ -132,17 +132,20 @@ class FormularioController extends Controller
         try {
             $formulario = Formulario::findOrFail($id);
 
+            // Determine email based on student type and institutional email availability
+            $email = $this->determineEmail($formulario);
+
             // Crear usuario
             $user = User::create([
                 'name' => $formulario->nombres . ' ' . $formulario->aPaterno . ' ' . $formulario->aMaterno,
-                'email' => $formulario->email ?? $formulario->correoInstitucional,
-                'password' => Hash::make($formulario->dni), // Using DNI as initial password
+                'email' => $email,
+                'password' => Hash::make($formulario->dni),
                 'tipoUsuario' => 'est',
-                'email_verified_at' => now(), // Añadir verificación de email
-                'remember_token' => Str::random(10), // Añadir remember token
+                'email_verified_at' => now(),
+                'remember_token' => Str::random(10),
             ]);
 
-            // Crear estudiante
+            // Crear estudiante con el correo apropiado
             $estudiante = Estudiante::create([
                 'nombres' => $formulario->nombres,
                 'aPaterno' => $formulario->aPaterno,
@@ -150,8 +153,8 @@ class FormularioController extends Controller
                 'dni' => $formulario->dni,
                 'sexo' => $formulario->sexo,
                 'celular' => $formulario->celular,
-                'email' => $formulario->email ?? $formulario->correoInstitucional,
-                'emailInstitucional' => $formulario->correoInstitucional,
+                'email' => $formulario->email ?? $email,
+                'emailInstitucional' => $this->getInstitutionalEmail($formulario),
                 'programaEstudios' => $formulario->programaEstudios,
                 'user_id' => $user->id
             ]);
@@ -199,6 +202,33 @@ class FormularioController extends Controller
             Log::error('Error al registrar estudiante y matrícula: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Error al procesar la solicitud: ' . $e->getMessage());
         }
+    }
+
+    private function determineEmail($formulario)
+    {
+        // Si es alumno regular, usar correo institucional
+        if ($formulario->tipoAlumno === 'alumno') {
+            return $formulario->correoInstitucional;
+        }
+        
+        // Si es egresado con correo institucional
+        if ($formulario->tipoAlumno === 'egresado' && $formulario->correoInstitucional) {
+            return $formulario->correoInstitucional;
+        }
+
+        // Si es egresado sin correo institucional o no es alumno del instituto
+        return 'cid' . $formulario->dni . '@istta.edu.pe';
+    }
+
+    private function getInstitutionalEmail($formulario)
+    {
+        // Para alumnos regulares y egresados con correo institucional
+        if ($formulario->correoInstitucional) {
+            return $formulario->correoInstitucional;
+        }
+
+        // Para egresados sin correo institucional y no alumnos
+        return 'cid' . $formulario->dni . '@istta.edu.pe';
     }
 
     public function rechazar(string $id)

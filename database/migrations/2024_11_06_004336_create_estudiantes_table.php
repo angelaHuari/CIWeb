@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('celular');
             $table->string('email');
             $table->string('emailInstitucional');
-            $table->string('programaEstudios');
+            $table->string('programaEstudios')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
