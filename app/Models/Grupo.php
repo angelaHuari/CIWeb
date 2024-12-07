@@ -34,4 +34,21 @@ class Grupo extends Model
     {
         return $this->hasMany(Matricula::class, 'grupo_id');
     }
+
+    public function incrementarEstudiantes()
+    {
+        $this->nroEstudiantes += 1;
+        $this->nroVacantes = max(0, $this->nroVacantes - 1);
+        $this->save();
+    }
+
+    public function tieneEstudiante($estudianteId)
+    {
+        return $this->estudiantes()->where('estudiante_id', $estudianteId)->exists();
+    }
+
+    public function tieneVacantes()
+    {
+        return $this->nroVacantes > 0;
+    }
 }

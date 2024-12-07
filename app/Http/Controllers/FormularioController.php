@@ -132,6 +132,22 @@ class FormularioController extends Controller
         try {
             $formulario = Formulario::findOrFail($id);
 
+            // Buscar el grupo correspondiente
+            $grupo = Grupo::where('horario', $formulario->horarioIngles)
+                ->whereHas('ciclo', function ($query) use ($formulario) {
+                    $query->whereRaw("CONCAT(nombre, ' - ', (SELECT nombre FROM idiomas WHERE id = ciclos.idioma_id), ' - ' ,nivel) = ?", [$formulario->cicloIngles]);
+                })
+                ->first();
+
+            if (!$grupo) {
+                throw new \Exception('No se encontró el grupo correspondiente');
+            }
+
+            // Verificar si hay vacantes disponibles
+            if (!$grupo->tieneVacantes()) {
+                throw new \Exception('No hay vacantes disponibles en este grupo');
+            }
+
             // Determine email based on student type and institutional email availability
             $email = $this->determineEmail($formulario);
 
@@ -159,16 +175,11 @@ class FormularioController extends Controller
                 'user_id' => $user->id
             ]);
 
-            // Buscar el grupo correspondiente
-            $grupo = Grupo::where('horario', $formulario->horarioIngles)
-                ->whereHas('ciclo', function ($query) use ($formulario) {
-                    $query->whereRaw("CONCAT(nombre, ' - ', (SELECT nombre FROM idiomas WHERE id = ciclos.idioma_id), ' - ' ,nivel) = ?", [$formulario->cicloIngles]);
-                })
-                ->first();
-
-            if (!$grupo) {
-                throw new \Exception('No se encontró el grupo correspondiente');
+            // Verificar si el estudiante ya está matriculado en el grupo
+            if ($grupo->tieneEstudiante($estudiante->id)) {
+                throw new \Exception('El estudiante ya está matriculado en este grupo');
             }
+
             // Create payment record
             $pago = Pago::create([
                 'fecha' => $formulario->fechaPago,
@@ -188,7 +199,8 @@ class FormularioController extends Controller
                 'pago_id' => $pago->id
             ]);
 
-            
+            // Incrementar el número de estudiantes y reducir vacantes
+            $grupo->incrementarEstudiantes();
 
             // Actualizar el estado del formulario
             $formulario->estado = 'Aceptado';

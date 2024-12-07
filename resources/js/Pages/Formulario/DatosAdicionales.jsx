@@ -214,12 +214,12 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
         setCorreoEgresado(value);
     };
 
-    // Add this helper function at the top of the component
+    // Update the getCurrentMonthGroups helper function
     const getCurrentMonthGroups = () => {
         const currentMonth = new Date().toLocaleString('es-ES', { month: 'long' });
         return grupos.filter(grupo => 
             grupo.periodo.toLowerCase().includes(currentMonth.toLowerCase()) &&
-            grupo.ciclo.nivel === 1  // Add this condition to filter by level 1
+            grupo.ciclo.nivel === 1
         );
     };
 
@@ -399,7 +399,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
             {fieldErrors.cicloIngles && 
                 <span className="error-message">{fieldErrors.cicloIngles}</span>}
 
-            {/* Horarios disponibles según el ciclo seleccionado */}
+            {/* Update the horarios filter logic */}
             {data.cicloIngles && (
                 <div>
                     <label>Seleccione el horario disponible:</label>
@@ -411,7 +411,11 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                     >
                         <option value="">Seleccione...</option>
                         {grupos
-                            .filter(grupo => grupo.ciclo.id === parseInt(data.cicloIngles))
+                            .filter(grupo => {
+                                const currentMonth = new Date().toLocaleString('es-ES', { month: 'long' });
+                                return grupo.ciclo.id === parseInt(data.cicloIngles) &&
+                                       grupo.periodo.toLowerCase().includes(currentMonth.toLowerCase());
+                            })
                             .map((grupo) => (
                                 <option key={grupo.id} value={grupo.id}>
                                     {`${grupo.modalidad} - ${grupo.horario} (Vacantes: ${grupo.nroVacantes})`}
