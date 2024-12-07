@@ -43,13 +43,19 @@ const DatosPagoCaja = ({ data, setData, errors }) => {
                 }
                 break;
             case 'montoPago':
-                if (!value || value === '0') {
-                    error = 'Debe seleccionar un monto';
+                if (!value || value === '0' || value === 0) {
+                    error = 'Debe seleccionar un monto de pago';
                 }
                 break;
             case 'imgComprobante':
                 if (!value) {
                     error = 'Debe adjuntar un comprobante';
+                } else if (value instanceof File) {
+                    if (!['image/jpeg', 'image/png'].includes(value.type)) {
+                        error = 'Solo se permiten imágenes JPG o PNG';
+                    } else if (value.size > 2 * 1024 * 1024) {
+                        error = 'La imagen no debe superar 2MB';
+                    }
                 }
                 break;
         }
@@ -84,25 +90,38 @@ const DatosPagoCaja = ({ data, setData, errors }) => {
     const handleVoucherChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            // Validar tipo de archivo
-            if (!['image/jpeg', 'image/png'].includes(file.type)) {
-                setFieldErrors(prev => ({
-                    ...prev,
-                    imgComprobante: 'Solo se permiten imágenes JPG o PNG'
-                }));
-                return;
+            const error = validateField('imgComprobante', file);
+            setFieldErrors(prev => ({
+                ...prev,
+                imgComprobante: error
+            }));
+            
+            if (!error) {
+                setData(prev => ({ ...prev, imgComprobante: file }));
+            } else {
+                e.target.value = ''; // Limpiar input si hay error
+                setData(prev => ({ ...prev, imgComprobante: null }));
             }
-            // Validar tamaño (máximo 2MB)
-            if (file.size > 2 * 1024 * 1024) {
-                setFieldErrors(prev => ({
-                    ...prev,
-                    imgComprobante: 'La imagen no debe superar 2MB'
-                }));
-                return;
-            }
+        } else {
+            setFieldErrors(prev => ({
+                ...prev,
+                imgComprobante: 'Debe adjuntar un comprobante'
+            }));
+            setData(prev => ({ ...prev, imgComprobante: null }));
         }
-        setData({ ...data, imgComprobante: file });
-        setFieldErrors(prev => ({ ...prev, imgComprobante: '' }));
+    };
+
+    const handleMontoChange = (e) => {
+        const value = Number(e.target.value);
+        const error = validateField('montoPago', value);
+        setFieldErrors(prev => ({
+            ...prev,
+            montoPago: error
+        }));
+        setData(prev => ({
+            ...prev,
+            montoPago: value
+        }));
     };
 
     return (
@@ -132,6 +151,7 @@ const DatosPagoCaja = ({ data, setData, errors }) => {
                 onChange={handleChange}
                 maxLength={10}
                 className={fieldErrors.nroComprobante ? 'error-input' : ''}
+                required
             />
             {fieldErrors.nroComprobante && <span className="error-message">{fieldErrors.nroComprobante}</span>}
             
@@ -143,23 +163,35 @@ const DatosPagoCaja = ({ data, setData, errors }) => {
                 onChange={handleChange}
                 max={new Date().toISOString().split('T')[0]}
                 className={fieldErrors.fechaPago ? 'error-input' : ''}
+                required
             />
             {fieldErrors.fechaPago && <span className="error-message">{fieldErrors.fechaPago}</span>}
 
-            <label>Monto de Pago:</label>
-            <select value={data.montoPago || 0} onChange={(e) => setData({ ...data, montoPago: Number(e.target.value) })}>
-                <option value={0}>Seleccione...</option>
-                <option value={100} >100 soles (Pago mes actual)</option>
+            <label>Monto de Pago: *</label>
+            <select 
+                name="montoPago"
+                value={data.montoPago || ''} // Changed from 0 to ''
+                onChange={handleMontoChange}
+                className={fieldErrors.montoPago || errors?.montoPago ? 'error-input' : ''}
+                required
+            >
+                <option value="">Seleccione...</option> {/* Changed from value={0} */}
+                <option value="100">100 soles (Pago mes actual)</option>
             </select>
+            {(fieldErrors.montoPago || errors?.montoPago) && 
+                <span className="error-message">{fieldErrors.montoPago || errors?.montoPago}</span>}
 
             <label>Adjuntar Voucher: *</label>
             <input 
                 type="file" 
+                name="imgComprobante"
                 accept="image/jpeg, image/png"
                 onChange={handleVoucherChange}
-                className={fieldErrors.imgComprobante ? 'error-input' : ''}
+                className={fieldErrors.imgComprobante || errors?.imgComprobante ? 'error-input' : ''}
+                required
             />
-            {fieldErrors.imgComprobante && <span className="error-message">{fieldErrors.imgComprobante}</span>}
+            {(fieldErrors.imgComprobante || errors?.imgComprobante) && 
+                <span className="error-message">{fieldErrors.imgComprobante || errors?.imgComprobante}</span>}
             <small>Importante: En la imagen del Voucher escribir de qué mes o meses está realizando el pago.</small>
 
             <style>{`

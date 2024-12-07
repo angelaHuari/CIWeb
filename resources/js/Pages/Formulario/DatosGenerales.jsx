@@ -68,6 +68,17 @@ const DatosGenerales = ({ data, setData, errors }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
+        // Validación específica para DNI y celular - solo permitir números
+        if (name === 'dni' || name === 'celular') {
+            if (!/^\d*$/.test(value)) {
+                return; // No actualizar si contiene caracteres no numéricos
+            }
+            if ((name === 'dni' && value.length > 8) || 
+                (name === 'celular' && value.length > 9)) {
+                return; // No actualizar si excede la longitud máxima
+            }
+        }
+
         // Para campos de solo letras, filtrar entrada
         if (['nombres', 'aPaterno', 'aMaterno'].includes(name)) {
             if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value)) {
@@ -100,6 +111,7 @@ const DatosGenerales = ({ data, setData, errors }) => {
                 value={data.nombres}
                 onChange={handleChange}
                 className={fieldErrors.nombres ? 'error-input' : ''}
+                required
             />
             {fieldErrors.nombres && <span className="error-message">{fieldErrors.nombres}</span>}
 
@@ -110,6 +122,7 @@ const DatosGenerales = ({ data, setData, errors }) => {
                 value={data.aPaterno}
                 onChange={handleChange}
                 className={fieldErrors.aPaterno ? 'error-input' : ''}
+                required
             />
             {fieldErrors.aPaterno && <span className="error-message">{fieldErrors.aPaterno}</span>}
 
@@ -120,6 +133,7 @@ const DatosGenerales = ({ data, setData, errors }) => {
                 value={data.aMaterno}
                 onChange={handleChange}
                 className={fieldErrors.aMaterno ? 'error-input' : ''}
+                required
             />
             {fieldErrors.aMaterno && <span className="error-message">{fieldErrors.aMaterno}</span>}
 
@@ -130,7 +144,10 @@ const DatosGenerales = ({ data, setData, errors }) => {
                 value={data.dni}
                 onChange={handleChange}
                 maxLength={8}
+                pattern="\d*"
+                inputMode="numeric"
                 className={fieldErrors.dni ? 'error-input' : ''}
+                required
             />
             {fieldErrors.dni && <span className="error-message">{fieldErrors.dni}</span>}
 
@@ -140,6 +157,7 @@ const DatosGenerales = ({ data, setData, errors }) => {
                 value={data.sexo}
                 onChange={handleChange}
                 className={fieldErrors.sexo ? 'error-input' : ''}
+                required
             >
                 <option value="">Seleccione...</option>
                 <option value="masculino">Masculino</option>
@@ -154,7 +172,10 @@ const DatosGenerales = ({ data, setData, errors }) => {
                 value={data.celular}
                 onChange={handleChange}
                 maxLength={9}
+                pattern="\d*"
+                inputMode="numeric"
                 className={fieldErrors.celular ? 'error-input' : ''}
+                required
             />
             {fieldErrors.celular && <span className="error-message">{fieldErrors.celular}</span>}
 
@@ -166,6 +187,7 @@ const DatosGenerales = ({ data, setData, errors }) => {
                 onChange={handleChange}
                 max={new Date().toISOString().split('T')[0]}
                 className={fieldErrors.fechaNacimiento ? 'error-input' : ''}
+                required
             />
             {fieldErrors.fechaNacimiento && <span className="error-message">{fieldErrors.fechaNacimiento}</span>}
 

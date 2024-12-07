@@ -3,8 +3,106 @@ import React, { useState } from 'react';
 const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
     const [correoEgresado, setCorreoEgresado] = useState('');
     const [fieldErrors, setFieldErrors] = useState({});
+
+    const validateSelect = (value, fieldName) => {
+        if (!value || value === "") {
+            setFieldErrors(prev => ({
+                ...prev,
+                [fieldName]: 'Este campo es obligatorio'
+            }));
+            return false;
+        }
+        setFieldErrors(prev => ({
+            ...prev,
+            [fieldName]: ''
+        }));
+        return true;
+    };
+
     const handleTipoAlumnoChange = (e) => {
-        setData({ ...data, tipoAlumno: e.target.value });
+        const { value } = e.target;
+        validateSelect(value, 'tipoAlumno');
+        
+        // Clear all fields based on previous selection
+        const baseData = {
+            ...data,
+            tipoAlumno: value,
+            programaEstudios: '',
+            email: '',
+            correoInstitucional: '',
+            cicloIngles: '',
+            horarioIngles: '',
+            cicloNombre: '',
+            horarioTexto: '',
+            modalidad: ''
+        };
+
+        // Clear specific fields based on new selection
+        if (value === 'alumno') {
+            setData({
+                ...baseData,
+                anioEgreso: '',
+                institucionProviene: '',
+                medioPublicitario: ''
+            });
+        } else if (value === 'egresado') {
+            setData({
+                ...baseData,
+                semestre: '',
+                institucionProviene: '',
+                medioPublicitario: ''
+            });
+        } else if (value === 'no_alumno') {
+            setData({
+                ...baseData,
+                semestre: '',
+                anioEgreso: ''
+            });
+        } else {
+            setData(baseData);
+        }
+
+        // Clear field errors
+        setFieldErrors({});
+        
+        // Reset correoEgresado state if exists
+        setCorreoEgresado('');
+    };
+
+    const handleProgramaEstudiosChange = (e) => {
+        const { value } = e.target;
+        validateSelect(value, 'programaEstudios');
+        setData({ ...data, programaEstudios: value });
+    };
+
+    const handleSemestreChange = (e) => {
+        const { value } = e.target;
+        validateSelect(value, 'semestre');
+        setData({ ...data, semestre: value });
+    };
+
+    const handleCicloInglesChange = (e) => {
+        const { value } = e.target;
+        validateSelect(value, 'cicloIngles');
+        const selectedCiclo = grupos.find(g => g.ciclo.id === parseInt(value))?.ciclo;
+        setData({ 
+            ...data, 
+            cicloIngles: value,
+            cicloNombre: selectedCiclo ? `${selectedCiclo.nombre} - ${selectedCiclo.idioma.nombre} - ${selectedCiclo.nivel}` : '',
+            horarioIngles: '' 
+        });
+    };
+
+    const handleHorarioInglesChange = (e) => {
+        const { value } = e.target;
+        validateSelect(value, 'horarioIngles');
+        const selectedGrupo = grupos.find(g => g.id === parseInt(value));
+        setData({ 
+            ...data, 
+            horarioIngles: value,
+            horarioTexto: selectedGrupo?.horario || '',
+            modalidad: selectedGrupo?.modalidad || ''
+        });
     };
 
     const validateEmail = (email, type = 'personal') => {
@@ -47,6 +145,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                         value={data.correoInstitucional}
                         onChange={(e) => handleEmailChange(e, 'institucional')}
                         className={fieldErrors.correoInstitucional ? 'error-input' : ''}
+                        required
                     />
                     {fieldErrors.correoInstitucional && 
                         <span className="error-message">{fieldErrors.correoInstitucional}</span>}
@@ -68,6 +167,60 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                 </div>
             );
         }
+    };
+
+    // Add new validation handlers
+    const handleMedioPublicitarioChange = (e) => {
+        const { value } = e.target;
+        validateSelect(value, 'medioPublicitario');
+        setData({ ...data, medioPublicitario: e.target.value });
+    };
+
+    const handleInstitucionProvienChange = (e) => {
+        const { value } = e.target;
+        if (!value.trim()) {
+            setFieldErrors(prev => ({
+                ...prev,
+                institucionProviene: 'Este campo es obligatorio'
+            }));
+        } else {
+            setFieldErrors(prev => ({
+                ...prev,
+                institucionProviene: ''
+            }));
+        }
+        setData({ ...data, institucionProviene: value });
+    };
+
+    const handleAnioEgresoChange = (e) => {
+        const { value } = e.target;
+        if (!value.trim()) {
+            setFieldErrors(prev => ({
+                ...prev,
+                anioEgreso: 'Este campo es obligatorio'
+            }));
+        } else {
+            setFieldErrors(prev => ({
+                ...prev,
+                anioEgreso: ''
+            }));
+        }
+        setData({ ...data, anioEgreso: value });
+    };
+
+    const handleCorreoEgresadoChange = (e) => {
+        const { value } = e.target;
+        validateSelect(value, 'correoEgresado');
+        setCorreoEgresado(value);
+    };
+
+    // Add this helper function at the top of the component
+    const getCurrentMonthGroups = () => {
+        const currentMonth = new Date().toLocaleString('es-ES', { month: 'long' });
+        return grupos.filter(grupo => 
+            grupo.periodo.toLowerCase().includes(currentMonth.toLowerCase()) &&
+            grupo.ciclo.nivel === 1  // Add this condition to filter by level 1
+        );
     };
 
     return (
@@ -94,7 +247,12 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
             {data.tipoAlumno === 'alumno' && (
                 <div>
                     <label>Seleccione su programa de estudios:</label>
-                    <select value={data.programaEstudios} onChange={(e) => setData({ ...data, programaEstudios: e.target.value })}>
+                    <select 
+                        value={data.programaEstudios} 
+                        onChange={handleProgramaEstudiosChange}
+                        className={fieldErrors.programaEstudios ? 'error-input' : ''}
+                        required
+                    >
                         <option value="">Seleccione...</option>
                         <option value="dsi">Desarrollo de Sistemas de Informacion</option>
                         <option value="electronica">Electrónica Industrial</option>
@@ -107,9 +265,16 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                         <option value="lcap">LCAP</option>
                         <option value="et">ET</option>
                     </select>
+                    {fieldErrors.programaEstudios && 
+                        <span className="error-message">{fieldErrors.programaEstudios}</span>}
 
                     <label>Seleccione su semestre actual:</label>
-                    <select value={data.semestre} onChange={(e) => setData({ ...data, semestre: e.target.value })}>
+                    <select 
+                        value={data.semestre} 
+                        onChange={handleSemestreChange}
+                        className={fieldErrors.semestre ? 'error-input' : ''}
+                        required
+                    >
                         <option value="">Seleccione...</option>
                         <option value="I">I</option>
                         <option value="II">II</option>
@@ -118,6 +283,8 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                         <option value="V">V</option>
                         <option value="VI">VI</option>
                     </select>
+                    {fieldErrors.semestre && 
+                        <span className="error-message">{fieldErrors.semestre}</span>}
 
                     {renderEmailField('institucional')}
                 </div>
@@ -126,7 +293,12 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
             {data.tipoAlumno === 'egresado' && (
                 <div>
                     <label>Seleccione su programa de estudios:</label>
-                    <select value={data.programaEstudios} onChange={(e) => setData({ ...data, programaEstudios: e.target.value })}>
+                    <select 
+                        value={data.programaEstudios} 
+                        onChange={handleProgramaEstudiosChange}
+                        className={fieldErrors.programaEstudios ? 'error-input' : ''}
+                        required
+                    >
                         <option value="">Seleccione...</option>
                         <option value="dsi">DSI</option>
                         <option value="electro">Electrónica I</option>
@@ -139,16 +311,33 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                         <option value="lcap">LCAP</option>
                         <option value="et">ET</option>
                     </select>
+                    {fieldErrors.programaEstudios && 
+                        <span className="error-message">{fieldErrors.programaEstudios}</span>}
 
-                    <label>Año de Egreso:</label>
-                    <input type="text" value={data.anioEgreso} onChange={(e) => setData({ ...data, anioEgreso: e.target.value })} />
+                    <label>Año de Egreso: *</label>
+                    <input 
+                        type="text" 
+                        value={data.anioEgreso} 
+                        onChange={handleAnioEgresoChange}
+                        className={fieldErrors.anioEgreso ? 'error-input' : ''}
+                        required 
+                    />
+                    {fieldErrors.anioEgreso && 
+                        <span className="error-message">{fieldErrors.anioEgreso}</span>}
 
-                    <label>¿Cuenta con correo institucional?</label>
-                    <select value={correoEgresado} onChange={(e) => setCorreoEgresado(e.target.value)}>
+                    <label>¿Cuenta con correo institucional? *</label>
+                    <select 
+                        value={correoEgresado} 
+                        onChange={handleCorreoEgresadoChange}
+                        className={fieldErrors.correoEgresado ? 'error-input' : ''}
+                        required
+                    >
                         <option value="">Seleccione...</option>
                         <option value="si">Sí</option>
                         <option value="no">No</option>
                     </select>
+                    {fieldErrors.correoEgresado && 
+                        <span className="error-message">{fieldErrors.correoEgresado}</span>}
                     {correoEgresado === 'si' && renderEmailField('institucional')}
                     {correoEgresado === 'no' && renderEmailField('personal')}
                 </div>
@@ -156,11 +345,24 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
 
             {data.tipoAlumno === 'no_alumno' && (
                 <div>
-                    <label>¿De qué institución proviene?</label>
-                    <input type="text" value={data.institucionProviene} onChange={(e) => setData({ ...data, institucionProviene: e.target.value })} />
+                    <label>¿De qué institución proviene? *</label>
+                    <input 
+                        type="text" 
+                        value={data.institucionProviene} 
+                        onChange={handleInstitucionProvienChange}
+                        className={fieldErrors.institucionProviene ? 'error-input' : ''}
+                        required 
+                    />
+                    {fieldErrors.institucionProviene && 
+                        <span className="error-message">{fieldErrors.institucionProviene}</span>}
 
-                    <label>¿Dónde se enteró del centro de idiomas?</label>
-                    <select value={data.medioPublicitario} onChange={(e) => setData({ ...data, medioPublicitario: e.target.value })}>
+                    <label>¿Dónde se enteró del centro de idiomas? *</label>
+                    <select 
+                        value={data.medioPublicitario} 
+                        onChange={handleMedioPublicitarioChange}
+                        className={fieldErrors.medioPublicitario ? 'error-input' : ''}
+                        required
+                    >
                         <option value="">Seleccione...</option>
                         <option value="pagina_web">Página web ISTTA</option>
                         <option value="facebook">Facebook</option>
@@ -169,6 +371,8 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                         <option value="amigos">Amigos</option>
                         <option value="familiar">Familiar</option>
                     </select>
+                    {fieldErrors.medioPublicitario && 
+                        <span className="error-message">{fieldErrors.medioPublicitario}</span>}
 
                     {renderEmailField('personal')}
                 </div>
@@ -178,27 +382,22 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
             <label>¿A qué ciclo de inglés desea matricularse?</label>
             <select 
                 value={data.cicloIngles} 
-                onChange={(e) => {
-                    const selectedCiclo = grupos.find(g => g.ciclo.id === parseInt(e.target.value))?.ciclo;
-                    setData({ 
-                        ...data, 
-                        cicloIngles: e.target.value,
-                        cicloNombre: selectedCiclo ? `${selectedCiclo.nombre} - ${selectedCiclo.idioma.nombre} - ${selectedCiclo.nivel}` : '',
-                        horarioIngles: '' 
-                    });
-                }}
+                onChange={handleCicloInglesChange}
+                className={fieldErrors.cicloIngles ? 'error-input' : ''}
+                required
             >
                 <option value="">Seleccione...</option>
-                {[...new Set(grupos.map(grupo => grupo.ciclo.id))].map((cicloId) => {
-                    const grupo = grupos.find(g => g.ciclo.id === cicloId);
-                    const ciclo = grupo?.ciclo;
+                {getCurrentMonthGroups().map((grupo) => {
+                    const ciclo = grupo.ciclo;
                     return (
-                        <option key={cicloId} value={cicloId}>
-                            {`${ciclo?.nombre} - ${ciclo?.idioma?.nombre || ''} - ${ciclo?.nivel} `}
+                        <option key={grupo.id} value={ciclo.id}>
+                            {`${ciclo?.nombre} - ${ciclo?.idioma?.nombre || ''} - ${ciclo?.nivel} - Periodo: ${grupo?.periodo}`}
                         </option>
                     );
                 })}
             </select>
+            {fieldErrors.cicloIngles && 
+                <span className="error-message">{fieldErrors.cicloIngles}</span>}
 
             {/* Horarios disponibles según el ciclo seleccionado */}
             {data.cicloIngles && (
@@ -206,15 +405,9 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                     <label>Seleccione el horario disponible:</label>
                     <select 
                         value={data.horarioIngles} 
-                        onChange={(e) => {
-                            const selectedGrupo = grupos.find(g => g.id === parseInt(e.target.value));
-                            setData({ 
-                                ...data, 
-                                horarioIngles: e.target.value,
-                                horarioTexto: selectedGrupo?.horario || '',
-                                modalidad: selectedGrupo?.modalidad || ''
-                            });
-                        }}
+                        onChange={handleHorarioInglesChange}
+                        className={fieldErrors.horarioIngles ? 'error-input' : ''}
+                        required
                     >
                         <option value="">Seleccione...</option>
                         {grupos
@@ -225,6 +418,8 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                                 </option>
                             ))}
                     </select>
+                    {fieldErrors.horarioIngles && 
+                        <span className="error-message">{fieldErrors.horarioIngles}</span>}
 
                     {/* Campos adicionales según el ciclo */}
                     {(() => {
