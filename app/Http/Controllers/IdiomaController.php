@@ -34,13 +34,15 @@ class IdiomaController extends Controller
             'nivelCert' => 'required|numeric|min:1|max:30',
         ], [
             'nombre.unique' => 'El nombre de este idioma ya existe, por favor ingrese otro',
-            'nombre.required' => 'El campo nombre es obligatorio.', 
+            'nombre.required' => 'El campo nombre es obligatorio.',
             'nombre.max' => 'El nombre no puede tener más de 30 caracteres.',
         ]);
 
         // Crear el nuevo idioma
         Idioma::create([
             'nombre' => $request->nombre,
+            'montoMes' => $request->montoMes,
+            'nivelCert' => $request->nivelCert,
         ]);
 
         // Redirigir al usuario con un mensaje de éxito
@@ -71,6 +73,12 @@ class IdiomaController extends Controller
         // Validar los datos de entrada
         $validatedData = $request->validate([
             'nombre' => 'required|string|max:40',
+            'montoMes' => 'required|numeric|min:50|max:900',
+            'nivelCert' => 'required|numeric|min:1|max:30',
+        ], [
+            'nombre.unique' => 'El nombre de este idioma ya existe, por favor ingrese otro',
+            'nombre.required' => 'El campo nombre es obligatorio.',
+            'nombre.max' => 'El nombre no puede tener más de 30 caracteres.',
         ]);
 
         // Buscar el idioma por su ID

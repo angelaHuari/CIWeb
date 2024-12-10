@@ -7,6 +7,7 @@ import DatosPagoBanco from './Formulario/DatosPagoBanco';
 
 
 export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
+    const [montoIdioma, setMontoIdioma] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const { data, setData, post, errors: serverErrors, reset } = useForm({
         nombres: '',
@@ -195,11 +196,11 @@ export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
                                             <DatosGenerales data={data} setData={setData} errors={{ ...serverErrors, ...validationErrors }} />
                                         </div>
                                         <div className="triptico-section bg-white/90 p-4 rounded-lg shadow-md">
-                                            <DatosAdicionales grupos={ListaGrupos} ciclos={ListaCiclos} data={data} setData={setData} />
+                                            <DatosAdicionales setMontoIdioma={setMontoIdioma} grupos={ListaGrupos} ciclos={ListaCiclos} data={data} setData={setData} />
                                         </div>
                                         <div className="triptico-section bg-white/90 p-4 rounded-lg shadow-md">
                                             <DatosPagoBanco />
-                                            <DatosPagoCaja data={data} setData={setData} />
+                                            <DatosPagoCaja montoIdioma={montoIdioma} data={data} setData={setData} />
                                         </div>
                                     </div>
                                     <br />

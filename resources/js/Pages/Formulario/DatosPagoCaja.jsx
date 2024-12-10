@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const DatosPagoCaja = ({ data, setData, errors }) => {
+const DatosPagoCaja = ({ data, setData,montoIdioma, errors }) => {
     const [fieldErrors, setFieldErrors] = useState({});
 
     const validateField = (name, value) => {
@@ -176,7 +176,7 @@ const DatosPagoCaja = ({ data, setData, errors }) => {
                 required
             >
                 <option value="">Seleccione...</option> {/* Changed from value={0} */}
-                <option value="100">100 soles (Pago mes actual)</option>
+                <option value={montoIdioma}>{montoIdioma} soles (Pago mes actual)</option>
             </select>
             {(fieldErrors.montoPago || errors?.montoPago) && 
                 <span className="error-message">{fieldErrors.montoPago || errors?.montoPago}</span>}

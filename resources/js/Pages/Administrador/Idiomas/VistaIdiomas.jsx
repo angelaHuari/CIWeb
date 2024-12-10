@@ -35,17 +35,29 @@ const VistaIdiomas = ({ idiomas = [] }) => {
 
     }
     // Limpiar el formulario
-    setData('nombre', '');
+    setData({
+      nombre: '',
+      montoMes: '',
+      nivelCert: ''
+    });
   };
 
   // Manejar la edición de un idioma
   const handleEdit = (language) => {
     setSelectedLanguage(language.id);
-    setData('nombre', language.nombre);
+    setData({
+      nombre: language.nombre,
+      montoMes: language.montoMes,
+      nivelCert: language.nivelCert
+    });
   };
   const handleCancel = () => {
     setSelectedLanguage(null);
-    setData('nombre', '');
+    setData({
+      nombre: '',
+      montoMes: '',
+      nivelCert: ''
+    });
   };
 
   return (
@@ -128,6 +140,8 @@ const VistaIdiomas = ({ idiomas = [] }) => {
               <thead className="bg-[#800020] text-white">
                 <tr >
                   <th className="border-b-2 border-gray-300 px-4 py-2" >Nombre</th>
+                  <th className="border-b-2 border-gray-300 px-4 py-2" >Monto de Mes</th>
+                  <th className="border-b-2 border-gray-300 px-4 py-2" >Nivel de Certificacion</th>
                   <th className="border-b-2 border-gray-300 px-4 py-2" >Acciones</th>
                 </tr>
               </thead>
@@ -135,6 +149,8 @@ const VistaIdiomas = ({ idiomas = [] }) => {
                 {languages && languages.length > 0 ? (languages.map((language, index) => (
                   <tr key={index} className='text-center'>
                     <td className="border-b border-gray-300 px-4 py-2">{language.nombre}</td>
+                    <td className="border-b border-gray-300 px-4 py-2">{language.montoMes}</td>
+                    <td className="border-b border-gray-300 px-4 py-2">{language.nivelCert}</td>
                     <td className="border-b border-gray-300 px-4 py-2">
                       <button
                         onClick={() => handleEdit(language)}

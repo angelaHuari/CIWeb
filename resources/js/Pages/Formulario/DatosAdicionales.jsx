@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
+const DatosAdicionales = ({ data, setData, setMontoIdioma, grupos = [], errors }) => {
     const [correoEgresado, setCorreoEgresado] = useState('');
     const [fieldErrors, setFieldErrors] = useState({});
 
@@ -22,7 +22,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
     const handleTipoAlumnoChange = (e) => {
         const { value } = e.target;
         validateSelect(value, 'tipoAlumno');
-        
+
         // Clear all fields based on previous selection
         const baseData = {
             ...data,
@@ -64,7 +64,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
 
         // Clear field errors
         setFieldErrors({});
-        
+
         // Reset correoEgresado state if exists
         setCorreoEgresado('');
     };
@@ -85,20 +85,21 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
         const { value } = e.target;
         validateSelect(value, 'cicloIngles');
         const selectedCiclo = grupos.find(g => g.ciclo.id === parseInt(value))?.ciclo;
-        setData({ 
-            ...data, 
+        setData({
+            ...data,
             cicloIngles: value,
             cicloNombre: selectedCiclo ? `${selectedCiclo.nombre} - ${selectedCiclo.idioma.nombre} - ${selectedCiclo.nivel}` : '',
-            horarioIngles: '' 
+            horarioIngles: ''
         });
+        setMontoIdioma(selectedCiclo.idioma.montoMes);
     };
 
     const handleHorarioInglesChange = (e) => {
         const { value } = e.target;
         validateSelect(value, 'horarioIngles');
         const selectedGrupo = grupos.find(g => g.id === parseInt(value));
-        setData({ 
-            ...data, 
+        setData({
+            ...data,
             horarioIngles: value,
             horarioTexto: selectedGrupo?.horario || '',
             modalidad: selectedGrupo?.modalidad || ''
@@ -122,7 +123,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
     const handleEmailChange = (e, type = 'personal') => {
         const { name, value } = e.target;
         const error = validateEmail(value, type);
-        
+
         setFieldErrors(prev => ({
             ...prev,
             [name]: error
@@ -147,7 +148,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                         className={fieldErrors.correoInstitucional ? 'error-input' : ''}
                         required
                     />
-                    {fieldErrors.correoInstitucional && 
+                    {fieldErrors.correoInstitucional &&
                         <span className="error-message">{fieldErrors.correoInstitucional}</span>}
                 </div>
             );
@@ -162,7 +163,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                         onChange={(e) => handleEmailChange(e, 'personal')}
                         className={fieldErrors.email ? 'error-input' : ''}
                     />
-                    {fieldErrors.email && 
+                    {fieldErrors.email &&
                         <span className="error-message">{fieldErrors.email}</span>}
                 </div>
             );
@@ -217,7 +218,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
     // Update the getCurrentMonthGroups helper function
     const getCurrentMonthGroups = () => {
         const currentMonth = new Date().toLocaleString('es-ES', { month: 'long' });
-        return grupos.filter(grupo => 
+        return grupos.filter(grupo =>
             grupo.periodo.toLowerCase().includes(currentMonth.toLowerCase()) &&
             grupo.ciclo.nivel === 1
         );
@@ -228,10 +229,10 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
             <strong><h2>Datos Adicionales</h2></strong>
             <label>¿Usted es?</label>
             <div>
-                <select 
+                <select
                     name="tipoAlumno"
-                    value={data.tipoAlumno} 
-                    onChange={handleTipoAlumnoChange} 
+                    value={data.tipoAlumno}
+                    onChange={handleTipoAlumnoChange}
                     className={fieldErrors.tipoAlumno || errors?.tipoAlumno ? 'error-input' : ''}
                     required
                 >
@@ -240,15 +241,15 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                     <option value="egresado">Egresado del Instituto</option>
                     <option value="no_alumno">No soy alumno del Instituto</option>
                 </select>
-                {(fieldErrors.tipoAlumno || errors?.tipoAlumno) && 
+                {(fieldErrors.tipoAlumno || errors?.tipoAlumno) &&
                     <span className="error-message">{fieldErrors.tipoAlumno || errors?.tipoAlumno}</span>}
             </div>
 
             {data.tipoAlumno === 'alumno' && (
                 <div>
                     <label>Seleccione su programa de estudios:</label>
-                    <select 
-                        value={data.programaEstudios} 
+                    <select
+                        value={data.programaEstudios}
                         onChange={handleProgramaEstudiosChange}
                         className={fieldErrors.programaEstudios ? 'error-input' : ''}
                         required
@@ -265,12 +266,12 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                         <option value="lcap">LCAP</option>
                         <option value="et">ET</option>
                     </select>
-                    {fieldErrors.programaEstudios && 
+                    {fieldErrors.programaEstudios &&
                         <span className="error-message">{fieldErrors.programaEstudios}</span>}
 
                     <label>Seleccione su semestre actual:</label>
-                    <select 
-                        value={data.semestre} 
+                    <select
+                        value={data.semestre}
                         onChange={handleSemestreChange}
                         className={fieldErrors.semestre ? 'error-input' : ''}
                         required
@@ -283,7 +284,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                         <option value="V">V</option>
                         <option value="VI">VI</option>
                     </select>
-                    {fieldErrors.semestre && 
+                    {fieldErrors.semestre &&
                         <span className="error-message">{fieldErrors.semestre}</span>}
 
                     {renderEmailField('institucional')}
@@ -293,8 +294,8 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
             {data.tipoAlumno === 'egresado' && (
                 <div>
                     <label>Seleccione su programa de estudios:</label>
-                    <select 
-                        value={data.programaEstudios} 
+                    <select
+                        value={data.programaEstudios}
                         onChange={handleProgramaEstudiosChange}
                         className={fieldErrors.programaEstudios ? 'error-input' : ''}
                         required
@@ -311,23 +312,23 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                         <option value="lcap">LCAP</option>
                         <option value="et">ET</option>
                     </select>
-                    {fieldErrors.programaEstudios && 
+                    {fieldErrors.programaEstudios &&
                         <span className="error-message">{fieldErrors.programaEstudios}</span>}
 
                     <label>Año de Egreso: *</label>
-                    <input 
-                        type="text" 
-                        value={data.anioEgreso} 
+                    <input
+                        type="text"
+                        value={data.anioEgreso}
                         onChange={handleAnioEgresoChange}
                         className={fieldErrors.anioEgreso ? 'error-input' : ''}
-                        required 
+                        required
                     />
-                    {fieldErrors.anioEgreso && 
+                    {fieldErrors.anioEgreso &&
                         <span className="error-message">{fieldErrors.anioEgreso}</span>}
 
                     <label>¿Cuenta con correo institucional? *</label>
-                    <select 
-                        value={correoEgresado} 
+                    <select
+                        value={correoEgresado}
                         onChange={handleCorreoEgresadoChange}
                         className={fieldErrors.correoEgresado ? 'error-input' : ''}
                         required
@@ -336,7 +337,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                         <option value="si">Sí</option>
                         <option value="no">No</option>
                     </select>
-                    {fieldErrors.correoEgresado && 
+                    {fieldErrors.correoEgresado &&
                         <span className="error-message">{fieldErrors.correoEgresado}</span>}
                     {correoEgresado === 'si' && renderEmailField('institucional')}
                     {correoEgresado === 'no' && renderEmailField('personal')}
@@ -346,19 +347,19 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
             {data.tipoAlumno === 'no_alumno' && (
                 <div>
                     <label>¿De qué institución proviene? *</label>
-                    <input 
-                        type="text" 
-                        value={data.institucionProviene} 
+                    <input
+                        type="text"
+                        value={data.institucionProviene}
                         onChange={handleInstitucionProvienChange}
                         className={fieldErrors.institucionProviene ? 'error-input' : ''}
-                        required 
+                        required
                     />
-                    {fieldErrors.institucionProviene && 
+                    {fieldErrors.institucionProviene &&
                         <span className="error-message">{fieldErrors.institucionProviene}</span>}
 
                     <label>¿Dónde se enteró del centro de idiomas? *</label>
-                    <select 
-                        value={data.medioPublicitario} 
+                    <select
+                        value={data.medioPublicitario}
                         onChange={handleMedioPublicitarioChange}
                         className={fieldErrors.medioPublicitario ? 'error-input' : ''}
                         required
@@ -371,7 +372,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                         <option value="amigos">Amigos</option>
                         <option value="familiar">Familiar</option>
                     </select>
-                    {fieldErrors.medioPublicitario && 
+                    {fieldErrors.medioPublicitario &&
                         <span className="error-message">{fieldErrors.medioPublicitario}</span>}
 
                     {renderEmailField('personal')}
@@ -380,8 +381,8 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
 
             {/* Ciclos de inglés */}
             <label>¿A qué ciclo de inglés desea matricularse?</label>
-            <select 
-                value={data.cicloIngles} 
+            <select
+                value={data.cicloIngles}
                 onChange={handleCicloInglesChange}
                 className={fieldErrors.cicloIngles ? 'error-input' : ''}
                 required
@@ -396,15 +397,15 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                     );
                 })}
             </select>
-            {fieldErrors.cicloIngles && 
+            {fieldErrors.cicloIngles &&
                 <span className="error-message">{fieldErrors.cicloIngles}</span>}
 
             {/* Update the horarios filter logic */}
             {data.cicloIngles && (
                 <div>
                     <label>Seleccione el horario disponible:</label>
-                    <select 
-                        value={data.horarioIngles} 
+                    <select
+                        value={data.horarioIngles}
                         onChange={handleHorarioInglesChange}
                         className={fieldErrors.horarioIngles ? 'error-input' : ''}
                         required
@@ -414,7 +415,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                             .filter(grupo => {
                                 const currentMonth = new Date().toLocaleString('es-ES', { month: 'long' });
                                 return grupo.ciclo.id === parseInt(data.cicloIngles) &&
-                                       grupo.periodo.toLowerCase().includes(currentMonth.toLowerCase());
+                                    grupo.periodo.toLowerCase().includes(currentMonth.toLowerCase());
                             })
                             .map((grupo) => (
                                 <option key={grupo.id} value={grupo.id}>
@@ -422,22 +423,22 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                                 </option>
                             ))}
                     </select>
-                    {fieldErrors.horarioIngles && 
+                    {fieldErrors.horarioIngles &&
                         <span className="error-message">{fieldErrors.horarioIngles}</span>}
 
                     {/* Campos adicionales según el ciclo */}
                     {(() => {
                         const cicloSeleccionado = grupos.find(g => g.ciclo.id === parseInt(data.cicloIngles))?.ciclo;
                         const nombreCiclo = cicloSeleccionado?.nombre.toLowerCase() || '';
-                        
+
                         // Si es intermedio
                         if (nombreCiclo.includes('intermedio')) {
                             return (
                                 <>
                                     <div className="mt-4">
                                         <label>¿Dónde realizó el ciclo básico?</label>
-                                        <select 
-                                            value={data.realizoInglesBasico} 
+                                        <select
+                                            value={data.realizoInglesBasico}
                                             onChange={(e) => setData({ ...data, realizoInglesBasico: e.target.value })}
                                         >
                                             <option value="">Seleccione...</option>
@@ -447,8 +448,8 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                                     </div>
                                     <div className="mt-4">
                                         <label>¿Cuenta con certificado de básico?</label>
-                                        <select 
-                                            value={data.tienecertificadoIngles} 
+                                        <select
+                                            value={data.tienecertificadoIngles}
                                             onChange={(e) => setData({ ...data, tienecertificadoIngles: e.target.value })}
                                         >
                                             <option value="">Seleccione...</option>
@@ -459,15 +460,15 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                                 </>
                             );
                         }
-                        
+
                         // Si es avanzado
                         if (nombreCiclo.includes('avanzado')) {
                             return (
                                 <>
                                     <div className="mt-4">
                                         <label>¿Dónde realizó el ciclo intermedio?</label>
-                                        <select 
-                                            value={data.realizoInglesIntermedio} 
+                                        <select
+                                            value={data.realizoInglesIntermedio}
                                             onChange={(e) => setData({ ...data, realizoInglesIntermedio: e.target.value })}
                                         >
                                             <option value="">Seleccione...</option>
@@ -477,8 +478,8 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                                     </div>
                                     <div className="mt-4">
                                         <label>¿Cuenta con certificado de intermedio?</label>
-                                        <select 
-                                            value={data.tieneCertificadoIntermedio} 
+                                        <select
+                                            value={data.tieneCertificadoIntermedio}
                                             onChange={(e) => setData({ ...data, tieneCertificadoIntermedio: e.target.value })}
                                         >
                                             <option value="">Seleccione...</option>
@@ -489,7 +490,7 @@ const DatosAdicionales = ({ data, setData, grupos = [], errors }) => {
                                 </>
                             );
                         }
-                        
+
                         return null; // Si es básico, no mostrar campos adicionales
                     })()}
                 </div>
