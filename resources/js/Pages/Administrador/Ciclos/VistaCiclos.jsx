@@ -56,7 +56,7 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-[#800020] to-[#F5D0A9] py-12">
+        <div className="min-h-screen bg- py-12">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
                     {/* Formulario para agregar o editar un ciclo */}
@@ -158,7 +158,7 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                         <tbody>
                             {ciclos && ciclos.data && ciclos.data.length > 0 ? (
                                 ciclos.data.map((cycle) => (
-                                    <tr key={cycle.id}>
+                                    <tr key={cycle.id} className="text-center border-b hover:bg-[#F4D6C5]">
                                         <td className="border-b border-gray-300 px-4 py-2">{cycle.idioma.nombre}</td>
                                         <td className="border-b border-gray-300 px-4 py-2">{cycle.nombre}</td>
                                         <td className="border-b border-gray-300 px-4 py-2">{cycle.nivel}</td>
@@ -188,7 +188,7 @@ const VistaCiclos = ({ ciclos = [], idiomas = [] }) => {
                             <Link
                                 key={index}
                                 href={link.url}
-                                className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-black text-white' : 'bg-white text-gray'
+                                className={`px-3 py-1 mx-1 border rounded hover:bg-black ${link.active ? 'bg-red-900 text-white' : 'bg-red-900 text-white'
                                     }`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />

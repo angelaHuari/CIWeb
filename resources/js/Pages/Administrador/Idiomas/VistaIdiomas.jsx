@@ -61,7 +61,7 @@ const VistaIdiomas = ({ idiomas = [] }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-[#800020] to-[#F5D0A9] py-12">
+    <div className="min-h-screen bg- py-12">
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
@@ -147,7 +147,7 @@ const VistaIdiomas = ({ idiomas = [] }) => {
               </thead>
               <tbody>
                 {languages && languages.length > 0 ? (languages.map((language, index) => (
-                  <tr key={index} className='text-center'>
+                  <tr key={index} className="text-center border-b hover:bg-[#F4D6C5]">
                     <td className="border-b border-gray-300 px-4 py-2">{language.nombre}</td>
                     <td className="border-b border-gray-300 px-4 py-2">{language.montoMes}</td>
                     <td className="border-b border-gray-300 px-4 py-2">{language.nivelCert}</td>
