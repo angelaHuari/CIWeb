@@ -6,7 +6,8 @@ import DatosPagoCaja from './Formulario/DatosPagoCaja';
 import DatosPagoBanco from './Formulario/DatosPagoBanco';
 
 
-export default function Welcome({ auth, ListaGrupos, ListaCiclos }) {
+export default function Welcome({ auth, ListaGrupos, ListaCiclos=[] }) {
+    
     const [montoIdioma, setMontoIdioma] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const { data, setData, post, errors: serverErrors, reset } = useForm({

@@ -86,6 +86,8 @@ class IdiomaController extends Controller
 
         // Actualizar los atributos del idioma
         $idioma->nombre = $validatedData['nombre'];
+        $idioma->montoMes = $validatedData['montoMes'];
+        $idioma->nivelCert = $validatedData['nivelCert'];
 
         $idioma->save();
 
