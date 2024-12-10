@@ -30,6 +30,8 @@ class IdiomaController extends Controller
         // Validar la solicitud
         $request->validate([
             'nombre' => 'required|unique:idiomas|string|max:30',
+            'montoMes' => 'required|numeric|min:50|max:900',
+            'nivelCert' => 'required|numeric|min:1|max:30',
         ], [
             'nombre.unique' => 'El nombre de este idioma ya existe, por favor ingrese otro',
             'nombre.required' => 'El campo nombre es obligatorio.', 

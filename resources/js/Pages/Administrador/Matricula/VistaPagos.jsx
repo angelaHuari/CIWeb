@@ -107,7 +107,7 @@ const VistaPagos = ({ pagos }) => {
                             ) : (
                                 <tr>
                                     <td colSpan="4" className="px-6 py-3 text-center text-gray-500">
-                                        No se encontraron matrículas.
+                                        No se encontraron pagos.
                                     </td>
                                 </tr>
                             )}
@@ -119,7 +119,7 @@ const VistaPagos = ({ pagos }) => {
                             <Link
                                 key={index}
                                 href={link.url}
-                                className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-red-900 text-white' : 'bg-white text-blue-800'
+                                className={`px-3 py-1 mx-1 border rounded hover:bg-black ${link.active ? 'bg-red-900 text-white' : 'bg-red-900 text-white'
                                     }`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />

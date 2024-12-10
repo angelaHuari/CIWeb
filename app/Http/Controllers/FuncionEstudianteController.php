@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Certificado;
 use App\Models\FormularioMatricula;
 use App\Models\Grupo;
 use App\Models\Matricula;
@@ -107,5 +108,16 @@ class FuncionEstudianteController extends Controller
             Log::error('Error al enviar el formulario: ' . $e->getMessage());
             return redirect()->back()->with('message', 'Error al enviar el formulario: ' . $e->getMessage());
         }
+    }
+
+    public function verificar($codigo)
+    {
+        $certificado = Certificado::where('codigo', $codigo)->first();
+
+        if ($certificado) {
+            return view('certificados.verificar', compact('certificado'));
+        }
+
+        return response()->json(['mensaje' => 'Certificado no encontrado'], 404);
     }
 }

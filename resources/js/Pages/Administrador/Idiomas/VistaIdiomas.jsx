@@ -5,6 +5,8 @@ import { FaEye, FaPen } from 'react-icons/fa';
 const VistaIdiomas = ({ idiomas = [] }) => {
   const { data, setData, post, put, processing, errors } = useForm({
     nombre: '',
+    montoMes: '',
+    nivelCert: '',
   });//formulario para idiomas
 
   const [languages, setLanguages] = useState(Array.isArray(idiomas) ? idiomas : []);//lista de Idiomas
@@ -51,16 +53,51 @@ const VistaIdiomas = ({ idiomas = [] }) => {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="overflow-x-auto shadow-lg rounded-lg bg-white p-6 mb-6">
-          <h3 className="text-xl font-semibold mb-2 text-center md:text-left">Registro de Idioma</h3>
-          <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-center w-full">
-            <input
-              type="text"
-              value={data.nombre}
-              onChange={(e) => setData('nombre', e.target.value.toUpperCase())}
-              placeholder="Nombre del Idioma"
-              required
-              className="p-2 border border-gray-300 rounded mb-4 md:mb-0 md:mr-4 w-full md:w-auto"
-            />
+          <h3 className="text-xl font-semibold mb-2 text-center md:text-left">Registrar</h3>
+          <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-center w-full space-x-6">
+            <div className="flex flex-col w-full md:w-auto">
+              <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-1">
+                Idioma
+              </label>
+              <input
+                type="text"
+                id="nombre"
+                value={data.nombre}
+                onChange={(e) => setData('nombre', e.target.value.toUpperCase())}
+                required
+                className="p-2 border border-gray-300 rounded w-full"
+              />
+            </div>
+
+            <div className="flex flex-col w-full md:w-auto">
+              <label htmlFor="montoMes" className="block text-sm font-medium text-gray-700 mb-1">
+                Monto del Mes
+              </label>
+              <input
+                id="montoMes"
+                type="number"
+                value={data.montoMes}
+                onChange={(e) => setData('montoMes', Number(e.target.value))}
+                min="1"
+                required
+                className="p-2 border border-gray-300 rounded w-full"
+              />
+            </div>
+
+            <div className="flex flex-col w-full md:w-auto">
+              <label htmlFor="nivelCert" className="block text-sm font-medium text-gray-700 mb-1">
+                Nivel de Certificación
+              </label>
+              <input
+                id="nivelCert"
+                type="number"
+                value={data.nivelCert}
+                onChange={(e) => setData('nivelCert', Number(e.target.value))}
+                min="1"
+                required
+                className="p-2 border border-gray-300 rounded w-full"
+              />
+            </div>
             <div className="flex justify-end">
               <button
                 type="submit"

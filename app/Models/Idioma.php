@@ -11,5 +11,7 @@ class Idioma extends Model
     use HasFactory;
     protected $fillable =[
         'nombre',
+        'montoMes',
+        'nivelCert',
     ];
 }

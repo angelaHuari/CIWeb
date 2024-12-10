@@ -7,7 +7,7 @@ const VistaMatriculas = ({ matriculas }) => {
 
     const [search, setSearch] = useState(''); // Estado para el buscador
     const [selectedMatricula, setSelectedMatricula] = useState(null);
-    
+
     // Filtrar matrículas por apellido
     const filteredMatriculas = matriculas.data.filter(ma =>
         ma.estudiante.aPaterno.toLowerCase().includes(search.toLowerCase())
@@ -105,7 +105,7 @@ const VistaMatriculas = ({ matriculas }) => {
                             <Link
                                 key={index}
                                 href={link.url}
-                                className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-red-900 text-white' : 'bg-white text-blue-800'
+                                className={`px-3 py-1 mx-1 border rounded hover:bg-black ${link.active ? 'bg-red-900 text-white' : 'bg-red-900 text-white'
                                     }`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />

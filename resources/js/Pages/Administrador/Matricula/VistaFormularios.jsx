@@ -225,7 +225,7 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                                 </button>
                                             ) : (
                                                 <button className="text-gradient ">
-                                                   <FaEye className="text-xl" />
+                                                    <FaEye className="text-xl" />
                                                 </button>
                                             )}
 
@@ -245,7 +245,7 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                             <Link
                                 key={index}
                                 href={link.url}
-                                className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-red-900 text-white' : 'bg-white text-blue-800'
+                                className={`px-3 py-1 mx-1 border rounded hover:bg-black ${link.active ? 'bg-red-900 text-white' : 'bg-red-900 text-white'
                                     }`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />
