@@ -68,19 +68,21 @@
             Centro de Idiomas
         </div>
         <div class="subheader">
-            Certificado de Ingles
+            Certificado de {{ $certificado->cicloCert }}
         </div>
         <div class="content">
             Por medio de la presente, se certifica que: <strong>{{ $certificado->nombre }}</strong><br>
-            Ha completado satisfactoriamente el curso de: <strong>{{ $certificado->curso }}</strong><br>
-            Con una duración de <strong>{{ $certificado->horas }}</strong> horas, en el periodo del
-            <strong>{{ $certificado->fechaInicio }}</strong> al <strong>{{ $certificado->fechaFin }}</strong>.
+            Ha completado satisfactoriamente el curso de: <strong>{{ $certificado->cicloCert }}</strong><br>
+            En el periodo de
+            <strong>{{ 'DICIEMBRE' }}</strong> a
+            <strong>{{ 'MAYO' }}</strong>
+            </strong>del año <strong>{{ now()->year }}</strong>.
         </div>
         <div class="qr-code">
             <div>{!! $qrCode !!}</div>
         </div>
         <div class="footer">
-            Código único: <strong>{{ $certificado->codigo }}</strong><br>
+
             Fecha de emisión: <strong>{{ $certificado->created_at }}</strong>
         </div>
         <div class="signature">

@@ -9,20 +9,34 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
         form.estudiante.aPaterno.toLowerCase().includes(search.toLowerCase())
     );
     const [selectedForm, setSelectedForm] = useState(null);
+    const [ver, setVer] = useState(null);
     const { data, setData, post, processing, errors, reset } = useForm({
         id: '',
         cicloIngles: '',
         horarioIngles: '',
     });
 
-    const handleFormClick = (frm) => {
-        setSelectedForm(frm);
-        setData({
-            ...data, // Mantenemos los datos existentes
-            cicloIngles: frm.cicloIngles,
-            horarioIngles: frm.horarioIngles,
-            id: frm.id,
-        });
+    const handleFormClick = (frm, ver) => {
+        if (ver === '') {
+            setSelectedForm(frm);
+            setData({
+                ...data, // Mantenemos los datos existentes
+                cicloIngles: frm.cicloIngles,
+                horarioIngles: frm.horarioIngles,
+                id: frm.id,
+            });
+            setVer(false);
+        } else {
+            setSelectedForm(frm);
+            setData({
+                ...data, // Mantenemos los datos existentes
+                cicloIngles: frm.cicloIngles,
+                horarioIngles: frm.horarioIngles,
+                id: frm.id,
+            });
+            setVer(true);
+        }
+
     };
 
     const handleAceptar = (e) => {
@@ -153,9 +167,8 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                         )}
                                     </div>
                                 </div>
-
                                 {/* Botones Aceptar y Rechazar*/}
-                                <div className="flex justify-center space-x-4 mt-4">
+                                <div className="flex justify-center space-x-4 mt-4" >
                                     <button
                                         type="button"
                                         onClick={() => {
@@ -163,7 +176,9 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                                 handleAceptar();
                                             }
                                         }}
-                                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition duration-200"
+                                        className={`bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition duration-200 ${ver ? "opacity-50 cursor-not-allowed" : ""
+                                            }`}
+                                        disabled={ver}
                                     >
                                         Aceptar
                                     </button>
@@ -174,7 +189,9 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                                 handleRechazar();
                                             }
                                         }}
-                                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded transition duration-200"
+                                        className={`bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded transition duration-200 ${ver ? "opacity-50 cursor-not-allowed" : ""
+                                            }`}
+                                        disabled={ver}
                                     >
                                         Rechazar
                                     </button>
@@ -218,15 +235,20 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                         <td className="px-6 py-3 text-center">
                                             {form.estado === 'pendiente' ? (
                                                 <button
-                                                    onClick={() => handleFormClick(form)}
+                                                    onClick={() => handleFormClick(form, '')}
                                                     className="text-[#800020] hover:text-[#6A4E3C]"
                                                 >
                                                     <FaEye className="text-xl" />
                                                 </button>
                                             ) : (
-                                                <button className="text-gradient ">
+                                                <button
+                                                    onClick={() => handleFormClick(form, 'ver')}
+                                                    className="text-gray-700 hover:text- gray-400"
+                                                >
                                                     <FaEye className="text-xl" />
                                                 </button>
+
+
                                             )}
 
                                         </td>

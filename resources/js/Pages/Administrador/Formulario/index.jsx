@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import TablaInscripciones from './TablaInscripciones';
 import ResumenInscripcion from './ResumenIncripcion';
+import { FaUserGraduate } from 'react-icons/fa';
 
 export default function Index({ ListaFormularios }) {
     const [verForm, setVerForm] = useState(false);
@@ -67,6 +68,7 @@ export default function Index({ ListaFormularios }) {
                                     aria-label="Inscripciones Pendientes"
                                     tabIndex="0"
                                 >
+                                    <FaUserGraduate className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
                                     <h4 className="text-lg font-semibold text-[#F5D0A9]">Inscripciones Pendientes</h4>
                                     <p className="text-[#F5D0A9] text-sm">Consulta los formularios de inscripción pendientes de aprobación.</p>
                                 </div>
@@ -82,6 +84,7 @@ export default function Index({ ListaFormularios }) {
                                     aria-label="Inscripciones Aprobadas"
                                     tabIndex="0"
                                 >
+                                    <FaUserGraduate className="text-[#F5D0A9] text-4xl mb-4 transition-transform transform hover:scale-110 hover:text-[#F2C49B]" />
                                     <h4 className="text-lg font-semibold text-[#F5D0A9]">Inscripciones Aprobadas</h4>
                                     <p className="text-[#F5D0A9] text-sm">Consulta los formularios de inscripción aprobadas.</p>
                                 </div>
