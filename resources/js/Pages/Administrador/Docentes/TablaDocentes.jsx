@@ -1,37 +1,14 @@
 import React, { useState } from 'react';
 import { FaEye, FaPen } from 'react-icons/fa';
 import FormularioDocentes from './FormularioDocentes';
+import { Link } from '@inertiajs/react';
 
-const TablaDocentes = ({ docentes }) => {
+const TablaDocentes = ({ docentes =[]}) => {
     const [showModal, setShowModal] = useState(false);
     const [showModalEdit, setShowModalEdit] = useState(false);
     const [selectedDocente, setSelectedDocente] = useState(null);
     const [showCredentials, setShowCredentials] = useState(false);
 
-    // Pagination state
-    const [currentPage, setCurrentPage] = useState(1);
-    const docentesPerPage = 10; // Number of docentes per page
-
-    // Calculate total pages
-    const totalPages = Math.ceil(docentes.length / docentesPerPage);
-
-    // Get current slice of docentes for the current page
-    const indexOfLastDocente = currentPage * docentesPerPage;
-    const indexOfFirstDocente = indexOfLastDocente - docentesPerPage;
-    const currentDocentes = docentes.slice(indexOfFirstDocente, indexOfLastDocente);
-
-    // Handle page change
-    const handlePreviousPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-
-    const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
 
     const handleShowModal = (docente) => {
         if (!docente) return;
@@ -65,8 +42,8 @@ const TablaDocentes = ({ docentes }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentDocentes.length > 0 ? (
-                        currentDocentes.map((docente) => (
+                    {docentes.length > 0 ? (
+                        docentes.data.map((docente) => (
                             <tr
                                 key={docente.id}
                                 className="border-b hover:bg-[#F4D6C5] cursor-pointer"
@@ -101,6 +78,18 @@ const TablaDocentes = ({ docentes }) => {
                     )}
                 </tbody>
             </table>
+            {/* Paginación */}
+            <div className="mt-4 flex justify-center">
+                {docentes.links.map((link, index) => (
+                    <Link
+                        key={index}
+                        href={link.url}
+                        className={`px-3 py-1 mx-1 border rounded hover:bg-black ${link.active ? 'bg-red-900 text-white' : 'bg-red-900 text-white'
+                            }`}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                ))}
+            </div>
 
             {showModal && selectedDocente && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -187,32 +176,6 @@ const TablaDocentes = ({ docentes }) => {
                 </div>
             )}
 
-            {/* Pagination controls */}
-            <div className="mt-6 flex justify-center items-center space-x-2">
-            <button
-                    className="px-6 py-2 bg-[#700303] text-white rounded hover:bg-[#6b0202] transition"
-                    onClick={handlePreviousPage(currentPage > 1 ? currentPage -1 :1)}
-                    disabled={currentPage === 1}
-                >
-                    Anterior
-                </button>
-                {Array.from({ length: totalPages }, (_, index) => (
-                            <button
-                                key={index + 1}
-                                className={`px-4 py-2 border rounded ${currentPage === index + 1 ? 'bg-red-900 text-white' : 'bg-white text-[#700303]'}`}
-                                onClick={() => handlePageChange(index + 1)}
-                            >
-                                {index + 1}
-                            </button>
-                        ))}
-                <button
-                    className="px-6 py-2 bg-[#700303] text-white rounded hover:bg-[#6b0202] transition"
-                    onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
-                    disabled={currentPage === totalPages}
-                >
-                    Siguiente
-                </button>
-            </div>
         </div>
     );
 };

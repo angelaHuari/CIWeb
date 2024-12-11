@@ -96,7 +96,7 @@ export default function Index({ auth, grupos, ciclos, docentes }) {
                                     <Link
                                         key={index}
                                         href={link.url}
-                                        className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-black text-white' : 'bg-white text-gray'
+                                        className={`px-3 py-1 mx-1 border rounded hover:bg-black ${link.active ? 'bg-red-900 text-white' : 'bg-red-900 text-white'
                                             }`}
                                         dangerouslySetInnerHTML={{ __html: link.label }}
                                     />

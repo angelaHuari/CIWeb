@@ -3,6 +3,7 @@ import { useForm, usePage } from '@inertiajs/react';
 
 function FormularioMatriculas({ grupos }) {
   const { flash } = usePage().props;
+  const[montoIdioma,setMontoIdioma]=useState('');
   const [voucherPreview, setVoucherPreview] = useState(null); // Estado para la vista previa de la imagen
 
   const { data, setData, post, processing, errors } = useForm({
@@ -108,6 +109,7 @@ function FormularioMatriculas({ grupos }) {
             {[...new Set(grupos.map(grupo => grupo.ciclo.id))].map((cicloId) => {
               const grupo = grupos.find(g => g.ciclo.id === cicloId);
               const ciclo = grupo?.ciclo;
+              setMontoIdioma(ciclo.idioma.montoMes);
               return (
                 <option key={cicloId} value={cicloId}>
                   {/* Si ciclo o idioma son indefinidos, muestra una cadena vacía */}
@@ -154,7 +156,7 @@ function FormularioMatriculas({ grupos }) {
           <label className="block text-sm font-medium text-[#700303] mb-1">Monto Pagado:</label>
           <input
             type="text"
-            value="S/100" // Fijo
+            value={'s/ '.montoIdioma} // Fijo
             disabled
             className="border border-[#700303] p-2 w-full rounded-md bg-gray-100"
           />

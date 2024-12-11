@@ -13,10 +13,10 @@ class DocenteController extends Controller
 {
     public function index()
     {
-        $query = Docente::with('user');
+        $docentes = Docente::with('user')->paginate(15);
 
         return Inertia::render('Administrador/Docentes/Index', [
-            'ListaDocentes' => $query->get(),
+            'ListaDocentes' => $docentes,
         ]);
     }
 

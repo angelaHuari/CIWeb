@@ -272,14 +272,14 @@ const VistaFormularios = ({ ListaFormularios }) => {
                             type="text"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Buscar por Apellido Paterno del estudiante"
+                            placeholder="Buscar por Apellido del estudiante"
                             className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#800020]"
                         />
                         <FaSearch className="absolute right-3 top-2 text-gray-500" />
                     </div>
                 </div>
 
-                {/* Vista de Pagos */}
+                {/* Vista de Formularios */}
                 <TablaFormularios formMatriculas={ListaFormularios} search={search} />
             </div>
         </div>
