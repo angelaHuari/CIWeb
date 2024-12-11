@@ -13,7 +13,7 @@ export default function NavLink({
             className={`flex items-center justify-between border-b-4 px-6 py-3 text-base font-medium transition duration-300 ease-in-out focus:outline-none rounded-lg
                 ${active
                     ? 'border-indigo-600 text-gray-900 bg-indigo-100 shadow-lg hover:bg-indigo-200 focus:border-indigo-700' // Fondo al estar activo
-                    : 'border-transparent text-gray-600 hover:border-red-900 hover:bg-indigo-50 hover:text-gray-900 focus:border-indigo-500 focus:bg-indigo-50 focus:text-gray-900'} 
+                    : 'border-transparent text-gray-600 hover:border-red-900 hover:bg-[#9C4C4C]  hover:text-white focus:border-indigo-500 focus:bg-indigo-50 focus:text-gray-900'} 
                 ${className}`}
             role="navigation" // Mejora de accesibilidad
             aria-current={active ? 'page' : undefined} // Indica la página activa

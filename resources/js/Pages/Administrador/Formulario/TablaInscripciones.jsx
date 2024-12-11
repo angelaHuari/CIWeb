@@ -43,7 +43,7 @@ const TablaInscripciones = ({ inscripciones = [], setIns, filter }) => {
                         filteredInscripciones.map((inscripcion) => (
                             <tr
                                 key={inscripcion.id}
-                                className={`border-t hover:bg-[#F4D6C5] ${inscripcion.estado === 'Aceptado' ? 'bg-white' : ''}`}
+                                className={`border-t hover:bg-[#F4D6C5] ${inscripcion.estado === 'Aceptado' ? 'bg-green-200' : ''}`}
                             >
                                 <td className="px-6 py-3text-center">{inscripcion.nombres}</td>
                                 <td className="px-6 py-3">{inscripcion.aPaterno}</td>

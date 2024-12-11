@@ -1,5 +1,5 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import { useState } from 'react'; // Añadir este import
+import { useState } from 'react'; 
 import DatosGenerales from './Formulario/DatosGenerales';
 import DatosAdicionales from './Formulario/DatosAdicionales';
 import DatosPagoCaja from './Formulario/DatosPagoCaja';

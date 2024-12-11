@@ -25,7 +25,7 @@ class FuncionAdminController extends Controller
         $estudiantes = Matricula::with(['estudiante', 'grupo.ciclo.idioma'])
             ->where('estado', 'vigente')
             ->whereHas('grupo.ciclo', function ($query) {
-                $query->where('nombre', 'BASICO') // Aquí se verifica el nombre del ciclo
+                $query
                     ->whereHas('idioma', function ($subQuery) {
                         $subQuery->whereColumn('nivel', 'nivelCert'); // Comparar nivel del ciclo con nivelCert del idioma
                     });
@@ -49,7 +49,7 @@ class FuncionAdminController extends Controller
 
         $matricula->estado = 'certificado';
         $matricula->save();
-        return $certificado;
+        return redirect()->route('usuarios.index');
     }
 
     public function mostrarCertificado($id)

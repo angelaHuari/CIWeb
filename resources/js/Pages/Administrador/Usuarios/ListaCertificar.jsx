@@ -37,6 +37,7 @@ const ListaCertificar = ({ estudiantesC = [] }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         post(route('generar.certificado')); // Enviar datos del formulario
+        closeDetailsModal();
     };
 
     return (
