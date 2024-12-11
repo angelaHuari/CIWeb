@@ -22,13 +22,16 @@ class FuncionAdminController extends Controller
     public function index()
     {
         $usuarios = User::paginate(15);
-        $estudiantes = Matricula::with(['estudiante', 'grupo.ciclo'])
+        $estudiantes = Matricula::with(['estudiante', 'grupo.ciclo.idioma'])
+            ->where('estado', 'vigente')
             ->whereHas('grupo.ciclo', function ($query) {
-                $query->where('nombre', 'BASICO')
-                    ->where('nivel', 4);
+                $query->where('nombre', 'BASICO') // Aquí se verifica el nombre del ciclo
+                    ->whereHas('idioma', function ($subQuery) {
+                        $subQuery->whereColumn('nivel', 'nivelCert'); // Comparar nivel del ciclo con nivelCert del idioma
+                    });
             })
             ->paginate(15);
-        $certificados = Certificado::with('estudiante')->paginate(15);
+        $certificados = Certificado::paginate(15);
         return Inertia::render('Administrador/Usuarios/Index', ['usuarios' => $usuarios, 'estudiantes' => $estudiantes, 'certificados' => $certificados]);
     }
 
@@ -36,14 +39,16 @@ class FuncionAdminController extends Controller
     public function generarCertificado(Request $request)
     {
         $codigo = Str::uuid(); // Genera un identificador único
-        //$estudiante = Estudiante::findorfail($request->estudiante_id);
-        //$nombre=$estudiante->nombres.$estudiante->aPaterno;
+        $matricula = Matricula::findOrFail($request->idMatricula);
+
         $certificado = Certificado::create([
             'nombre' => $request->nombre,
             'codigo' => $codigo,
-            'estudiante_id' => $request->idEst,
+            'cicloCert' => $request->cicloCert,
         ]);
 
+        $matricula->estado = 'certificado';
+        $matricula->save();
         return $certificado;
     }
 

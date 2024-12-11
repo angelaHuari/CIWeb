@@ -9,7 +9,8 @@ const ListaCertificar = ({ estudiantesC = [] }) => {
 
     const { data, setData, post, errors, reset } = useForm({
         nombre: '',
-        idEst: '',
+        cicloCert: '',
+        idMatricula: '',
     });
 
     // Maneja la acción de certificar
@@ -19,7 +20,8 @@ const ListaCertificar = ({ estudiantesC = [] }) => {
         setData({
             ...data, // Mantenemos los datos existentes
             nombre: `${est.estudiante.nombres} ${est.estudiante.aPaterno} ${est.estudiante.aMaterno}`,
-            idEst: est.estudiante.id,
+            cicloCert: `${est.grupo.ciclo.idioma.nombre} ${est.grupo.ciclo.nombre}`,
+            idMatricula: est.id,
         });
 
     };
@@ -43,14 +45,15 @@ const ListaCertificar = ({ estudiantesC = [] }) => {
                 {/* Modal de certificación */}
                 {selectedEst && modal && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg relative w-[900px] h-[600px] flex">
+                        <div className="bg-white p-6 rounded-lg shadow-lg relative w-[400px] h-[400px] flex">
                             {/* Aumenté el ancho y alto del modal */}
                             <MdClose
                                 className="absolute top-2 right-2 text-2xl text-[#800020] cursor-pointer"
                                 onClick={closeDetailsModal}
                             />
                             {/* Formulario de certificación */}
-                            <div className="w-1/3 flex flex-col justify-center">
+                            <div className="flex flex-col justify-center">
+                                <h2 className="text-2xl font-bold text-[#800020] text-center mb-4">CERTIFICAR</h2>
                                 <form onSubmit={handleSubmit}>
                                     <label>Nombre</label>
                                     <input
@@ -58,6 +61,14 @@ const ListaCertificar = ({ estudiantesC = [] }) => {
                                         name="nombre"
                                         value={`${selectedEst.estudiante.nombres} ${selectedEst.estudiante.aPaterno} ${selectedEst.estudiante.aMaterno}`}
                                         disabled
+                                    />
+                                    <label>Ciclo a Certificar</label>
+                                    <input
+                                        type="text"
+                                        name="nombre"
+                                        value={`${selectedEst.grupo.ciclo.idioma.nombre} - ${selectedEst.grupo.ciclo.nombre}`}
+                                        disabled
+                                        className='mb-4'
                                     />
                                     <button type="submit">Generar certificado</button>
                                 </form>
@@ -79,9 +90,9 @@ const ListaCertificar = ({ estudiantesC = [] }) => {
                             {estudiantes.length > 0 ? (
                                 estudiantes.map((est) => (
                                     <tr key={est.id} className="bg-gray-100 hover:bg-red-200">
-                                        <td className="border px-6 py-3 text-black">{est.estudiante.nombres}</td>
-                                        <td className="border px-6 py-3 text-center text-black">{est.grupo.ciclo.nombre}</td>
-                                        <td className="border px-6 py-3 text-black">
+                                        <td className=" px-6 py-3 text-black">{est.estudiante.nombres}</td>
+                                        <td className=" px-6 py-3 text-center text-black">{est.grupo.ciclo.nombre}</td>
+                                        <td className=" px-6 py-3 text-black">
                                             <button onClick={() => Certificar(est)}>Certificar</button>
                                         </td>
                                     </tr>

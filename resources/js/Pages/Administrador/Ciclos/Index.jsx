@@ -3,11 +3,13 @@ import { Head, Link } from '@inertiajs/react';
 import VistaCiclos from './VistaCiclos';
 import VistaIdiomas from '../Idiomas/VistaIdiomas';
 import { FaUserGraduate, FaCreditCard, FaRegListAlt } from 'react-icons/fa';
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 
 export default function Index({ ListaCiclos, ListaIdiomas }) {
+    
     const [view, setView] = useState(null); // Estado para controlar qué vista se muestra
-
+    
+    
     // Función para manejar clics en las tarjetas y cambiar de vista
     const handleCardClick = (value) => {
         // Verifica que esta función se está ejecutando correctamente

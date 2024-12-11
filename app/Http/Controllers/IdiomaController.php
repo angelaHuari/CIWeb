@@ -46,7 +46,9 @@ class IdiomaController extends Controller
         ]);
 
         // Redirigir al usuario con un mensaje de éxito
-        return redirect()->route('ciclo.index')->with('message', 'Idioma creado exitosamente');
+        return redirect()->route('ciclo.index')->with(
+            'message' ,'Idioma creado exitosamente'
+        );
     }
 
     /**

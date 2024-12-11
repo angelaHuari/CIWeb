@@ -3,7 +3,7 @@ import { useForm, usePage } from '@inertiajs/react';
 
 function FormularioMatriculas({ grupos }) {
   const { flash } = usePage().props;
-  const[montoIdioma,setMontoIdioma]=useState('');
+  const [montoIdioma, setMontoIdioma] = useState('');
   const [voucherPreview, setVoucherPreview] = useState(null); // Estado para la vista previa de la imagen
 
   const { data, setData, post, processing, errors } = useForm({
@@ -84,24 +84,38 @@ function FormularioMatriculas({ grupos }) {
       if (voucherPreview) {
         URL.revokeObjectURL(voucherPreview);
       }
+
     };
   }, [voucherPreview]);
   // Filtra los horarios basados en el ciclo seleccionado 
   const horariosFiltrados = grupos.filter((grupo) => grupo.ciclo.id === parseInt(data.cicloIngles));
+  
+  // Función para actualizar el montoIdioma al seleccionar un ciclo
+  const handleCicloChange = (e) => {
+    const cicloId = e.target.value;
+    setData('cicloIngles', cicloId); // Actualizar el ciclo
 
+    // Buscar el montoMes del ciclo seleccionado
+    const grupoSeleccionado = grupos.find(grupo => grupo.ciclo.id === parseInt(cicloId));
+    if (grupoSeleccionado) {
+      setMontoIdioma(grupoSeleccionado.ciclo.idioma.montoMes); // Establecer el monto
+    } else {
+      setMontoIdioma(''); // Si no se encuentra el ciclo, establecer monto en blanco
+    }
+  };
   return (
     <form
       onSubmit={handleSubmit}
       className="max-w-4xl mx-auto p-10 bg-white shadow-lg rounded-lg border border-gray-200" // Aumentar el max-width y padding
     >
-      <h2 className="text-2xl font-bold mb-6 text-center text-[#700303]">Formulario de Matriculas -Mensualidades</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center text-[#700303]">Formulario de Matriculas - Mensualidades</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-[#700303] mb-1">Ciclo:</label>
           <select
             id="cicloIngles"
             value={data.cicloIngles}
-            onChange={(e) => setData('cicloIngles', e.target.value)}
+            onChange={handleCicloChange}
             required
             className="border border-[#700303] p-2 w-full max-w-full rounded-md focus:outline-none focus:ring-2 focus:ring-[#700303]"
           >
@@ -109,7 +123,6 @@ function FormularioMatriculas({ grupos }) {
             {[...new Set(grupos.map(grupo => grupo.ciclo.id))].map((cicloId) => {
               const grupo = grupos.find(g => g.ciclo.id === cicloId);
               const ciclo = grupo?.ciclo;
-              setMontoIdioma(ciclo.idioma.montoMes);
               return (
                 <option key={cicloId} value={cicloId}>
                   {/* Si ciclo o idioma son indefinidos, muestra una cadena vacía */}
@@ -156,7 +169,7 @@ function FormularioMatriculas({ grupos }) {
           <label className="block text-sm font-medium text-[#700303] mb-1">Monto Pagado:</label>
           <input
             type="text"
-            value={'s/ '.montoIdioma} // Fijo
+            value={montoIdioma} // Fijo
             disabled
             className="border border-[#700303] p-2 w-full rounded-md bg-gray-100"
           />
@@ -215,7 +228,7 @@ function FormularioMatriculas({ grupos }) {
           )}
         </div>
       </div>
-      {flash && flash.message &&(
+      {flash && flash.message && (
         <span className="text-red-500 text-sm">{flash.message}</span>
       )}
 
@@ -227,7 +240,7 @@ function FormularioMatriculas({ grupos }) {
           Enviar
         </button>
       </div>
-      
+
     </form>
   );
 }

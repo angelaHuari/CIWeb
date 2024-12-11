@@ -42,7 +42,7 @@ const TablaDocentes = ({ docentes =[]}) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {docentes.length > 0 ? (
+                    {docentes.data.length > 0 ? (
                         docentes.data.map((docente) => (
                             <tr
                                 key={docente.id}

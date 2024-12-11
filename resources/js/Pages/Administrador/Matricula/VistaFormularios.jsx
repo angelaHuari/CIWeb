@@ -215,7 +215,7 @@ const TablaFormularios = ({ formMatriculas = [], search }) => {
                                                 </span>
                                             )}
                                         </td>
-                                        <td className="px-6 py-3">
+                                        <td className="px-6 py-3 text-center">
                                             {form.estado === 'pendiente' ? (
                                                 <button
                                                     onClick={() => handleFormClick(form)}

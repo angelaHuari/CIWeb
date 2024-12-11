@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('codigo')->unique();
-            $table->foreignId('estudiante_id')->constrained()->onDelete('cascade');
+            $table->string('cicloCert');
             $table->timestamps();
         });
     }

@@ -9,10 +9,7 @@ class Certificado extends Model
     protected $fillable=[
         'nombre',
         'codigo',
-        'estudiante_id',
+        'cicloCert',
     ];
-    public function estudiante()
-    {
-        return $this->belongsTo(Estudiante::class);
-    }
+    
 }

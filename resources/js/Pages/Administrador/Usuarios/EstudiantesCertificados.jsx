@@ -18,13 +18,14 @@ const EstudiantesCertificados = ({ certificados = [] }) => {
                         <thead className="bg-[#700303] text-white">
                             <tr>
                                 <th className="border border-[#700303] px-6 py-3 text-center">Estudiante</th>
+                                <th className="border border-[#700303] px-6 py-3 text-center">Ciclo Certificado</th>
                                 <th className="border border-[#700303] px-6 py-3 text-center">Codigo de Certificado </th>
                                 <th className="border border-[#700303] px-6 py-3 text-center">Accion</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            {certificados.data > 0 ? (
+                            {certificados.data.length > 0 ? (
                                 certificados.data.map((est, index) => (
                                     <tr
                                         key={est.id}
@@ -33,13 +34,16 @@ const EstudiantesCertificados = ({ certificados = [] }) => {
                                             'bg-gray-100 hover:bg-red-200'
                                         }
                                     >
-                                        <td className="border px-6 py-3 text-black">
-                                            {est.estudiante.nombres}
+                                        <td className=" px-6 py-3 text-black">
+                                            {est.nombre}
                                         </td>
-                                        <td className="border px-6 py-3 text-center  text-black">
+                                        <td className=" px-6 py-3 text-black">
+                                            {est.cicloCert}
+                                        </td>
+                                        <td className=" px-6 py-3 text-center  text-black">
                                             {est.codigo}
                                         </td>
-                                        <td className="border px-6 py-3  text-black">
+                                        <td className=" px-6 py-3  text-black">
                                             <button
                                                 onClick={() => Mostrar(est.id)}>
                                                 Mostrar
