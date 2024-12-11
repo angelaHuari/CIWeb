@@ -4,6 +4,7 @@ import { useForm, usePage } from '@inertiajs/react';
 function FormularioMatriculas({ grupos }) {
   const { flash } = usePage().props;
   const [montoIdioma, setMontoIdioma] = useState('');
+  const [message, setMessage] = useState(''); // Mensaje de confirmación
   const [voucherPreview, setVoucherPreview] = useState(null); // Estado para la vista previa de la imagen
 
   const { data, setData, post, processing, errors } = useForm({
@@ -45,7 +46,9 @@ function FormularioMatriculas({ grupos }) {
     e.preventDefault();
     //console.log(data);
 
-    post(route('estudiante.enviar'));
+    post(route('estudiante.enviar'), {
+      onSuccess: () => setMessage('Formulario de Matricula enviado correctamente.')
+    });
     // Limpiar los campos (excepto los no mostrados)
     setData({
       fechaMatricula: new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' }),// Fecha actual
@@ -58,7 +61,7 @@ function FormularioMatriculas({ grupos }) {
       imgComprobante: null,
     });
     setVoucherPreview(null);
-    console.log(flash);
+    setMontoIdioma('');
   };
 
   // Función para manejar la selección de la imagen
@@ -89,7 +92,7 @@ function FormularioMatriculas({ grupos }) {
   }, [voucherPreview]);
   // Filtra los horarios basados en el ciclo seleccionado 
   const horariosFiltrados = grupos.filter((grupo) => grupo.ciclo.id === parseInt(data.cicloIngles));
-  
+
   // Función para actualizar el montoIdioma al seleccionar un ciclo
   const handleCicloChange = (e) => {
     const cicloId = e.target.value;
@@ -109,6 +112,7 @@ function FormularioMatriculas({ grupos }) {
       className="max-w-4xl mx-auto p-10 bg-white shadow-lg rounded-lg border border-gray-200" // Aumentar el max-width y padding
     >
       <h2 className="text-2xl font-bold mb-6 text-center text-[#700303]">Formulario de Matriculas - Mensualidades</h2>
+      {message && (<div className="bg-green-100 border border-green-400 text-green-700 px-4 text-center py-3 rounded relative">{message}</div>)}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-[#700303] mb-1">Ciclo:</label>

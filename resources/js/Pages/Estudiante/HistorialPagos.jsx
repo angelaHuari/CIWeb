@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import {  FaEye} from 'react-icons/fa';
+import { FaEye } from 'react-icons/fa';
 import React, { useState } from 'react';
 import { MdClose } from 'react-icons/md';
 
@@ -89,7 +89,7 @@ function HistorialPagos({ matriculas = [] }) {
                                 <Link
                                     key={index}
                                     href={link.url}
-                                    className={`px-3 py-1 mx-1 border rounded ${link.active ? 'bg-black text-white' : 'bg-red-900 text-white'
+                                    className={`px-3 py-1 mx-1 border rounded hover:bg-black ${link.active ? 'bg-red-900 text-white' : 'bg-red-900 text-white'
                                         }`}
                                     dangerouslySetInnerHTML={{ __html: link.label }}
                                 />
